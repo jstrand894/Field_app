@@ -19,7 +19,8 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:16px -
 input,textarea{-webkit-user-select:text;user-select:text}
 #app{max-width:900px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;min-height:100%}
 header{display:grid;grid-template-columns:1.6fr 1.2fr 1.2fr 1.2fr;gap:8px}
-label{display:flex;flex-direction:column;font-size:13px;font-weight:600;color:var(--mute);gap:3px}
+label input{min-width:0;width:100%}
+label{min-width:0;display:flex;flex-direction:column;font-size:13px;font-weight:600;color:var(--mute);gap:3px}
 input,textarea,select{font:inherit;font-size:18px;padding:10px;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
 .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .bar .sp{flex:1}
@@ -81,6 +82,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .list{display:flex;flex-direction:column;gap:6px}
 .list button{text-align:left;font-weight:600}
 .hint{font-size:14px;font-weight:600;color:var(--mute)}
+#foot{margin-top:auto;padding-top:10px;text-align:center;font-size:13px;font-weight:600;color:var(--mute)}
 @media(max-width:700px){header{grid-template-columns:1fr 1fr}header label:first-child{grid-column:1/-1}.ctr{grid-template-columns:1fr}}
 </style>
 </head>
@@ -99,13 +101,14 @@ textarea{width:100%;min-height:90px;resize:vertical}
   </div>
   <div id="grid"></div>
   <div class="hint">Green = done, yellow = started, dot = has notes, ! = check this cell. Cells are numbered in your zigzag walking order.</div>
+  <footer id="foot"></footer>
 </div>
 
 <div id="sheet"><div class="panel" id="panel"></div></div>
 <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" hidden>
 
 <script>
-const N=100, KEY='grids.v1';
+const N=100, KEY='grids.v1', VERSION='1.0.0';
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.sessions)db={cur:null,sessions:{}};
@@ -203,7 +206,7 @@ function openCell(n){
     <div class="ctr">${ctl('ch','Chomps',q5('ch'))}${ctl('m','% Mature',qb('m',-5,'−5')+qb('m',5,'+5')+qb('m',100,'100'),10)}${ctl('h','Avg height',qb('h',-0.1,'−0.1')+qb('h',0.1,'+0.1'),1)}</div>
     <div class="hint">Write numbers with the Pencil in the boxes (3+4 adds). In each box header, the left icon undoes that box and the right icon clears it.</div>
     <textarea id="notes" inputmode="none" placeholder="Notes (write with the Pencil)">${esc(c.n)}</textarea>
-    <div class="nav"><button id="undo" class="ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button><button id="clr">Clear cell</button><button id="done" class="pri">Done ✓ → ${nx??'finish'}</button></div>`;
+    <div class="nav"><button id="undo" class="ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button><button id="clr">Clear cell</button><button id="none">No toadflax ✓</button><button id="done" class="pri">Done ✓ → ${nx??'finish'}</button></div>`;
   $('#sheet').classList.add('open');renderGrid();refresh();
 }
 function closeSheet(){$('#sheet').classList.remove('open');cur=null;renderGrid()}
@@ -229,8 +232,9 @@ $('#panel').addEventListener('click',e=>{
     else if(b.id==='undo')doUndo();
     else if(b.id==='clr'){
       push();Object.assign(c,{s1:null,s2:null,g:null,ch:null,m:null,h:null,n:'',done:false});save();openCell(cur);
-    }else if(b.id==='done'){
+    }else if(b.id==='none'||b.id==='done'){
       push();
+      if(b.id==='none')Object.assign(c,{s1:0,s2:0,g:0,ch:0,m:null,h:null});
       if(c.s1===null&&c.s2===null)c.s1=0;if(c.g===null)c.g=0;if(c.ch===null)c.ch=0;c.done=true;save();
       const nx=nextOf(cur);
       if(nx)openCell(nx);
@@ -397,6 +401,7 @@ async function exportCsv(){
 $('#btnExport').onclick=exportCsv;
 
 if(!db.cur||!db.sessions[db.cur])newSession();
+$('#foot').textContent=`Grid Data v${VERSION} · Created by Jackson R Strand · © ${new Date().getFullYear()} Jackson R Strand`;
 renderHeader();renderGrid();
 (async()=>{
   try{

@@ -90,3 +90,9 @@ python3 -m http.server 8000
 ```
 
 Then open <http://localhost:8000>.
+
+## Version
+
+The current version is shown at the bottom of the app screen. To change it, edit `VERSION` near the top of the script in `app/index.html`.
+
+Created by Jackson R Strand. © 2026 Jackson R Strand.
