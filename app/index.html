@@ -11,56 +11,86 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <title>Grid Data</title>
 <style>
-:root{--bg:#f4f5f2;--card:#fff;--ink:#1d2a1f;--mute:#6b7a6e;--line:#d9ded8;--accent:#2f6b3a;--done:#bfe3c4;--part:#f6e3a1;--note:#2f6b3a}
-@media(prefers-color-scheme:dark){:root{--bg:#121613;--card:#1c231e;--ink:#e8efe9;--mute:#93a496;--line:#2f3a32;--accent:#6fbf7d;--done:#2f5a38;--part:#6b5a1d;--note:#6fbf7d}}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+/* High-contrast palette for use in direct sun */
+:root{--bg:#e9ece6;--card:#fff;--ink:#0a120c;--mute:#2f3b32;--line:#5d695f;--accent:#1f6b2c;--done:#7ccf88;--part:#f5c842;--note:#0a5a1a;--warn:#b3201f}
+@media(prefers-color-scheme:dark){:root{--bg:#0c0f0d;--card:#1a211c;--ink:#f4faf5;--mute:#c3d0c5;--line:#7d8c80;--accent:#7ed38d;--done:#2f7a3d;--part:#8a6d0f;--note:#9bf0aa;--warn:#ff8a84}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:16px -apple-system,system-ui,sans-serif;-webkit-user-select:none;user-select:none}
 input,textarea{-webkit-user-select:text;user-select:text}
 #app{max-width:900px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;min-height:100%}
-header{display:grid;grid-template-columns:2fr 1.4fr 1.4fr;gap:8px}
-label{display:flex;flex-direction:column;font-size:12px;color:var(--mute);gap:3px}
-input,textarea,select{font:inherit;font-size:18px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+header{display:grid;grid-template-columns:1.6fr 1.2fr 1.2fr 1.2fr;gap:8px}
+label{display:flex;flex-direction:column;font-size:13px;font-weight:600;color:var(--mute);gap:3px}
+input,textarea,select{font:inherit;font-size:18px;padding:10px;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
 .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .bar .sp{flex:1}
-button{font:inherit;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:11px 16px;cursor:pointer}
+button{font:inherit;font-weight:700;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:11px 16px;cursor:pointer}
 button.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
-button:active{transform:scale(.97)}
-#prog{font-size:14px;color:var(--mute)}
+button:active{transform:scale(.95);filter:brightness(.88)}
+button:disabled{opacity:.5}
+#prog{font-size:15px;font-weight:700;color:var(--mute)}
 #grid{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
-.cell{aspect-ratio:1;border-radius:10px;border:1px solid var(--line);background:var(--card);padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:clamp(14px,2.6vw,22px);position:relative;line-height:1.1}
-.cell small{font-size:clamp(9px,1.6vw,13px);font-weight:500;color:var(--mute)}
-.cell.done{background:var(--done);border-color:transparent}
-.cell.part{background:var(--part);border-color:transparent}
-.cell.has::after{content:"";position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--note)}
-.cell.cur{outline:3px solid var(--accent)}
-#sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:5}
+.cell{aspect-ratio:1;border-radius:10px;border:2px solid var(--line);background:var(--card);padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:clamp(15px,2.8vw,24px);font-weight:800;position:relative;line-height:1.1}
+.cell small{font-size:clamp(10px,1.7vw,14px);font-weight:700;color:var(--ink)}
+.cell.done{background:var(--done);border-color:var(--accent)}
+.cell.part{background:var(--part);border-color:#8a6d0f}
+.cell.has::after{content:"";position:absolute;top:4px;right:4px;width:9px;height:9px;border-radius:50%;background:var(--note);border:1px solid var(--card)}
+.cell.warn::before{content:"!";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--warn);color:#fff;font-size:12px;line-height:16px;text-align:center}
+.cell.cur{outline:4px solid var(--accent)}
+#sheet{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:5}
 #sheet.open{display:flex}
-.panel{background:var(--bg);width:100%;max-width:700px;border-radius:20px 20px 0 0;padding:16px 16px max(16px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px;max-height:94vh;overflow:auto}
-.ph{display:flex;align-items:center;justify-content:space-between}
-.ph h2{margin:0;font-size:24px}
-.ctr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.ctl{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px}
-.ctl .t{font-size:13px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em}
+.panel{background:var(--bg);width:100%;max-width:860px;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.45)}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ph h2{margin:0;font-size:26px}
+.navh{display:flex;align-items:center;gap:10px}
+.navh button{min-width:78px;font-size:20px;padding:10px 14px}
+.ctr{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tot{font-size:16px;font-weight:700;color:var(--mute)}.tot b{color:var(--ink);font-size:26px}
+.warn{background:#fde2e0;color:#7a0f0c;border:2px solid var(--warn);border-radius:10px;padding:8px 12px;font-weight:700}
+.warn[hidden]{display:none}
+.ctl{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.ctl[data-f]{border:3px solid var(--c);background:var(--card);background:color-mix(in srgb,var(--c) 14%,var(--card))}
+.ctl[data-f=s1]{--c:#1b6b2a}.ctl[data-f=s2]{--c:#35904a}.ctl[data-f=g]{--c:#b85600}
+.ctl[data-f=ch]{--c:#b3201f}.ctl[data-f=m]{--c:#7a2fa8}.ctl[data-f=h]{--c:#0a6c76}
+.ctl .t{position:relative;min-height:38px;display:flex;align-items:center;justify-content:center;align-self:stretch;text-align:center;background:var(--c);color:#fff;border-radius:8px;padding:4px 40px;font-size:15px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.xk.l{left:4px}
+.xk.r{right:4px}
+.xk{position:absolute;top:50%;margin-top:-17px;width:34px;height:34px;padding:0;border:0;border-radius:50%;background:transparent;color:#fff;display:flex;align-items:center;justify-content:center;opacity:.9}
+.xk svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.ib{display:flex;align-items:center;justify-content:center;gap:8px}
+.ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.xk:active{background:rgba(255,255,255,.3);filter:none;transform:none}
+.ctl[data-f] .row input{border:3px solid var(--c)}
+.ctl[data-f] .row button{border-color:var(--c);color:var(--c);font-weight:800}
+.ctl[data-f] .quick button{border-color:var(--c);color:var(--ink)}
+.ctl[data-f] .sub{color:var(--c);font-weight:800}
 .ctl .row{display:flex;align-items:center;gap:10px;width:100%}
-.ctl .row button{width:64px;height:64px;font-size:34px;padding:0;border-radius:16px}
-.ctl .row input{flex:1;min-width:0;width:100%;text-align:center;font-size:40px;font-weight:700;padding:6px}
-.ctl .quick{display:flex;gap:6px}
-.ctl .quick button{padding:8px 12px;font-size:14px}
+.ctl .row button{width:56px;height:56px;font-size:30px;padding:0;border-radius:16px;flex:none}
+.ctl .row input{flex:1;min-width:0;width:100%;text-align:center;font-size:40px;font-weight:800;padding:10px 4px;min-height:72px}
+.ctl .quick{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.sub{font-size:14px;color:var(--mute);min-height:18px}
+.ctl .quick button{padding:8px 11px;font-size:15px}
+.sect{display:flex;flex-direction:column;gap:8px;border-top:2px solid var(--line);padding-top:12px}
+.sect b{font-size:16px}
+.sect select{font-size:17px}
+.flash{animation:pop .3s ease-out}
+@keyframes pop{0%{transform:scale(1)}30%{transform:scale(1.1);background:color-mix(in srgb,var(--c,#1f6b2c) 38%,#fff)}100%{transform:scale(1)}}
 textarea{width:100%;min-height:90px;resize:vertical}
 .nav{display:flex;gap:8px}
 .nav button{flex:1}
+.nav #done{flex:2}
 .list{display:flex;flex-direction:column;gap:6px}
-.list button{text-align:left;font-weight:500}
-.hint{font-size:13px;color:var(--mute)}
-@media(max-width:600px){header{grid-template-columns:1fr 1fr}header label:first-child{grid-column:1/-1}}
+.list button{text-align:left;font-weight:600}
+.hint{font-size:14px;font-weight:600;color:var(--mute)}
+@media(max-width:700px){header{grid-template-columns:1fr 1fr}header label:first-child{grid-column:1/-1}.ctr{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <label>Site<input id="site" autocomplete="off"></label>
+    <label>Site<input id="site" autocomplete="off" inputmode="none"></label>
     <label>Date<input id="date" type="date"></label>
-    <label>Obs<input id="obs" autocomplete="off"></label>
+    <label>Observer 1<input id="obs1" autocomplete="off" inputmode="none"></label>
+    <label>Observer 2<input id="obs2" autocomplete="off" inputmode="none"></label>
   </header>
   <div class="bar">
     <span id="prog"></span><span class="sp"></span>
@@ -68,28 +98,52 @@ textarea{width:100%;min-height:90px;resize:vertical}
     <button id="btnExport" class="pri">Export CSV</button>
   </div>
   <div id="grid"></div>
-  <div class="hint">Green = done, yellow = started, dot = has notes. Tap a cell to enter data.</div>
+  <div class="hint">Green = done, yellow = started, dot = has notes, ! = check this cell. Cells are numbered in your zigzag walking order.</div>
 </div>
 
 <div id="sheet"><div class="panel" id="panel"></div></div>
+<input type="file" id="csvFile" accept=".csv,text/csv,text/plain" hidden>
 
 <script>
 const N=100, KEY='grids.v1';
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.sessions)db={cur:null,sessions:{}};
+const FIELDS={s1:{},s2:{},g:{},ch:{},m:{max:100,dec:0},h:{dec:1}};
+function migrate(d){
+  Object.values(d.sessions).forEach(s=>{
+    if(s.obs!==undefined){s.obs1=s.obs;delete s.obs}
+    s.obs1=s.obs1||'';s.obs2=s.obs2||'';
+    Object.values(s.cells).forEach(c=>{if('s' in c){c.s1=c.s;c.s2=null;delete c.s}Object.keys(FIELDS).forEach(k=>{if(c[k]===undefined)c[k]=null})});
+  });
+  return d;
+}
+migrate(db);
 const $=s=>document.querySelector(s);
 const today=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)};
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){alert('Could not save! Storage may be full or blocked. Export CSV now.')}};
+// touch=false for saves that are not data edits (switching sessions, exporting)
+const save=(touch=true)=>{
+  const s=db.sessions[db.cur];if(touch&&s)s.lastEdit=Date.now();
+  try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){alert('Could not save! Storage may be full or blocked. Export CSV now.')}
+  queueBackup();
+};
 function newSession(){
   const id='s'+Date.now();
   const prev=db.sessions[db.cur];
-  db.sessions[id]={id,site:prev?prev.site:'',date:today(),obs:prev?prev.obs:'',cells:{}};
-  db.cur=id;save();return db.sessions[id];
+  db.sessions[id]={id,site:prev?prev.site:'',date:today(),obs1:prev?prev.obs1:'',obs2:prev?prev.obs2:'',cells:{}};
+  db.cur=id;save(false);return db.sessions[id];
 }
 const S=()=>db.sessions[db.cur]||newSession();
-const cell=n=>S().cells[n]||(S().cells[n]={s:null,g:null,n:'',done:false});
-const state=n=>{const c=S().cells[n];if(!c)return '';if(c.done)return 'done';if(c.s!==null||c.g!==null||c.n)return 'part';return ''};
+const cell=n=>S().cells[n]||(S().cells[n]={s1:null,s2:null,g:null,ch:null,m:null,h:null,n:'',done:false});
+const stems=c=>(c.s1===null&&c.s2===null)?null:(c.s1??0)+(c.s2??0);
+const touched=c=>Object.keys(FIELDS).some(k=>c[k]!=null);
+const state=n=>{const c=S().cells[n];if(!c)return '';if(c.done)return 'done';if(touched(c)||c.n)return 'part';return ''};
+const warns=c=>{const w=[],t=stems(c)??0;if(c.ch!=null&&c.ch>t)w.push(`Chomps (${c.ch}) is more than total stems (${t}).`);return w};
+
+// Zigzag walking order: 1-10 left to right, then 20-11 right to left, then 21-30, ...
+const ORDER=[];for(let r=0;r<10;r++){const row=[];for(let c=1;c<=10;c++)row.push(r*10+c);if(r%2)row.reverse();ORDER.push(...row)}
+const POS={};ORDER.forEach((n,i)=>POS[n]=i);
+const nextOf=n=>ORDER[POS[n]+1]??null, prevOf=n=>ORDER[POS[n]-1]??null;
 
 function renderGrid(){
   const g=$('#grid');g.innerHTML='';
@@ -97,96 +151,264 @@ function renderGrid(){
   for(let i=1;i<=N;i++){
     const c=S().cells[i],st=state(i);if(st==='done')done++;
     const b=document.createElement('button');
-    b.className='cell '+st+(c&&c.n?' has':'')+(cur===i?' cur':'');
-    b.innerHTML=`${i}`+(c&&(c.s!==null||c.g!==null)?`<small>${c.s??0}/${c.g??0}</small>`:'');
+    b.className='cell '+st+(c&&c.n?' has':'')+(c&&warns(c).length?' warn':'')+(cur===i?' cur':'');
+    b.innerHTML=`${i}`+(c&&touched(c)?`<small>${stems(c)??0}/${c.g??0}</small>`:'');
     b.onclick=()=>openCell(i);
     g.appendChild(b);
   }
   $('#prog').textContent=`${done} / ${N} cells done`;
 }
-function renderHeader(){const s=S();$('#site').value=s.site;$('#date').value=s.date;$('#obs').value=s.obs}
-['site','date','obs'].forEach(k=>$('#'+k).addEventListener('input',e=>{S()[k]=e.target.value;save()}));
+function renderHeader(){const s=S();$('#site').value=s.site;$('#date').value=s.date;$('#obs1').value=s.obs1;$('#obs2').value=s.obs2}
+['site','date','obs1','obs2'].forEach(k=>$('#'+k).addEventListener('input',e=>{S()[k]=e.target.value;save()}));
 
 let cur=null;
+const esc=x=>String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const flash=el=>{if(!el)return;el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash')};
+function refresh(){
+  if(cur==null)return;const c=cell(cur);
+  const t=$('#tot');if(t)t.textContent=stems(c)??'–';
+    const w=$('#warn');if(w){const a=warns(c);w.hidden=!a.length;w.textContent=a.length?'⚠ '+a.join(' '):''}
+  const u=$('#undo');if(u)u.disabled=!(undo[ukey()]||[]).length;
+}
+
+// Undo history (per session + cell, kept in memory)
+const undo={};
+const ukey=()=>db.cur+':'+cur;
+function push(f){
+  const k=ukey();(undo[k]=undo[k]||[]).push(JSON.stringify(cell(cur)));if(undo[k].length>100)undo[k].shift();
+  if(f){const fk=k+':'+f;(undo[fk]=undo[fk]||[]).push(cell(cur)[f]);if(undo[fk].length>100)undo[fk].shift()}
+}
+function undoField(f){
+  const a=undo[ukey()+':'+f];if(!a||!a.length)return;
+  const c=cell(cur);c[f]=a.pop();c.done=false;save();openCell(cur);
+}
+function doUndo(){const a=undo[ukey()];if(!a||!a.length)return;S().cells[cur]=JSON.parse(a.pop());save();openCell(cur)}
+let pend=false; // first edit after focusing a box saves one undo step
+
 function openCell(n){
-  cur=n;const c=cell(n);
-  const ctl=(key,label)=>`<div class="ctl"><div class="t">${label}</div>
-    <div class="row"><button data-k="${key}" data-d="-1">−</button>
-    <input data-in="${key}" inputmode="numeric" pattern="[0-9]*" placeholder="–" value="${c[key]??''}">
-    <button data-k="${key}" data-d="1">+</button></div>
-    <div class="quick"><button data-k="${key}" data-d="5">+5</button><button data-k="${key}" data-d="10">+10</button><button data-k="${key}" data-z="1">0</button></div></div>`;
-  $('#panel').innerHTML=`<div class="ph"><h2>Cell ${n}</h2><button id="x">Close</button></div>
-    <div class="ctr">${ctl('s','Stems')}${ctl('g','Galls')}</div>
-    <textarea id="notes" placeholder="Notes (Pencil or dictation)">${c.n.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</textarea>
-    <div class="nav"><button id="prev">← Prev</button><button id="clr">Clear</button><button id="done" class="pri">Done → Next</button></div>`;
-  $('#sheet').classList.add('open');renderGrid();
+  cur=n;const c=cell(n);pend=false;
+  const pv=prevOf(n),nx=nextOf(n);
+  const qb=(k,d,l)=>`<button data-k="${k}" data-d="${d}">${l}</button>`;
+  const ctl=(key,label,quick,step=1,sub='')=>`<div class="ctl" data-f="${key}"><div class="t">${label}<button class="xk l" data-undof="${key}" aria-label="Undo ${esc(label)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg></button><button class="xk r" data-clearf="${key}" aria-label="Clear ${esc(label)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="row"><button data-k="${key}" data-d="${-step}">−</button>
+    <input data-in="${key}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${c[key]??''}">
+    <button data-k="${key}" data-d="${step}">+</button></div>
+    <div class="quick">${quick}<button data-k="${key}" data-z="1">0</button></div>${sub?`<div class="sub" id="sub-${key}">${sub}</div>`:''}</div>`;
+  const q5=k=>qb(k,5,'+5')+qb(k,10,'+10');
+  const w=warns(c);
+  $('#panel').innerHTML=`<div class="ph"><div class="navh"><button id="prev" ${pv?'':'disabled'}>← ${pv??''}</button><h2>Cell ${n}</h2><button id="next" ${nx?'':'disabled'}>${nx??''} →</button></div>
+    <span class="tot">Stems total: <b id="tot">${stems(c)??'–'}</b></span><button id="x">Close</button></div>
+    <div class="warn" id="warn" ${w.length?'':'hidden'}>${w.length?'⚠ '+esc(w.join(' ')):''}</div>
+    <div class="ctr">${ctl('s1','Stems · '+esc(S().obs1||'Obs 1'),q5('s1'))}${ctl('s2','Stems · '+esc(S().obs2||'Obs 2'),q5('s2'))}${ctl('g','Galls',q5('g'))}</div>
+    <div class="ctr">${ctl('ch','Chomps',q5('ch'))}${ctl('m','% Mature',qb('m',-5,'−5')+qb('m',5,'+5')+qb('m',100,'100'),10)}${ctl('h','Avg height',qb('h',-0.1,'−0.1')+qb('h',0.1,'+0.1'),1)}</div>
+    <div class="hint">Write numbers with the Pencil in the boxes (3+4 adds). In each box header, the left icon undoes that box and the right icon clears it.</div>
+    <textarea id="notes" inputmode="none" placeholder="Notes (write with the Pencil)">${esc(c.n)}</textarea>
+    <div class="nav"><button id="undo" class="ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button><button id="clr">Clear cell</button><button id="done" class="pri">Done ✓ → ${nx??'finish'}</button></div>`;
+  $('#sheet').classList.add('open');renderGrid();refresh();
 }
 function closeSheet(){$('#sheet').classList.remove('open');cur=null;renderGrid()}
+
 $('#panel').addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
-  const c=cell(cur);
-  if(b.dataset.k){
-    const k=b.dataset.k;
-    if(b.dataset.z)c[k]=0;
-    else c[k]=Math.max(0,(c[k]??0)+Number(b.dataset.d));
-    c.done=false;
-    b.closest('.ctl').querySelector('input').value=c[k];save();renderGrid();
-  }else if(b.id==='x')closeSheet();
-  else if(b.id==='prev'&&cur>1)openCell(cur-1);
-  else if(b.id==='clr'){if(confirm('Clear cell '+cur+'?')){delete S().cells[cur];save();openCell(cur)}}
-  else if(b.id==='done'){
-    if(c.s===null)c.s=0;if(c.g===null)c.g=0;c.done=true;save();
-    if(cur<N)openCell(cur+1);else closeSheet();
+  if(b.id==='x'){closeSheet();return}
+  if(cur!=null){
+    const c=cell(cur);
+    if(b.dataset.k){
+      const k=b.dataset.k;push(k);
+      c[k]=b.dataset.z?0:fit(k,(c[k]??0)+Number(b.dataset.d));
+      c.done=false;
+      const inp=b.closest('.ctl').querySelector('input');inp.value=c[k];flash(inp);
+      save();refresh();renderGrid();
+    }else if(b.dataset.clearf){
+      const k=b.dataset.clearf;push(k);c[k]=null;c.done=false;
+      const inp=b.closest('.ctl').querySelector('input');inp.value='';flash(inp);
+      save();refresh();renderGrid();
+    }else if(b.dataset.undof){undoField(b.dataset.undof)}
+    else if(b.id==='prev'){const p=prevOf(cur);if(p)openCell(p)}
+    else if(b.id==='next'){const p=nextOf(cur);if(p)openCell(p)}
+    else if(b.id==='undo')doUndo();
+    else if(b.id==='clr'){
+      push();Object.assign(c,{s1:null,s2:null,g:null,ch:null,m:null,h:null,n:'',done:false});save();openCell(cur);
+    }else if(b.id==='done'){
+      push();
+      if(c.s1===null&&c.s2===null)c.s1=0;if(c.g===null)c.g=0;if(c.ch===null)c.ch=0;c.done=true;save();
+      const nx=nextOf(cur);
+      if(nx)openCell(nx);
+      else{
+        closeSheet();
+        const all=Object.values(S().cells).filter(x=>x.done).length;
+        if(all>=N&&confirm('All 100 cells are done! Export a backup CSV now?'))exportCsv();
+      }
+    }
+  }else{
+    if(b.id==='new'){newSession();renderHeader();closeSheet()}
+    else if(b.dataset.sid){db.cur=b.dataset.sid;save(false);renderHeader();closeSheet()}
+    else if(b.id==='del'&&confirm('Delete this session and its data? Export first if unsure.')){
+      delete db.sessions[db.cur];db.cur=Object.keys(db.sessions)[0]||null;save(false);S();renderHeader();closeSheet()}
+    else if(b.id==='restoreBtn')showSnaps();
+    else if(b.id==='importBtn')$('#csvFile').click();
+    else if(b.id==='backBtn')showSessions();
+    else if(b.dataset.snap)restoreSnap(b.dataset.snap);
   }
 });
+$('#panel').addEventListener('focusin',e=>{if(e.target.dataset.in||e.target.id==='notes')pend=true});
 $('#panel').addEventListener('input',e=>{
+  if(cur==null)return;
   const c=cell(cur);
   if(e.target.dataset.in){
-    const k=e.target.dataset.in,v=e.target.value.replace(/\D/g,'');
-    e.target.value=v;c[k]=v===''?null:parseInt(v,10);c.done=false;
-  }else if(e.target.id==='notes'){c.n=e.target.value}
+    if(e.isComposing)return;
+    const k=e.target.dataset.in;if(pend){push(k);pend=false}
+    const v=clean(e.target.value);
+    c[k]=num(v,k);c.done=false;refresh();
+  }else if(e.target.id==='notes'){if(pend){push();pend=false}c.n=e.target.value;c.done=false}
   save();renderGrid();
+});
+// Handwriting cleanup: fix look-alike letters, allow digits, + and decimal point; sum on blur
+const LOOK={o:'0',O:'0',D:'0',Q:'0',I:'1',l:'1','|':'1','!':'1',i:'1',z:'2',Z:'2',s:'5',S:'5',b:'6',G:'6',T:'7',B:'8',g:'9',q:'9',',':'.','·':'.'};
+const clean=v=>v.replace(/[^0-9+.]/g,ch=>LOOK[ch]??'').replace(/^\+/,'');
+const fit=(k,x)=>{const f=FIELDS[k];x=Math.max(0,Math.min(f.max??Infinity,x));return f.dec!=null?Math.round(x*10**f.dec)/10**f.dec:Math.round(x)};
+const num=(v,k)=>{const p=v.split('+').map(parseFloat).filter(x=>!isNaN(x));return p.length?fit(k,p.reduce((a,x)=>a+x,0)):null};
+$('#panel').addEventListener('change',e=>{
+  if(cur==null||!e.target.dataset.in)return;
+  const c=cell(cur),k=e.target.dataset.in,n=num(clean(e.target.value),k);
+  c[k]=n;e.target.value=n??'';flash(e.target);save();refresh();renderGrid();
 });
 $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
 
-$('#btnSessions').onclick=()=>{
+function showSessions(){
   cur=null;
   const list=Object.values(db.sessions).sort((a,b)=>(b.date+b.id).localeCompare(a.date+a.id));
   $('#panel').innerHTML=`<div class="ph"><h2>Sessions</h2><button id="x">Close</button></div>
-    <button class="pri" id="new">+ New session (copies site &amp; observer)</button>
+    <button class="pri" id="new">+ New session (copies site &amp; observers)</button>
     <div class="list">${list.map(s=>{const d=Object.values(s.cells).filter(c=>c.done).length;
-      return `<button data-sid="${s.id}">${s.id===db.cur?'● ':''}${s.site||'(no site)'} — ${s.date} — ${s.obs||'?'} <span class="hint">(${d}/100)</span></button>`}).join('')}</div>
-    <button id="del">Delete current session</button>`;
+      return `<button data-sid="${s.id}">${s.id===db.cur?'● ':''}${esc(s.site||'(no site)')} — ${s.date} — ${esc([s.obs1,s.obs2].filter(Boolean).join(' & ')||'?')} <span class="hint">(${d}/100)</span></button>`}).join('')}</div>
+    <button id="del">Delete current session</button>
+    <div class="sect"><b>Screen</b>
+      <div class="hint" id="wlstat">${wlText()}</div></div>
+    <div class="sect"><b>Backup &amp; restore</b>
+      <div class="hint">A hidden backup copy of your data is saved automatically on this iPad, separate from the main copy.</div>
+      <div class="nav"><button id="restoreBtn">Restore from backup copy</button><button id="importBtn">Import a CSV</button></div></div>`;
   $('#sheet').classList.add('open');
-};
-$('#panel').addEventListener('click',e=>{
-  const b=e.target.closest('button');if(!b)return;
-  if(b.id==='new'){newSession();renderHeader();closeSheet()}
-  else if(b.dataset.sid){db.cur=b.dataset.sid;save();renderHeader();closeSheet()}
-  else if(b.id==='del'&&confirm('Delete this session and its data? Export first if unsure.')){
-    delete db.sessions[db.cur];db.cur=Object.keys(db.sessions)[0]||null;save();renderHeader();closeSheet()}
-});
+}
+$('#btnSessions').onclick=showSessions;
+
+// ---------- hidden backup copy (IndexedDB) ----------
+let backupReady=false,lastSnap=0,bt=null;
+const idb=()=>new Promise((res,rej)=>{const r=indexedDB.open('grids-backup',1);r.onupgradeneeded=()=>r.result.createObjectStore('snap',{keyPath:'id'});r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+const hasData=d=>Object.values(d.sessions||{}).some(s=>Object.values(s.cells||{}).some(c=>c.done||touched(c)||c.n));
+const countCells=d=>Object.values(d.sessions||{}).reduce((n,s)=>n+Object.values(s.cells||{}).filter(c=>c.done||touched(c)||c.n).length,0);
+function queueBackup(force){if(!backupReady)return;clearTimeout(bt);bt=setTimeout(()=>backupNow(force),force?0:1500)}
+async function backupNow(force){
+  try{
+    const d=await idb(),data=JSON.stringify(db),now=Date.now(),st=d.transaction('snap','readwrite').objectStore('snap');
+    st.put({id:'latest',t:now,data});
+    if(hasData(db)&&(force||now-lastSnap>600000)){
+      lastSnap=now;st.put({id:'snap-'+now,t:now,data});
+      st.getAll().onsuccess=e=>e.target.result.filter(r=>r.id!=='latest').sort((a,b)=>b.t-a.t).slice(12).forEach(r=>st.delete(r.id));
+    }
+  }catch(e){}
+}
+async function listSnaps(){
+  try{const d=await idb();return await new Promise(res=>{const r=d.transaction('snap').objectStore('snap').getAll();r.onsuccess=()=>res(r.result.sort((a,b)=>b.t-a.t));r.onerror=()=>res([])})}catch(e){return[]}
+}
+const when=t=>new Date(t).toLocaleString([], {weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+async function showSnaps(){
+  const snaps=await listSnaps();
+  $('#panel').innerHTML=`<div class="ph"><h2>Backup copies</h2><button id="backBtn">Back</button></div>
+    <div class="hint">Restoring replaces what is on screen now. Your current data is backed up first, so you can undo a restore from this list.</div>
+    <div class="list">${snaps.length?snaps.map(r=>{let c=0,n=0;try{const d=JSON.parse(r.data);c=countCells(d);n=Object.keys(d.sessions).length}catch(e){}
+      return `<button data-snap="${r.id}">${r.id==='latest'?'Most recent copy':'Saved'} — ${when(r.t)} <span class="hint">(${n} session${n===1?'':'s'}, ${c} cells)</span></button>`}).join(''):'<div class="hint">No backup copies yet.</div>'}</div>`;
+}
+async function restoreSnap(id){
+  try{
+    const d=await idb(),row=await new Promise(res=>{const r=d.transaction('snap').objectStore('snap').get(id);r.onsuccess=()=>res(r.result)});
+    if(!row)return;const data=migrate(JSON.parse(row.data));
+    if(!confirm(`Replace current data (${countCells(db)} cells) with this backup from ${when(row.t)} (${countCells(data)} cells)?`))return;
+    await backupNow(true);
+    db=data;if(!db.cur||!db.sessions[db.cur])db.cur=Object.keys(db.sessions)[0]||null;
+    S();save(false);renderHeader();closeSheet();
+  }catch(e){alert('Could not restore that backup.')}
+}
+
+// ---------- import a CSV exported by this app ----------
+function parseCsv(text){
+  const rows=[];let row=[],f='',q=false;
+  for(let i=0;i<text.length;i++){const ch=text[i];
+    if(q){if(ch==='"'){if(text[i+1]==='"'){f+='"';i++}else q=false}else f+=ch}
+    else if(ch==='"')q=true;
+    else if(ch===','){row.push(f);f=''}
+    else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&text[i+1]==='\n')i++;row.push(f);f='';rows.push(row);row=[]}
+    else f+=ch}
+  if(f!==''||row.length){row.push(f);rows.push(row)}
+  return rows.filter(r=>r.some(x=>x!==''));
+}
+function importCsv(text){
+  const rows=parseCsv(text.replace(/^\uFEFF/,''));if(rows.length<2){alert('That file has no data rows.');return}
+  const head=rows[0].map(h=>h.trim().toLowerCase()),col=(...names)=>{for(const n of names){const i=head.indexOf(n);if(i>=0)return i}return -1};
+  const ix={cell:col('cell'),site:col('site'),date:col('date'),obs1:col('obs1','obs'),obs2:col('obs2'),s1:col('stems_obs1','stems'),s2:col('stems_obs2'),g:col('galls'),ch:col('chomps'),m:col('pct_mature'),h:col('avg_height'),n:col('notes')};
+  if(ix.cell<0){alert('This does not look like a CSV exported from this app (no "cell" column).');return}
+  const get=(r,k)=>ix[k]>=0?(r[ix[k]]??'').trim():'';
+  const numv=(r,k)=>{const v=parseFloat(get(r,k));return isNaN(v)?null:v};
+  const first=rows[1],id='s'+Date.now();
+  const s={id,site:get(first,'site'),date:get(first,'date')||today(),obs1:get(first,'obs1'),obs2:get(first,'obs2'),cells:{}};
+  let n=0;
+  rows.slice(1).forEach(r=>{
+    const c=parseInt(get(r,'cell'),10);if(!(c>=1&&c<=N))return;
+    s.cells[c]={s1:numv(r,'s1'),s2:numv(r,'s2'),g:numv(r,'g'),ch:numv(r,'ch'),m:numv(r,'m'),h:numv(r,'h'),n:ix.n>=0?(r[ix.n]??''):'',done:true};n++;
+  });
+  if(!n){alert('No cells found in that file.');return}
+  db.sessions[id]=s;db.cur=id;save(false);renderHeader();closeSheet();
+  alert(`Imported ${n} cells as a new session. They are all marked done.`);
+}
+$('#csvFile').addEventListener('change',async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{importCsv(await f.text())}catch(err){alert('Could not read that file.')}});
+
+// ---------- keep screen awake ----------
+let wl=null,wlState=('wakeLock' in navigator)?'off':'unsupported',lastWL=0;
+function wlText(){return wlState==='active'?'Screen stay-awake: ON. The iPad will not auto-lock while this app is open.':wlState==='unsupported'?'Screen stay-awake is not supported on this iPad/Safari version, so the iPad will lock on its own timer.':wlState==='blocked'?'Screen stay-awake was blocked, usually by Low Power Mode, so the iPad will lock on its own timer. Turn off Low Power Mode to let the app keep the screen on.':'Screen stay-awake: not active yet.'}
+async function getWL(){
+  if(wlState==='unsupported'||wl)return;lastWL=Date.now();
+  try{wl=await navigator.wakeLock.request('screen');wlState='active';wl.addEventListener('release',()=>{wl=null;if(wlState==='active')wlState='off'})}
+  catch(e){wlState='blocked'}
+  const el=$('#wlstat');if(el)el.textContent=wlText();
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){wl=null;getWL()}});
+['pointerdown','touchstart'].forEach(ev=>document.addEventListener(ev,()=>{
+  if(!wl&&wlState!=='unsupported'&&Date.now()-lastWL>30000)getWL();
+},{capture:true,passive:true}));
+getWL();
 
 const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;
 function csv(s){
-  const rows=[['site','date','obs','cell','row','col','stems','galls','notes']];
+  const rows=[['site','date','obs1','obs2','cell','row','col','stems_obs1','stems_obs2','stems_total','galls','chomps','pct_mature','pct_immature','avg_height','notes']];
   for(let i=1;i<=N;i++){
-    const c=s.cells[i];if(!c||(!c.done&&c.s===null&&c.g===null&&!c.n))continue;
-    rows.push([s.site,s.date,s.obs,i,Math.floor((i-1)/10)+1,(i-1)%10+1,c.s??'',c.g??'',c.n]);
+    const c=s.cells[i];if(!c||(!c.done&&!touched(c)&&!c.n))continue;
+    rows.push([s.site,s.date,s.obs1,s.obs2,i,Math.floor((i-1)/10)+1,(i-1)%10+1,c.s1??'',c.s2??'',stems(c)??'',c.g??'',c.ch??'',c.m??'',c.m==null?'':100-c.m,c.h??'',c.n]);
   }
   return rows.map(r=>r.map(q).join(',')).join('\n');
 }
-$('#btnExport').onclick=async()=>{
+async function exportCsv(){
   const s=S(),name=`grid_${(s.site||'site').replace(/\W+/g,'_')}_${s.date}.csv`;
   const file=new File([csv(s)],name,{type:'text/csv'});
   try{
     if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:name});return}
   }catch(e){if(e.name==='AbortError')return}
   const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=name;a.click();
-};
+}
+$('#btnExport').onclick=exportCsv;
 
 if(!db.cur||!db.sessions[db.cur])newSession();
 renderHeader();renderGrid();
+(async()=>{
+  try{
+    if(!hasData(db)){
+      const d=await idb(),row=await new Promise(res=>{const r=d.transaction('snap').objectStore('snap').get('latest');r.onsuccess=()=>res(r.result);r.onerror=()=>res(null)});
+      if(row){const data=migrate(JSON.parse(row.data));
+        if(hasData(data)){db=data;if(!db.cur||!db.sessions[db.cur])db.cur=Object.keys(db.sessions)[0];S();backupReady=true;save(false);renderHeader();renderGrid();
+          alert('Your main data was missing, so it was restored from the backup copy ('+countCells(db)+' cells).')}}
+    }
+  }catch(e){}
+  backupReady=true;queueBackup();
+})();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
 </script>

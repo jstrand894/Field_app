@@ -2,15 +2,27 @@
 
 An offline field data-entry app for 10×10 grid surveys, built to run on an iPad. It replaces handwriting recognition with tap-based counters, so there is no more `1` vs `I`, `2` vs `z`, or `0` vs `o`.
 
-It mirrors the layout of the original Numbers sheet: 100 cells numbered 1–10 across the first row, 11–20 across the second, and so on. Each cell records **stems**, **galls**, and **notes**.
+It mirrors the layout of the original Numbers sheet: 100 cells numbered 1–10 across the first row, 11–20 across the second, and so on. Each cell records **stems** (counted separately by two observers, added up for you), **galls**, **chomps**, **% mature**, **average height**, and **notes**.
 
 ## Features
 
 - **10×10 grid** of buttons so you always see where you are in the plot. Green = done, yellow = started, a dot = has notes. Each cell shows its stems/galls.
-- **Big +/− counters** for stems and galls, with +5, +10, and 0 shortcuts. You can also tap the number and type it on a numeric-only keypad.
-- **Notes box** that works with Apple Pencil (Scribble) or dictation.
-- **Done → Next** marks a cell complete and jumps to the next one. Blank counts are saved as 0, so a real zero is recorded rather than left empty. **← Prev** goes back.
-- **Sessions:** Site, Date, and Observer are set once at the top. "New session" copies the site and observer, and each session's data is kept separate. Switch or delete sessions from the **Sessions** button.
+- **Centered entry panel** with big +/− counters for **Stems (Observer 1)**, **Stems (Observer 2)**, **Galls**, and **Chomps** (number of stems eaten), with +5, +10, and 0 shortcuts. The stems total is added automatically.
+- **% Mature** (0–100, −/+ moves by 10, with −5/+5/100 shortcuts). **% Immature** (100 minus mature) is worked out for you in the CSV.
+- **Avg height** takes decimals like `14.5` or `22.9` (−/+ moves by 1, with ±0.1 fine-tune buttons). Write the decimal point with the Pencil, and a comma is read as a point.
+- **Apple Pencil input:** write numbers directly in the count boxes. Look-alike letters are fixed (`I`→1, `o`→0, `z`→2, ...) and you can write sums like `3+4`, which are added when you lift off.
+- **Zigzag walking order:** cells are visited 1→10, then 20→11, then 21→30, and so on. The **← / →** arrows at the top of the cell screen show the previous and next cell number in that order, and **Done ✓ →** follows the same path.
+- **Undo and clear:** every box header has a clear icon (right) to clear just that variable and an undo icon (left) to undo the last change to just that variable, the main **Undo** steps back through your changes in that cell (taps, writing, clears, Done), and **Clear cell** wipes the whole cell (also undoable).
+- **Sanity check:** a red warning shows (and a **!** appears on that cell in the grid) if chomps are more than total stems. It never blocks you.
+- **Hidden backup copy:** every save is also copied to a second storage area on the iPad (plus a snapshot every 10 minutes, keeping the latest 12). If the main data is ever missing when the app opens, it is restored automatically. **Sessions → Restore from backup copy** lets you roll back to any snapshot, and your current data is backed up first.
+- **Import a CSV:** **Sessions → Import a CSV** loads a file previously exported by this app as a new session (cells come in marked done). Useful for moving data between iPads or recovering from a file.
+- **Keeps the screen on:** the app asks the iPad not to auto-lock while it is open. iPadOS usually refuses this in **Low Power Mode**, so the iPad's own lock timer applies there. **Sessions** shows whether stay-awake is on.
+- **Export prompt:** finishing the last cell in the walk offers to export a CSV right away.
+- **No on-screen keyboard:** all boxes are set so the iPad keyboard doesn't pop up. Write with the Pencil, or use the buttons.
+- **Sun-readable:** high-contrast colors, heavier borders and bolder text. Each tap also gives a quick visual pop on the box.
+- **Notes box** for Apple Pencil (Scribble).
+- **Done → Next** marks a cell complete and jumps to the next one. Blank stems, galls, and chomps are saved as 0, so a real zero is recorded rather than left empty. % mature and height stay blank unless you enter them. **← Prev** goes back.
+- **Sessions:** Site, Date, Observer 1, and Observer 2 are set once at the top (the names label the stems counters). "New session" copies the site and observers, and each session's data is kept separate. Switch or delete sessions from the **Sessions** button.
 - **Autosave:** every tap is saved on the device immediately.
 - **Export CSV** through the iPad share sheet (Files, AirDrop, email, etc.).
 - **Works with no internet** once installed (see below).
@@ -19,8 +31,8 @@ It mirrors the layout of the original Numbers sheet: 100 cells numbered 1–10 a
 
 One row per cell that has data:
 
-| site | date | obs | cell | row | col | stems | galls | notes |
-|------|------|-----|------|-----|-----|-------|-------|-------|
+| site | date | obs1 | obs2 | cell | row | col | stems_obs1 | stems_obs2 | stems_total | galls | chomps | pct_mature | pct_immature | avg_height | notes |
+|------|------|------|------|------|-----|-----|-----------|-----------|-------------|-------|--------|-----------|-------------|-----------|-------|
 
 `row` and `col` (1–10) are derived from the cell number, so the file reads straight into R or Excel with no reshaping.
 
@@ -52,13 +64,13 @@ GitHub Pages can only publish from the repo root or a `/docs` folder, so publish
 
 ### 3. In the field
 
-- Open **Grids** from the home screen, fill in Site / Date / Obs, and tap cells.
+- Open **Grids** from the home screen, fill in Site / Date / Observer 1 / Observer 2, and tap cells.
 - When you're back in range, tap **Export CSV** and save it to Files or send it to yourself.
 
 ## Tips and cautions
 
 - **Data lives only on the iPad.** Export the CSV after every session and don't treat the app as your only copy. Home screen apps are much less likely to have storage cleared than regular Safari tabs, but a backup habit is cheap insurance.
-- **Updates need internet.** If you change the app, load it once on wifi (you may need to close and reopen it, or bump the cache version in `app/sw.js`) *before* the trip, not at the site.
+- **Updates need internet.** The app checks for a new version whenever it opens online. After pushing a change, open it once on wifi (and reopen it if needed) *before* the trip, not at the site.
 - Delete a session only after exporting it.
 
 ## Files
