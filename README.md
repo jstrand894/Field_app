@@ -30,14 +30,15 @@ It mirrors the layout of the original Numbers sheet: 100 cells numbered 1–10 a
 - **Sun-readable:** high-contrast colors, heavier borders and bolder text. Each tap also gives a quick visual pop on the box.
 - **Notes box** for Apple Pencil (Scribble).
 - **Done → Next** marks a cell complete and jumps to the next one. Blank stems, galls, and chomps are saved as 0, so a real zero is recorded rather than left empty. % mature and height stay blank unless you enter them. **← Prev** goes back.
-- **Sessions:** Site, Date, Observer 1, and Observer 2 are set once at the top (the names label the stems counters). "New session" copies the site and observers, and each session's data is kept separate. Switch or delete sessions from the **Sessions** button.
+- **Compact site / date / observer bar:** on both the Grid and Transect screens, Site, Date and Observers are shown as one slim bar in the top row, which leaves more room for the grid. Tap it and a panel drops down from the top with large input boxes over a darkened, blurred screen; tap **Done**, the dark area, or press Esc to close it (it slides back up). The bar updates as you type.
+- **Sessions:** Site, Date, Observer 1, and Observer 2 are set once (the names label the stems counters). "New session" copies the site and observers, and each session's data is kept separate. Switch or delete sessions from the **Sessions** button.
 - **Autosave:** every tap is saved on the device immediately.
 - **Export CSV** through the iPad share sheet (Files, AirDrop, email, etc.).
 - **Works with no internet** once installed (see below).
 
 ## Main menu and the Transect (SIMP) sheet
 
-The app opens on a **main menu** titled *Toadflax Field Data Collection*. Each sampling method has a clean card with an icon, a small diagram (the 10×10 grid with its zigzag walking path, and the 20 m transect tape with a frame every 2 m), chips for what you record, a one-line how-to, and a progress bar showing how far along your current session is. The two data sheets: **Grid** (everything above) and **Transect**, a digital version of the SIMP 2026 form. Use **‹ Menu** at the top left of either sheet to switch. Each sheet has its own sessions and its own CSV export.
+The app opens on a **main menu** titled *Toadflax Field Data Collection*. Each sampling method has a clean card with an icon, a small diagram (the 10×10 grid with its zigzag walking path, and a top-down picture of the 20 m transect: a measuring tape on a reel with a numbered quadrat frame every 2 m, laid across the ground), chips for what you record, a one-line how-to, and a progress bar showing how far along your current session is. The two data sheets: **Grid** (everything above) and **Transect**, a digital version of the SIMP 2026 form. Use **‹ Menu** at the top left of either sheet to switch. Each sheet has its own sessions and its own CSV export.
 
 **Distance ruler:** each transect is 20 m long and the frames are every 2 m starting at 2 m, so frame 1 = 2 m, frame 2 = 4 m, ... frame 10 = 20 m. A tape-measure style ruler (rounded segments with tick marks that fill green as frames are finished) sits above the numbered bubbles, both on the transect screen and inside each frame (the current frame is highlighted and its distance is shown next to the frame title), so you always know where you are on the line. The CSV has a `distance_m` column.
 
