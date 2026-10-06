@@ -102,8 +102,8 @@ html.lock .view{overflow:hidden}
 .sect{display:flex;flex-direction:column;gap:8px;border-top:2px solid var(--line);padding-top:12px}
 .sect b{font-size:16px}
 .sect select{font-size:17px}
-.flash{animation:pop .3s ease-out}
-@keyframes pop{0%{transform:scale(1)}30%{transform:scale(1.1);background:color-mix(in srgb,var(--c,#1f6b2c) 38%,#fff)}100%{transform:scale(1)}}
+.flash{animation:pop .22s ease-out}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.025);background:color-mix(in srgb,var(--c,#1f6b2c) 13%,var(--card))}100%{transform:scale(1)}}
 textarea{width:100%;min-height:90px;resize:vertical}
 .nav{display:flex;gap:8px}
 .nav button{flex:1}
@@ -376,7 +376,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
 <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" hidden>
 
 <script>
-const N=100, KEY='grids.v1', VERSION='1.14.2';
+const N=100, KEY='grids.v1', VERSION='1.14.3';
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.sessions)db={cur:null,sessions:{}};
@@ -402,10 +402,12 @@ migrate(db);
 const $=s=>document.querySelector(s);
 const today=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)};
 // touch=false for saves that are not data edits (switching sessions, exporting)
+let pendingJson=null,penDown=false,lastPadAct=0,padT=null;
 const save=(touch=true)=>{
   const s=db.sessions[db.cur];if(touch&&s)s.lastEdit=Date.now();
-  try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){alert('Could not save! Storage may be full or blocked. Export CSV now.')}
-  queueBackup();
+  const json=JSON.stringify(db);
+  try{localStorage.setItem(KEY,json)}catch(e){alert('Could not save! Storage may be full or blocked. Export CSV now.')}
+  pendingJson=json;queueBackup();
 };
 function newSession(){
   const id='s'+Date.now();
@@ -607,7 +609,7 @@ $('#panel').addEventListener('change',e=>{
   const c=cell(cur),k=e.target.dataset.in,raw=e.target.value,v=clean(raw);
   if(raw.trim()!==''&&!readable(v)){e.target.value=c[k]??'';toast('Could not read that as a number: '+codes(raw)+'. Try again, or use the + / − buttons.');return}
   const n=num(v,k);
-  c[k]=n;e.target.value=n??'';flash(e.target);save();refresh();renderGrid();
+  c[k]=n;e.target.value=n??'';save();refresh();renderGrid();
 });
 $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
 
@@ -635,10 +637,12 @@ const idb=()=>new Promise((res,rej)=>{const r=indexedDB.open('grids-backup',1);r
 const tHas=f=>f.done||TKEYS.some(k=>f[k]!=null)||!!f.dm||(f.ow||[]).some(w=>w.v!=null);
 const hasData=d=>Object.values(d.sessions||{}).some(s=>Object.values(s.cells||{}).some(c=>c.done||touched(c)||c.n))||Object.values(d.tsessions||{}).some(s=>Object.values(s.frames||{}).some(tHas));
 const countCells=d=>Object.values(d.sessions||{}).reduce((n,s)=>n+Object.values(s.cells||{}).filter(c=>c.done||touched(c)||c.n).length,0)+Object.values(d.tsessions||{}).reduce((n,s)=>n+Object.values(s.frames||{}).filter(tHas).length,0);
-function queueBackup(force){if(!backupReady)return;clearTimeout(bt);bt=setTimeout(()=>backupNow(force),force?0:1500)}
+function queueBackup(force){if(!backupReady)return;clearTimeout(bt);bt=setTimeout(()=>backupNow(force),force?0:(Date.now()-lastPadAct<4000?6000:1500))}
 async function backupNow(force){
   try{
-    const data=JSON.stringify(db),now=Date.now(),has=hasData(db);
+    if(penDown&&!force){clearTimeout(bt);bt=setTimeout(()=>backupNow(force),1500);return}   // never compete with the pen
+    const data=force?JSON.stringify(db):(pendingJson||JSON.stringify(db)),now=Date.now(),has=hasData(db);
+    pendingJson=null;
     const d=await idb(),st=d.transaction('snap','readwrite').objectStore('snap');
     st.put({id:'latest',t:now,data});
     if(has&&(force||now-lastSnap>600000)){
@@ -839,6 +843,11 @@ function fitGrid(){
 // ---------- notes / sketch pads (Pencil, finger or mouse) ----------
 const PAD_COLORS=['#111111','#c62f2f','#1b6b2a','#1f5fbf','#d99e00'];
 const PADS=[];
+// Pad strokes are saved a moment after you stop drawing (not at every pen lift), and always when the app is hidden or closed
+function padSaveSoon(){lastPadAct=Date.now();clearTimeout(padT);padT=setTimeout(()=>{padT=null;if(penDown){padSaveSoon();return}save()},1200)}
+function flushPad(){if(padT){clearTimeout(padT);padT=null;save()}}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)flushPad()});
+window.addEventListener('pagehide',flushPad);
 function makePad(root,title,getStrokes){
   const svg=p=>`<svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`;
   root.innerHTML=`<div class="padbar"><b>${title}</b>${PAD_COLORS.map((c,i)=>`<button class="pc${i?'':' on'}" data-c="${c}" style="--pc:${c}" aria-label="Pen colour ${i+1}"></button>`).join('')}
@@ -846,7 +855,7 @@ function makePad(root,title,getStrokes){
     <button class="pb" data-act="undo" aria-label="Undo last stroke">${svg('<path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/>')}</button>
     <button class="pb" data-act="clear" aria-label="Clear pad">${svg('<path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/>')}</button></div>
     <div class="padbody"><canvas></canvas></div>`;
-  const body=root.querySelector('.padbody'),cv=root.querySelector('canvas'),cx=cv.getContext('2d');
+  const body=root.querySelector('.padbody'),cv=root.querySelector('canvas'),cx=cv.getContext('2d',{desynchronized:true});
   let color=PAD_COLORS[0],erase=false,W=1,H=1,cur=null;
   const WIDTH=2.6;                                    // pen width in pixels at the pad's normal width; stored relative to pad width
   const px=v=>v/1000*W;                               // stored coordinates are thousandths of the pad width
@@ -867,13 +876,14 @@ function makePad(root,title,getStrokes){
   function eraseAt(x,y){
     const ss=getStrokes(),R=14/W*1000;let hit=false;
     for(let i=ss.length-1;i>=0;i--){const p=ss[i].p;for(let k=0;k<p.length;k+=2){if(Math.hypot(p[k]-x,p[k+1]-y)<R){ss.splice(i,1);hit=true;break}}}
-    if(hit){redraw();save()}
+    if(hit){redraw();padSaveSoon()}
   }
   cv.addEventListener('pointerdown',e=>{
     if(e.pointerType==='mouse'&&e.button!==0)return;
     const rr=cv.getBoundingClientRect();if(Math.abs(rr.width-W)>1||Math.abs(rr.height-H)>1)size(); // never store coordinates against a stale size
     try{cv.setPointerCapture(e.pointerId)}catch(err){}
     const [x,y]=pt(e);
+    penDown=true;
     if(erase){cur={erase:true};eraseAt(x,y);return}
     cur={c:color,w:WIDTH/W*1000,p:[x,y]};
   });
@@ -890,14 +900,14 @@ function makePad(root,title,getStrokes){
       cx.beginPath();cx.moveTo(px(lx),px(ly));cx.lineTo(px(x),px(y));cx.stroke();
     }
   });
-  const end=()=>{if(cur&&!cur.erase){getStrokes().push({c:cur.c,w:Math.round(cur.w*10)/10,p:cur.p});save()}cur=null};
+  const end=()=>{penDown=false;if(cur&&!cur.erase){getStrokes().push({c:cur.c,w:Math.round(cur.w*10)/10,p:cur.p});padSaveSoon()}cur=null};
   cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
   root.querySelector('.padbar').addEventListener('click',e=>{
     const b=e.target.closest('button');if(!b)return;
     if(b.dataset.c){color=b.dataset.c;erase=false;root.querySelectorAll('.pc').forEach(x=>x.classList.toggle('on',x===b));root.querySelector('[data-act=erase]').classList.remove('on')}
     else if(b.dataset.act==='erase'){erase=!erase;b.classList.toggle('on',erase);if(erase)root.querySelectorAll('.pc').forEach(x=>x.classList.remove('on'));else root.querySelector(`.pc[data-c="${color}"]`).classList.add('on')}
-    else if(b.dataset.act==='undo'){getStrokes().pop();redraw();save()}
-    else if(b.dataset.act==='clear'){if(getStrokes().length&&confirm('Clear everything on this pad?')){getStrokes().length=0;redraw();save()}}
+    else if(b.dataset.act==='undo'){getStrokes().pop();redraw();padSaveSoon()}
+    else if(b.dataset.act==='clear'){if(getStrokes().length&&confirm('Clear everything on this pad?')){getStrokes().length=0;redraw();padSaveSoon()}}
   });
   const pad={redraw,size};PADS.push(pad);return pad;
 }
@@ -1115,7 +1125,7 @@ $('#tpanel').addEventListener('change',e=>{
   const f=frame(tcur),isW=d.tow!==undefined,raw=e.target.value,v=clean(raw),old=isW?f.ow[Number(d.tow)].v:f[d.tin];
   if(raw.trim()!==''&&!readable(v)){e.target.value=old??'';toast('Could not read that as a number: '+codes(raw)+'. Try again, or use the + / − buttons.');return}
   const n=num(v,isW?'ow':d.tin);if(isW)f.ow[Number(d.tow)].v=n;else f[d.tin]=n;
-  e.target.value=n??'';flash(e.target);save();refreshT();renderT();
+  e.target.value=n??'';save();refreshT();renderT();
 });
 let swp=null;
 $('#tpanel').addEventListener('pointerdown',e=>{swp=(e.pointerType==='touch'&&tcur!=null)?{x:e.clientX,y:e.clientY}:null});
