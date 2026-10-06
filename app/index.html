@@ -193,23 +193,23 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .fbody.leaving{position:absolute;left:0;top:0}
 .fnav{position:sticky;bottom:0;z-index:4;background:var(--bg);padding-top:6px;margin-top:auto}
 /* when the screen is short (iPad mini / landscape) the frame form shrinks step by step until it fits */
-#tpanel.c1 .tf input:not(.wn){min-height:50px;font-size:28px}
-#tpanel.c1 .tf .tb button{height:30px}
-#tpanel.c1 .tf{padding:4px 6px;gap:4px}
-#tpanel.c1 .tn{width:26px;height:26px;font-size:13px}
-#tpanel.c1 .tsec h3{margin-bottom:2px}
-#tpanel.c2 .tf input:not(.wn){min-height:42px;font-size:24px}
-#tpanel.c2 .tf .tb button{height:26px;font-size:20px}
-#tpanel.c2 .hintsm{display:none}
-#tpanel.c2 .tm{padding:2px 0 7px;font-size:11px}
-#tpanel.c2 .ph h2{font-size:20px}
-#tpanel.c2 .dmh button{width:34px;height:34px;font-size:18px}
-#tpanel.c3 .tf input:not(.wn){min-height:34px;font-size:20px}
-#tpanel.c3 .tf .tb button{height:22px;font-size:17px}
-#tpanel.c3 .tf .tl{font-size:11px;padding:1px 4px}
-#tpanel.c3 .tf{gap:3px;padding:3px 5px}
-#tpanel.c3 .trl{font-size:12px}
-#tpanel.c3 .tinyadd{padding:2px 8px;font-size:12px}
+.panel.wide.c1 .tf input:not(.wn){min-height:50px;font-size:28px}
+.panel.wide.c1 .tf .tb button{height:30px}
+.panel.wide.c1 .tf{padding:4px 6px;gap:4px}
+.panel.wide.c1 .tn{width:26px;height:26px;font-size:13px}
+.panel.wide.c1 .tsec h3{margin-bottom:2px}
+.panel.wide.c2 .tf input:not(.wn){min-height:42px;font-size:24px}
+.panel.wide.c2 .tf .tb button{height:26px;font-size:20px}
+.panel.wide.c2 .hintsm{display:none}
+.panel.wide.c2 .tm{padding:2px 0 7px;font-size:11px}
+.panel.wide.c2 .ph h2{font-size:20px}
+.panel.wide.c2 .dmh button{width:34px;height:34px;font-size:18px}
+.panel.wide.c3 .tf input:not(.wn){min-height:34px;font-size:20px}
+.panel.wide.c3 .tf .tb button{height:22px;font-size:17px}
+.panel.wide.c3 .tf .tl{font-size:11px;padding:1px 4px}
+.panel.wide.c3 .tf{gap:3px;padding:3px 5px}
+.panel.wide.c3 .trl{font-size:12px}
+.panel.wide.c3 .tinyadd{padding:2px 8px;font-size:12px}
 #tpanel{touch-action:pan-y}
 .panel.wide{max-width:1400px;padding:8px 12px;gap:5px;max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px)}
 #tsheet{padding:8px 8px max(8px,env(safe-area-inset-bottom))}
@@ -350,7 +350,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
 <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" hidden>
 
 <script>
-const N=100, KEY='grids.v1', VERSION='1.12.0';
+const N=100, KEY='grids.v1', VERSION='1.13.0';
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.sessions)db={cur:null,sessions:{}};
@@ -469,31 +469,13 @@ function mountCell(n){ // instant render
   panel.scrollTop=0;$('#sheet').classList.add('open');renderGrid();refresh();
   if(!was&&!reduceMotion())panel.animate([{transform:'translateY(56px) scale(.94)',opacity:0},{transform:'translateY(-7px) scale(1.01)',opacity:1,offset:.72},{transform:'none',opacity:1}],{duration:440,easing:'cubic-bezier(.2,.8,.3,1)'});
 }
-// kind: 'next' | 'prev' (arrows slide along), 'done' (checked off and lifted away), 'none' (no toadflax poof)
+// kind: 'next' | 'prev' (arrows), 'done' (checked off) or 'none' (no toadflax): all slide as two cards;
+// Done and No toadflax also pop a small stamp so you can tell which one you pressed.
 function openCell(n,kind){
-  const panel=$('#panel'),wrap=panel.querySelector('.gwrap');
-  if(!kind||!wrap||reduceMotion()||!$('#sheet').classList.contains('open')||cur==null){mountCell(n);return}
-  wrap.querySelectorAll('.gbody.leaving').forEach(x=>x.remove());
-  const old=wrap.querySelector('.gbody');
-  old.classList.add('leaving');old.style.width=old.offsetWidth+'px';old.style.pointerEvents='none';
-  old.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));
-  const nu=document.createElement('div');nu.className='gbody';nu.innerHTML=buildCell(n);wrap.appendChild(nu);
-  panel.scrollTop=0;renderGrid();refresh();
-  const W=Math.min(panel.clientWidth,820),E='cubic-bezier(.22,.8,.3,1)',gone=()=>{old.remove()};
-  if(kind==='next'||kind==='prev'){
-    const d=kind==='next'?1:-1;
-    old.animate([{transform:'translateX(0) scale(1)',opacity:1},{transform:`translateX(${-d*W}px) scale(.92)`,opacity:0}],{duration:460,easing:'cubic-bezier(.5,0,.3,1)',fill:'forwards'}).onfinish=gone;
-    nu.animate([{transform:`translateX(${d*W}px) scale(.92)`,opacity:0},{transform:`translateX(${-d*12}px) scale(1)`,opacity:1,offset:.78},{transform:'none',opacity:1}],{duration:540,easing:E});
-    fxBurst('arrow',d);
-  }else if(kind==='done'){
-    old.animate([{transform:'translateY(0) scale(1)',opacity:1},{transform:'translateY(-80px) scale(.94) rotate(-1.5deg)',opacity:0}],{duration:420,easing:'cubic-bezier(.5,0,.8,.4)',fill:'forwards'}).onfinish=gone;
-    nu.animate([{transform:'translateY(100px) scale(.94)',opacity:0},{transform:'translateY(-12px) scale(1.01)',opacity:1,offset:.7},{transform:'none',opacity:1}],{duration:580,delay:150,easing:E,fill:'backwards'});
-    fxBurst('done');
-  }else{
-    old.animate([{transform:'scale(1) rotate(0)',opacity:1},{transform:'scale(.8) rotate(3deg)',opacity:0}],{duration:360,easing:'cubic-bezier(.5,0,.8,.4)',fill:'forwards'}).onfinish=gone;
-    nu.animate([{transform:'scale(1.16)',opacity:0},{transform:'scale(.98)',opacity:1,offset:.7},{transform:'none',opacity:1}],{duration:560,delay:140,easing:E,fill:'backwards'});
-    fxBurst('none');
-  }
+  const panel=$('#panel'),sheet=$('#sheet');
+  if(!kind||reduceMotion()||!sheet.classList.contains('open')||cur==null||!panel.querySelector('.gwrap')){mountCell(n);return}
+  slideCards(panel,sheet,()=>mountCell(n),kind==='prev'?-1:1);
+  if(kind==='done'||kind==='none')fxBurst(kind);
 }
 // Little celebration overlay: a stamp, a ring and confetti, so you can tell which button you pressed
 function fxBurst(type,d){
@@ -921,22 +903,28 @@ let tnav=0;
 const reduceMotion=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 // Moving along the transect: the old page slides off one side while the new page slides in from the other
 // (both visible at once, with a little spring), and the gold marker hops along the ruler to the new spot.
-function openFrame(n,dir){
-  const panel=$('#tpanel'),sheet=$('#tsheet');
-  tnav++;
-  if(!dir||reduceMotion()||!sheet.classList.contains('open')||!panel.querySelector('.fbodywrap')){renderFrame(n);return}
-  // Two rigid cards moving together: a copy of the current card slides away while the live card (already showing
-  // the new frame) slides in from the other side, same distance, same speed, nothing fading or scaling.
+// Shared "two cards" slide used by the transect frames and the grid cells: a copy of the current card slides away
+// while the live card (already showing the next screen) slides in from the other side, same distance, same speed,
+// nothing fading or scaling. The copy is an exact twin (typed values included), so no box changes size mid-slide.
+function slideCards(panel,sheet,mount,dir){
   sheet.querySelectorAll('.ghost').forEach(g=>g.remove());
+  panel.querySelectorAll('input').forEach(el=>el.setAttribute('value',el.value));
+  panel.querySelectorAll('textarea').forEach(el=>{el.textContent=el.value});
   const r=panel.getBoundingClientRect(),ghost=panel.cloneNode(true);
   ghost.removeAttribute('id');ghost.classList.add('ghost');ghost.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));
   Object.assign(ghost.style,{position:'fixed',left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',margin:'0',pointerEvents:'none',zIndex:'7'});
   sheet.appendChild(ghost);
-  mountFrame(n);
+  mount();
   const D=r.width+24,opt={duration:340,easing:'cubic-bezier(.4,0,.2,1)'};
   ghost.animate([{transform:'translateX(0)'},{transform:`translateX(${-dir*D}px)`}],{...opt,fill:'forwards'}).onfinish=()=>ghost.remove();
   setTimeout(()=>ghost.remove(),700);
   panel.animate([{transform:`translateX(${dir*D}px)`},{transform:'translateX(0)'}],opt);
+}
+function openFrame(n,dir){
+  const panel=$('#tpanel'),sheet=$('#tsheet');
+  tnav++;
+  if(!dir||reduceMotion()||!sheet.classList.contains('open')||!panel.querySelector('.fbodywrap')){renderFrame(n);return}
+  slideCards(panel,sheet,()=>mountFrame(n),dir);
 }
 function doResetT(){
   const s=TS(),n=Object.values(s.frames).filter(tHas).length;
