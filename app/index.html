@@ -102,13 +102,37 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .mcard.g{--c:#1b6b2a}.mcard.t{--c:#0a6c76}
 /* ---- transect ---- */
 #tapp{max-width:900px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;min-height:100%}
-#tframes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
-.tframe{aspect-ratio:1.25;font-size:30px}
-.tframe small{font-size:13px}
-.panel.wide{max-width:1120px}
-.tsec h3{margin:0 0 6px;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
-.tcov{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
-.tmx{display:grid;grid-template-columns:96px repeat(4,minmax(0,1fr));gap:10px;align-items:stretch}
+.tl-wrap{position:relative}
+#tframes{display:flex;overflow-x:auto;scroll-snap-type:x proximity;padding:14px 4px 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#tframes::-webkit-scrollbar{display:none}
+.tnode{flex:0 0 156px;scroll-snap-align:center;position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0;border:0;background:none;color:var(--ink)}
+.tnode::before{content:"";position:absolute;top:24px;left:-50%;width:100%;height:6px;border-radius:3px;background:var(--line)}
+.tnode:first-child::before{display:none}
+.tnode.done::before{background:var(--accent)}
+.tnode .dot{position:relative;z-index:1;width:50px;height:50px;border-radius:50%;border:4px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800}
+.tnode.done .dot{background:var(--done);border-color:var(--accent)}
+.tnode.part .dot{background:var(--part);border-color:#8a6d0f}
+.tnode.next .dot{border-color:#d99e00;box-shadow:0 0 0 5px color-mix(in srgb,#f2b705 40%,transparent)}
+.tnode .card{width:142px;min-height:92px;border:2px solid var(--line);border-radius:14px;background:var(--card);padding:8px 10px;text-align:left;font-size:13px;font-weight:700;line-height:1.35;color:var(--ink)}
+.tnode.done .card{border-color:var(--accent);background:color-mix(in srgb,var(--done) 45%,var(--card))}
+.tnode.part .card{border-color:#8a6d0f}
+.tnode .card span{display:block;color:var(--mute);font-weight:600}
+.tnode .card b{color:var(--ink)}
+.tnode:active .card{transform:scale(.97)}
+.ttl{position:relative;display:flex;justify-content:space-between;align-items:center;padding:0 4px}
+.ttl::before{content:"";position:absolute;left:20px;right:20px;top:50%;height:5px;margin-top:-2px;border-radius:3px;background:var(--line)}
+.tn{position:relative;z-index:1;width:32px;height:32px;border-radius:50%;padding:0;font-size:15px;font-weight:800;border-width:3px;background:var(--card)}
+.tn.done{background:var(--done);border-color:var(--accent)}
+.tn.part{background:var(--part);border-color:#8a6d0f}
+.tn.cur{transform:scale(1.18);box-shadow:0 0 0 3px #f2b705}
+.sl{animation:slideFromRight .22s ease-out}.sr{animation:slideFromLeft .22s ease-out}
+@keyframes slideFromRight{from{transform:translateX(48px);opacity:.35}to{transform:none;opacity:1}}
+@keyframes slideFromLeft{from{transform:translateX(-48px);opacity:.35}to{transform:none;opacity:1}}
+#tpanel{touch-action:pan-y}
+.panel.wide{max-width:1120px;padding:12px;gap:8px}
+.tsec h3{margin:0 0 4px;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.tcov{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.tmx{display:grid;grid-template-columns:96px repeat(4,minmax(0,1fr));gap:8px;align-items:stretch}
 .tmx .th{align-self:end;text-align:center;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
 .trl{display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--c);color:#fff;font-weight:800;font-size:15px;text-transform:uppercase;text-align:center}
 .tf{--c:var(--line);display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:14px;border:3px solid var(--c);background:var(--card);background:color-mix(in srgb,var(--c) 12%,var(--card))}
@@ -160,7 +184,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .ttotal .ts{font-size:13px;font-weight:700;color:var(--mute)}
 .ttotal.ok{--c:#1b6b2a}.ttotal.bad{--c:#b8860b}
 .ttotal.ok .ts{color:#1b6b2a}.ttotal.bad .ts{color:#8a6d0f}
-@media(max-width:760px){.tcov{grid-template-columns:repeat(3,minmax(0,1fr))}#tframes{grid-template-columns:repeat(2,minmax(0,1fr))}.mgrid{grid-template-columns:1fr}}
+@media(max-width:760px){.tcov{grid-template-columns:repeat(3,minmax(0,1fr))}.mgrid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -203,8 +227,9 @@ textarea{width:100%;min-height:90px;resize:vertical}
     <button id="tSessions">Sessions</button>
     <button id="tExport" class="pri">Export CSV</button>
   </div>
-  <div id="tframes"></div>
-  <div class="hint">Green = frame done, yellow = started. Tap a frame to enter everything for it on one screen.</div>
+  <div class="tl-wrap"><div id="tframes"></div></div>
+  <button class="pri" id="tContinue" style="font-size:20px;padding:14px">Continue</button>
+  <div class="hint">Swipe along the transect line. Green = frame done, yellow = started, gold ring = next up. Tap a frame to enter all of its information on one screen; inside a frame, swipe left or right to move to the next or previous frame.</div>
   <footer class="foot"></footer>
 </div>
 
@@ -215,7 +240,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
 <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" hidden>
 
 <script>
-const N=100, KEY='grids.v1', VERSION='1.3.0';
+const N=100, KEY='grids.v1', VERSION='1.4.0';
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.sessions)db={cur:null,sessions:{}};
@@ -531,7 +556,7 @@ $('#btnExport').onclick=exportCsv;
 function show(view){
   ['menu','app','tapp'].forEach(id=>$('#'+id).hidden=id!==view);
   $('#sheet').classList.remove('open');$('#tsheet').classList.remove('open');cur=null;tcur=null;
-  if(view==='menu')renderMenu();else if(view==='app'){renderHeader();renderGrid()}else renderT();
+  if(view==='menu')renderMenu();else if(view==='app'){renderHeader();renderGrid()}else renderT(true);
   window.scrollTo(0,0);
 }
 function renderMenu(){
@@ -560,20 +585,27 @@ const seenWeeds=()=>{const m=new Map();Object.keys(TS().frames).sort((a,b)=>a-b)
 const tstate=n=>{const f=TS().frames[n];if(!f)return '';if(f.done)return 'done';if(tHas(f))return 'part';return ''};
 let tcur=null;
 ['site','date','obs1','obs2'].forEach(k=>$('#t'+k).addEventListener('input',e=>{TS()[k]=e.target.value;save()}));
-function renderT(){
+function renderT(scroll){
   const s=TS();
   $('#tsite').value=s.site;$('#tdate').value=s.date;$('#tobs1').value=s.obs1;$('#tobs2').value=s.obs2;
-  let done=0;$('#tframes').innerHTML='';
+  let done=0,next=0;$('#tframes').innerHTML='';
+  for(let n=1;n<=10;n++){if(tstate(n)==='done')done++;else if(!next)next=n}
   for(let n=1;n<=10;n++){
-    const f=s.frames[n],st=tstate(n);if(st==='done')done++;
+    const f=s.frames[n],st=tstate(n),tot=f?covTot(f):null;
     const b=document.createElement('button');
-    b.className='cell tframe '+st+(tcur===n?' cur':'');
-    b.innerHTML=`${n}`+(f&&tHas(f)?`<small>Tgt ${f.ct??'–'}% · M${f.nm??'–'}/I${f.ni??'–'}</small>`:'');
+    b.className='tnode '+st+(n===next?' next':'')+(tcur===n?' cur':'');b.dataset.n=n;
+    const has=f&&tHas(f);
+    b.innerHTML=`<div class="dot">${n}</div><div class="card">${has?
+      `<b>Target ${f.ct??'–'}%</b><span>Cover total ${tot??'–'}</span><span>Mature ${f.nm??'–'} · Imm ${f.ni??'–'}</span>${f.dm?`<span>Damage ${f.dm}</span>`:''}`
+      :`<span>${n===next?'Next up':'Not started'}</span>`}</div>`;
     b.onclick=()=>openFrame(n);
     $('#tframes').appendChild(b);
   }
   $('#tprog').textContent=`${done} / 10 frames done`;
+  const c=$('#tContinue');c.hidden=!next;if(next)c.textContent=`Continue: frame ${next} ▸`;c.dataset.n=next;
+  if(scroll){const el=$('#tframes').querySelector(next?'.next':'.tnode:last-child');if(el)el.scrollIntoView({inline:'center',block:'nearest'})}
 }
+$('#tContinue').onclick=e=>{const n=Number(e.currentTarget.dataset.n);if(n)openFrame(n)};
 
 // ----- frame entry screen: everything for one frame in one place -----
 const tundo={};
@@ -588,9 +620,10 @@ function refreshT(){
     box.classList.toggle('ok',tot===100);box.classList.toggle('bad',tot!=null&&tot!==100);
     $('#ttots').textContent=tot==null?'cover total':tot===100?'= 100 ✓':'not 100';
   }
+  document.querySelectorAll('.ttl .tn').forEach(b=>{const i=Number(b.dataset.tgo);b.className='tn '+tstate(i)+(i===tcur?' cur':'')});
   const dis=!(tundo[tkey()]||[]).length;['#tundo','#tundoTop'].forEach(s=>{const u=$(s);if(u)u.disabled=dis});
 }
-function openFrame(n){
+function openFrame(n,dir){
   tcur=n;const f=frame(n);tpend=false;
   // carry the other-weed names forward from the previous frame (values stay blank)
   if(!tHas(f)&&!f.ow.some(w=>w.n)){for(let j=n-1;j>=1;j--){const pf=TS().frames[j];if(pf&&pf.ow.some(w=>w.n)){f.ow=pf.ow.map(w=>({n:w.n,v:null}));break}}}
@@ -610,6 +643,7 @@ function openFrame(n){
       <div class="hsum"><div class="ttchip" id="ttotbox"><span class="ts" style="color:inherit">Total</span><b id="ttot">–</b><span class="ts" id="ttots"></span></div>
         <div class="dmh"><span>Damage</span>${[1,2,3,4].map(d=>`<button data-tdm="${d}" class="${f.dm===d?'on':''}" aria-label="Damage ${d}">${d}</button>`).join('')}</div></div>
       <div class="hb"><button id="tundoTop" class="ib">${undoSvg}Undo</button><button id="tx">Close</button></div></div>
+    <div class="ttl" aria-label="Transect timeline">${Array.from({length:10},(_,i)=>i+1).map(i=>`<button class="tn ${tstate(i)}${i===n?' cur':''}" data-tgo="${i}" aria-label="Go to frame ${i}">${i}</button>`).join('')}</div>
     <div class="tsec"><h3 class="h3row"><span>Cover (%)</span>${chipsHtml}${f.ow.length<5?'<button class="tinyadd" id="towadd">＋ Add another other weed</button>':''}</h3><div class="tcov">
       ${fld('ct','★ Target','tg',5)}${f.ow.map(weed).join('')}${fld('cf','Forb','pl',5)}${fld('cs','Shrub','pl',5)}${fld('cg','Grass','pl',5)}
       ${fld('cd','Ground','gr',5)}${fld('cl','Litter','gr',5)}${fld('cm','Moss','gr',5)}
@@ -621,9 +655,10 @@ function openFrame(n){
     </div></div>
     <div class="nav"><button id="tundo" class="ib">${undoSvg}Undo</button><button id="tclr">Clear frame</button><button id="tdone" class="pri">Done ✓ → ${n<10?'frame '+(n+1):'finish'}</button></div>`;
   $('#tsheet').classList.add('open');renderT();refreshT();
+  const pn=$('#tpanel');pn.classList.remove('sl','sr');if(dir){void pn.offsetWidth;pn.classList.add(dir>0?'sl':'sr')}
   $('#weedlist').innerHTML=seenWeeds().map(nm=>`<option value="${esc(nm)}">`).join('');
 }
-function closeFrame(){$('#tsheet').classList.remove('open');tcur=null;renderT()}
+function closeFrame(){$('#tsheet').classList.remove('open');tcur=null;renderT(true)}
 $('#tpanel').addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
   if(b.id==='tx'){closeFrame();return}
@@ -658,13 +693,14 @@ $('#tpanel').addEventListener('click',e=>{
       b.parentElement.querySelectorAll('button').forEach(x=>x.classList.toggle('on',Number(x.dataset.tdm)===f.dm));
       save();renderT();
     }
-    else if(b.id==='tprev'){if(tcur>1)openFrame(tcur-1)}
-    else if(b.id==='tnext'){if(tcur<10)openFrame(tcur+1)}
+    else if(b.dataset.tgo){const g=Number(b.dataset.tgo);if(g!==tcur)openFrame(g,g>tcur?1:-1)}
+    else if(b.id==='tprev'){if(tcur>1)openFrame(tcur-1,-1)}
+    else if(b.id==='tnext'){if(tcur<10)openFrame(tcur+1,1)}
     else if(b.id==='tundo'||b.id==='tundoTop')tdoUndo();
     else if(b.id==='tclr'){tpush();Object.assign(f,Object.fromEntries(TKEYS.map(k=>[k,null])),{dm:'',done:false,ow:f.ow.map(w=>({n:w.n,v:null}))});save();openFrame(tcur)}
     else if(b.id==='tdone'){
       tpush();f.done=true;save();
-      if(tcur<10)openFrame(tcur+1);
+      if(tcur<10)openFrame(tcur+1,1);
       else{
         closeFrame();
         const all=Object.values(TS().frames).filter(x=>x.done).length;
@@ -698,6 +734,16 @@ $('#tpanel').addEventListener('change',e=>{
   if(raw.trim()!==''&&!readable(v)){e.target.value=old??'';toast('Could not read that as a number: '+codes(raw)+'. Try again, or use the + / − buttons.');return}
   const n=num(v,isW?'ow':d.tin);if(isW)f.ow[Number(d.tow)].v=n;else f[d.tin]=n;
   e.target.value=n??'';flash(e.target);save();refreshT();renderT();
+});
+let swp=null;
+$('#tpanel').addEventListener('pointerdown',e=>{swp=(e.pointerType==='touch'&&tcur!=null)?{x:e.clientX,y:e.clientY}:null});
+$('#tpanel').addEventListener('pointercancel',()=>{swp=null});
+$('#tpanel').addEventListener('pointerup',e=>{
+  if(!swp||tcur==null)return;const dx=e.clientX-swp.x,dy=e.clientY-swp.y;swp=null;
+  if(Math.abs(dx)>90&&Math.abs(dx)>Math.abs(dy)*2){
+    if(dx<0&&tcur<10){e.preventDefault();openFrame(tcur+1,1)}
+    else if(dx>0&&tcur>1){e.preventDefault();openFrame(tcur-1,-1)}
+  }
 });
 $('#tsheet').addEventListener('click',e=>{if(e.target.id==='tsheet')closeFrame()});
 

@@ -31,6 +31,8 @@ It mirrors the layout of the original Numbers sheet: 100 cells numbered 1–10 a
 
 The app opens on a **main menu** with two data sheets: **Grid** (everything above) and **Transect**, a digital version of the SIMP 2026 form. Use **‹ Menu** at the top left of either sheet to switch. Each sheet has its own sessions and its own CSV export.
 
+**Timeline:** the transect screen shows the 10 frames as a horizontal line you swipe along (green = done, yellow = started, gold ring = next up), with a **Continue: frame N** button that jumps to the next unfinished frame. Inside a frame, a row of 10 dots shows where you are on the line (tap one to jump), and you can **swipe left or right with a finger** to move to the next or previous frame. Pencil strokes never trigger a swipe, so writing numbers is safe.
+
 The paper form puts the 10 frames in two separate tables, so you scroll between cover and heights. Here **each frame has all of its information on one screen**, and you finish it before moving to the next:
 
 - **Cover (%)** for Target, Other, Forb, Shrub, Grass, Ground, Litter, and Moss (−/+ moves by 5). **Target** is the gold box with a star so it stands out, and it has **5** and **10** shortcut buttons (it never needs Rest). **Total** and **Damage** sit in the top bar so the cover boxes have the room.
