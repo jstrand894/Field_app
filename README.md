@@ -31,6 +31,12 @@ It mirrors the layout of the original Numbers sheet: 100 cells numbered 1–10 a
 
 The app opens on a **main menu** with two data sheets: **Grid** (everything above) and **Transect**, a digital version of the SIMP 2026 form. Use **‹ Menu** at the top left of either sheet to switch. Each sheet has its own sessions and its own CSV export.
 
+**Distance ruler:** each transect is 20 m long and the frames are every 2 m starting at 2 m, so frame 1 = 2 m, frame 2 = 4 m, ... frame 10 = 20 m. A tape-measure style ruler (rounded segments with tick marks that fill green as frames are finished) sits above the numbered bubbles, both on the transect screen and inside each frame (the current frame is highlighted and its distance is shown next to the frame title), so you always know where you are on the line. The CSV has a `distance_m` column.
+
+**New transect:** a **＋ New transect** button at the top of the transect screen (next to Sessions) starts a fresh one, and finishing frame 10 offers to export a backup and then asks whether to start a new transect. The finished transect stays saved under Sessions.
+
+**Motion:** moving to the next or previous frame slides the old page off one side while the new page slides in from the other (with a little spring), and a gold marker hops along the ruler to the new distance. On the transect screen the line behaves like a carousel: the bubble in the middle grows while the ones at the edges shrink and fade, the frames pop in one after another when you open it, returning from a frame glides back to the next-up frame, and the next-up bubble gently pulses. Turn on iPad *Reduce Motion* and the animations switch off.
+
 **Timeline:** the transect screen shows the 10 frames as a horizontal line you swipe along (green = done, yellow = started, gold ring = next up), with a **Continue: frame N** button that jumps to the next unfinished frame. Inside a frame, a row of 10 dots shows where you are on the line (tap one to jump), and you can **swipe left or right with a finger** to move to the next or previous frame. Pencil strokes never trigger a swipe, so writing numbers is safe.
 
 The paper form puts the 10 frames in two separate tables, so you scroll between cover and heights. Here **each frame has all of its information on one screen**, and you finish it before moving to the next:
@@ -41,11 +47,11 @@ The paper form puts the 10 frames in two separate tables, so you scroll between 
 - **Other weeds:** the Other category is a list. Write the weed's name in the white box at the top of each weed's card (Pencil) and its percent below. Tap **＋ Add another other weed** (up to 5) for more; the ✕ on a box removes it. New frames start with the weed names from the previous frame (values blank), since the same weeds usually repeat. Any weed you have named earlier in the same transect but that is not in the current frame shows as a **Seen:** chip next to the Cover heading; tap it to fill an empty weed box (or add a new one) without writing the name again.
 - **Damage** is a 1 / 2 / 3 / 4 button set in the top bar. Tap a number to choose it, tap it again to clear it.
 - **Undo** is at the top of the frame screen (and the grid cell screen) as well as at the bottom.
-- **Counts and heights** as a Mature / Immature table: Count, Tall, Short, and Avg.
+- **Counts and heights** as a Mature / Immature table: Count, Tall, Short, and Avg. The number boxes are tall for Pencil writing. The three height boxes per row have no −/+ buttons (heights are decimals like 14.5, so you just write them); the Count boxes keep −/+.
 - **← / →** move between frames, **Done ✓ → frame N** saves and advances, and **Undo** and **Clear frame** work like in the grid.
 - Site, Date, and the two observers are set once at the top; a new transect copies them from the last one. The hidden backup copy covers transect data too.
 
-Transect CSV columns: `site, date, obs1, obs2, frame, target, other_total, other1_name, other1_pct, (other2_name, other2_pct, ... as many as used), forb, shrub, grass, ground, litter, moss, total, damage, mature_count, immature_count, mature_tall, mature_short, mature_avg, immature_tall, immature_short, immature_avg`.
+Transect CSV columns: `site, date, obs1, obs2, frame, distance_m, target, other_total, other1_name, other1_pct, (other2_name, other2_pct, ... as many as used), forb, shrub, grass, ground, litter, moss, total, damage, mature_count, immature_count, mature_tall, mature_short, mature_avg, immature_tall, immature_short, immature_avg`.
 
 ## CSV format (Grid)
 
