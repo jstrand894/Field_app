@@ -12,13 +12,15 @@
 <title>Grid Data</title>
 <style>
 /* High-contrast palette for use in direct sun */
-:root{--bg:#e9ece6;--card:#fff;--ink:#0a120c;--mute:#2f3b32;--line:#5d695f;--accent:#1f6b2c;--done:#7ccf88;--part:#f5c842;--note:#0a5a1a;--warn:#b3201f}
-@media(prefers-color-scheme:dark){:root{--bg:#0c0f0d;--card:#1a211c;--ink:#f4faf5;--mute:#c3d0c5;--line:#7d8c80;--accent:#7ed38d;--done:#2f7a3d;--part:#8a6d0f;--note:#9bf0aa;--warn:#ff8a84}}
+:root{--pri:#14592a;--bg:#e9ece6;--card:#fff;--ink:#0a120c;--mute:#2f3b32;--line:#5d695f;--accent:#1f6b2c;--done:#7ccf88;--part:#f5c842;--note:#0a5a1a;--warn:#b3201f}
+@media(prefers-color-scheme:dark){:root{--pri:#17662b;--bg:#0c0f0d;--card:#1a211c;--ink:#f4faf5;--mute:#c3d0c5;--line:#7d8c80;--accent:#7ed38d;--done:#2f7a3d;--part:#8a6d0f;--note:#9bf0aa;--warn:#ff8a84}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:16px -apple-system,system-ui,sans-serif;-webkit-user-select:none;user-select:none}
 input,textarea{-webkit-user-select:text;user-select:text;caret-color:transparent}
 input:focus,textarea:focus{outline:none}
-#app{max-width:900px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;min-height:100%}
+/* site and observer names: a finger gets the keyboard (and a cursor), the Pencil does not */
+input.kb.typing{caret-color:auto}
+#app{max-width:1500px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;min-height:100%}
 header{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1.3fr) minmax(0,1.2fr) minmax(0,1.2fr);gap:8px}
 label input{min-width:0;width:100%;max-width:100%}
 input[type=date]{-webkit-appearance:none;appearance:none;display:block;min-height:46px;overflow:hidden;text-align:left;padding-right:6px}
@@ -28,7 +30,7 @@ input,textarea,select{font:inherit;font-size:18px;padding:10px;border:2px solid 
 .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .bar .sp{flex:1}
 button{font:inherit;font-weight:700;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:11px 16px;cursor:pointer}
-button.pri{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.pri{background:var(--pri);color:#fff;border-color:var(--pri);text-shadow:0 1px 1px rgba(0,0,0,.35)}
 button:active{transform:scale(.95);filter:brightness(.88)}
 button:disabled{opacity:.5}
 #prog{font-size:15px;font-weight:700;color:var(--mute)}
@@ -44,7 +46,7 @@ button:disabled{opacity:.5}
 #toast.on{opacity:1}
 #sheet,#tsheet{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:5}
 #sheet.open,#tsheet.open{display:flex}
-.panel{background:var(--bg);width:100%;max-width:860px;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.45)}
+.panel{background:var(--bg);width:100%;max-width:1120px;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.45)}
 .ph{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .ph h2{margin:0;font-size:26px}
 .navh{display:flex;align-items:center;gap:10px}
@@ -75,6 +77,25 @@ button:disabled{opacity:.5}
 .ctl .quick{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
 .sub{font-size:14px;color:var(--mute);min-height:18px}
 .ctl .quick button{padding:8px 11px;font-size:15px}
+.danger{border-color:var(--warn);color:var(--warn)}
+.gwrap{position:relative;overflow:hidden;display:flex;flex-direction:column}
+.gbody{display:flex;flex-direction:column;gap:12px;will-change:transform,opacity}
+.gbody.leaving{position:absolute;left:0;top:0}
+.fx{position:fixed;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center;z-index:8;overflow:hidden}
+.fxring{position:absolute;width:150px;height:150px;border:7px solid;border-radius:50%}
+.fxstamp,.fxring,.fxdot{opacity:0}
+.fxstamp{position:absolute;width:140px;height:140px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.fxstamp.done{background:#1b8a3a}.fxstamp.none{background:#f2b705;color:#1d1500;gap:2px}
+.fxstamp.arrow{width:96px;height:96px;background:rgba(255,255,255,.94);color:#1d2a1f}
+.fxstamp svg{width:74px;height:74px;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.fxstamp.arrow svg{width:54px;height:54px}
+.fxstamp b{font-size:54px;line-height:1}.fxstamp small{font-size:14px;font-weight:800}
+.fxdot{position:absolute;width:12px;height:12px;border-radius:3px}
+html.lock,html.lock body{overflow:hidden}
+html.lock body{position:fixed;left:0;right:0;width:100%}
+.panel{overscroll-behavior:contain;position:relative}
+#sheet,#tsheet{overscroll-behavior:contain;touch-action:none}
+.panel{touch-action:pan-y}
 .sect{display:flex;flex-direction:column;gap:8px;border-top:2px solid var(--line);padding-top:12px}
 .sect b{font-size:16px}
 .sect select{font-size:17px}
@@ -92,7 +113,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .foot{margin-top:auto;padding-top:10px;text-align:center;font-size:13px;font-weight:600;color:var(--mute)}
 @media(max-width:700px){header{grid-template-columns:1fr 1fr}header label:first-child{grid-column:1/-1}.ctr{grid-template-columns:1fr}}
 /* ---- main menu ---- */
-#menu{max-width:900px;margin:0 auto;padding:max(24px,env(safe-area-inset-top)) 18px 18px;display:flex;flex-direction:column;gap:22px;min-height:100%}
+#menu{max-width:1200px;margin:0 auto;padding:max(24px,env(safe-area-inset-top)) 18px 18px;display:flex;flex-direction:column;gap:22px;min-height:100%}
 #menu h1{margin:8px 0 0;text-align:center;font-size:34px}
 #menu .sub2{text-align:center;color:var(--mute);font-weight:600;margin-top:-14px}
 .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
@@ -102,16 +123,15 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .mcard small{font-size:14px;font-weight:700;color:var(--mute)}
 .mcard.g{--c:#1b6b2a}.mcard.t{--c:#0a6c76}
 /* ---- transect ---- */
-#tapp{max-width:900px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;min-height:100%}
+#tapp{max-width:1500px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;min-height:100%}
 .tl-wrap{position:relative}
 #tframes{position:relative;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 4px 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 #tframes::-webkit-scrollbar{display:none}
+/* end spacers let the first and last frames reach the middle, so the biggest bubble is frame 1 at the start and frame 10 at the end */
+#tframes::before,#tframes::after{content:"";flex:0 0 calc(50% - 78px)}
 .tnode{flex:0 0 156px;scroll-snap-align:center;position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0;border:0;background:none;color:var(--ink)}
 .tnode .tm{width:calc(100% - 6px);font-size:13px}
-.tnode::before{content:"";position:absolute;top:66px;left:-50%;width:100%;height:6px;border-radius:3px;background:var(--line)}
-.tnode:first-child::before{display:none}
-.tnode.done::before{background:var(--accent)}
-.tnode .dot{position:relative;z-index:1;width:50px;height:50px;border-radius:50%;border:4px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800}
+.tnode .dot{position:relative;z-index:2;width:50px;height:50px;border-radius:50%;border:4px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800}
 .tnode.done .dot{background:var(--done);border-color:var(--accent)}
 .tnode.part .dot{background:var(--part);border-color:#8a6d0f}
 .tnode.next .dot{border-color:#d99e00;animation:pulse 1.6s ease-in-out infinite}
@@ -128,6 +148,10 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .tnode .card span{display:block;color:var(--mute);font-weight:600}
 .tnode .card b{color:var(--ink)}
 .tnode:active .card{filter:brightness(.9)}
+.tnode{z-index:1}
+/* one continuous track behind all the bubbles (never painted over a number) */
+.tline{position:absolute;z-index:0;height:6px;border-radius:3px;background:var(--line);transform-origin:left center;pointer-events:none}
+.tline i{display:block;height:100%;border-radius:3px;background:var(--accent);transition:width .5s}
 .ttwrap{display:flex;flex-direction:column}
 /* distance ruler above the frame bubbles: frame N is N x 2 m along the 20 m transect */
 .tms{display:grid;grid-template-columns:repeat(10,minmax(0,1fr))}
@@ -150,7 +174,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .fbody{display:flex;flex-direction:column;gap:5px;will-change:transform,opacity}
 .fbody.leaving{position:absolute;left:0;top:0}
 #tpanel{touch-action:pan-y}
-.panel.wide{max-width:1120px;padding:8px 12px;gap:5px;max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px)}
+.panel.wide{max-width:1400px;padding:8px 12px;gap:5px;max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px)}
 #tsheet{padding:8px}
 .tsec h3{margin:0 0 4px;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
 .tcov{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
@@ -208,6 +232,9 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .ttotal.ok{--c:#1b6b2a}.ttotal.bad{--c:#b8860b}
 .ttotal.ok .ts{color:#1b6b2a}.ttotal.bad .ts{color:#8a6d0f}
 @media(max-width:760px){.tcov{grid-template-columns:repeat(3,minmax(0,1fr))}.mgrid{grid-template-columns:1fr}}
+/* iPad landscape: use the full width; cells become wide tiles so the whole 10x10 grid fits without scrolling */
+#app.fit .cell{aspect-ratio:auto;height:var(--ch,60px);font-size:clamp(16px,2vw,24px);flex-direction:row;gap:8px}
+#app.fit .cell small{font-size:clamp(11px,1.25vw,15px)}
 </style>
 </head>
 <body>
@@ -230,6 +257,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
   </header>
   <div class="bar">
     <button id="btnMenu">‹ Menu</button><span id="prog"></span><span class="sp"></span>
+    <button id="btnReset" class="danger ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/></svg>Reset grid</button>
     <button id="btnSessions">Sessions</button>
     <button id="btnExport" class="pri ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>Export CSV</button>
   </div>
@@ -248,6 +276,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
   <div class="bar">
     <button id="tMenu">‹ Menu</button><span id="tprog"></span><span class="sp"></span>
     <button id="tNew">＋ New transect</button>
+    <button id="tResetBtn" class="danger ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/></svg>Reset transect</button>
     <button id="tSessions">Sessions</button>
     <button id="tExport" class="pri ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>Export CSV</button>
   </div>
@@ -264,7 +293,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
 <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" hidden>
 
 <script>
-const N=100, KEY='grids.v1', VERSION='1.7.0';
+const N=100, KEY='grids.v1', VERSION='1.9.1';
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.sessions)db={cur:null,sessions:{}};
@@ -314,15 +343,18 @@ const POS={};ORDER.forEach((n,i)=>POS[n]=i);
 const nextOf=n=>ORDER[POS[n]+1]??null, prevOf=n=>ORDER[POS[n]-1]??null;
 
 function renderGrid(){
-  const g=$('#grid');g.innerHTML='';
+  const g=$('#grid');
+  if(g.children.length!==N){
+    g.innerHTML='';
+    for(let i=1;i<=N;i++){const b=document.createElement('button');b.onclick=()=>openCell(i);g.appendChild(b)}
+  }
   let done=0;
   for(let i=1;i<=N;i++){
-    const c=S().cells[i],st=state(i);if(st==='done')done++;
-    const b=document.createElement('button');
-    b.className='cell '+st+(c&&c.n?' has':'')+(c&&warns(c).length?' warn':'')+(cur===i?' cur':'');
-    b.innerHTML=`${i}`+(c&&touched(c)?`<small>${stems(c)??0}/${c.g??0}</small>`:'');
-    b.onclick=()=>openCell(i);
-    g.appendChild(b);
+    const b=g.children[i-1],c=S().cells[i],st=state(i);if(st==='done')done++;
+    const cls='cell '+st+(c&&c.n?' has':'')+(c&&warns(c).length?' warn':'')+(cur===i?' cur':'');
+    if(b.className!==cls)b.className=cls;
+    const html=`${i}`+(c&&touched(c)?`<small>${stems(c)??0}/${c.g??0}</small>`:'');
+    if(b._h!==html){b.innerHTML=html;b._h=html}
   }
   $('#prog').textContent=`${done} / ${N} cells done`;
 }
@@ -353,7 +385,7 @@ function undoField(f){
 function doUndo(){const a=undo[ukey()];if(!a||!a.length)return;S().cells[cur]=JSON.parse(a.pop());save();openCell(cur)}
 let pend=false; // first edit after focusing a box saves one undo step
 
-function openCell(n){
+function buildCell(n){
   cur=n;const c=cell(n);pend=false;
   const pv=prevOf(n),nx=nextOf(n);
   const qb=(k,d,l)=>`<button data-k="${k}" data-d="${d}">${l}</button>`;
@@ -364,7 +396,7 @@ function openCell(n){
     <div class="quick">${quick}<button data-k="${key}" data-z="1">0</button></div>${sub?`<div class="sub" id="sub-${key}">${sub}</div>`:''}</div>`;
   const q5=k=>qb(k,5,'+5')+qb(k,10,'+10');
   const w=warns(c);
-  $('#panel').innerHTML=`<div class="ph"><div class="navh"><button id="prev" ${pv?'':'disabled'}>← ${pv??''}</button><h2>Cell ${n}</h2><button id="next" ${nx?'':'disabled'}>${nx??''} →</button></div>
+  const html=`<div class="ph"><div class="navh"><button id="prev" ${pv?'':'disabled'}>← ${pv??''}</button><h2>Cell ${n}</h2><button id="next" ${nx?'':'disabled'}>${nx??''} →</button></div>
     <span class="tot">Stems total: <b id="tot">${stems(c)??'–'}</b></span><div class="hb"><button id="undoTop" class="ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button><button id="x">Close</button></div></div>
     <div class="warn" id="warn" ${w.length?'':'hidden'}>${w.length?'⚠ '+esc(w.join(' ')):''}</div>
     <div class="ctr">${ctl('s1','Stems · '+esc(S().obs1||'Obs 1'),q5('s1'))}${ctl('s2','Stems · '+esc(S().obs2||'Obs 2'),q5('s2'))}${ctl('g','Galls',q5('g'))}</div>
@@ -372,7 +404,69 @@ function openCell(n){
     <div class="hint">Write numbers with the Pencil in the boxes (3+4 adds). In each box header, the left icon undoes that box and the right icon clears it.</div>
     <textarea id="notes" inputmode="none" placeholder="Notes (write with the Pencil)">${esc(c.n)}</textarea>
     <div class="nav"><button id="undo" class="ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button><button id="clr">Clear cell</button><button id="none">No toadflax ✓</button><button id="done" class="pri">Done ✓ → ${nx??'finish'}</button></div>`;
-  $('#sheet').classList.add('open');renderGrid();refresh();
+  return html;
+}
+function mountCell(n){ // instant render
+  const html=buildCell(n),panel=$('#panel'),was=$('#sheet').classList.contains('open')&&panel.querySelector('.gwrap');
+  panel.innerHTML=`<div class="gwrap"><div class="gbody">${html}</div></div>`;
+  panel.scrollTop=0;$('#sheet').classList.add('open');renderGrid();refresh();
+  if(!was&&!reduceMotion())panel.animate([{transform:'translateY(56px) scale(.94)',opacity:0},{transform:'translateY(-7px) scale(1.01)',opacity:1,offset:.72},{transform:'none',opacity:1}],{duration:440,easing:'cubic-bezier(.2,.8,.3,1)'});
+}
+// kind: 'next' | 'prev' (arrows slide along), 'done' (checked off and lifted away), 'none' (no toadflax poof)
+function openCell(n,kind){
+  const panel=$('#panel'),wrap=panel.querySelector('.gwrap');
+  if(!kind||!wrap||reduceMotion()||!$('#sheet').classList.contains('open')||cur==null){mountCell(n);return}
+  wrap.querySelectorAll('.gbody.leaving').forEach(x=>x.remove());
+  const old=wrap.querySelector('.gbody');
+  old.classList.add('leaving');old.style.width=old.offsetWidth+'px';old.style.pointerEvents='none';
+  old.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));
+  const nu=document.createElement('div');nu.className='gbody';nu.innerHTML=buildCell(n);wrap.appendChild(nu);
+  panel.scrollTop=0;renderGrid();refresh();
+  const W=Math.min(panel.clientWidth,820),E='cubic-bezier(.22,.8,.3,1)',gone=()=>{old.remove()};
+  if(kind==='next'||kind==='prev'){
+    const d=kind==='next'?1:-1;
+    old.animate([{transform:'translateX(0) scale(1)',opacity:1},{transform:`translateX(${-d*W}px) scale(.92)`,opacity:0}],{duration:460,easing:'cubic-bezier(.5,0,.3,1)',fill:'forwards'}).onfinish=gone;
+    nu.animate([{transform:`translateX(${d*W}px) scale(.92)`,opacity:0},{transform:`translateX(${-d*12}px) scale(1)`,opacity:1,offset:.78},{transform:'none',opacity:1}],{duration:540,easing:E});
+    fxBurst('arrow',d);
+  }else if(kind==='done'){
+    old.animate([{transform:'translateY(0) scale(1)',opacity:1},{transform:'translateY(-80px) scale(.94) rotate(-1.5deg)',opacity:0}],{duration:420,easing:'cubic-bezier(.5,0,.8,.4)',fill:'forwards'}).onfinish=gone;
+    nu.animate([{transform:'translateY(100px) scale(.94)',opacity:0},{transform:'translateY(-12px) scale(1.01)',opacity:1,offset:.7},{transform:'none',opacity:1}],{duration:580,delay:150,easing:E,fill:'backwards'});
+    fxBurst('done');
+  }else{
+    old.animate([{transform:'scale(1) rotate(0)',opacity:1},{transform:'scale(.8) rotate(3deg)',opacity:0}],{duration:360,easing:'cubic-bezier(.5,0,.8,.4)',fill:'forwards'}).onfinish=gone;
+    nu.animate([{transform:'scale(1.16)',opacity:0},{transform:'scale(.98)',opacity:1,offset:.7},{transform:'none',opacity:1}],{duration:560,delay:140,easing:E,fill:'backwards'});
+    fxBurst('none');
+  }
+}
+// Little celebration overlay: a stamp, a ring and confetti, so you can tell which button you pressed
+function fxBurst(type,d){
+  const fx=document.createElement('div');fx.className='fx';$('#sheet').appendChild(fx);
+  const cols=type==='done'?['#1b8a3a','#43b05c','#9be3a6','#f2b705']:['#f2b705','#ffe08a','#ffffff','#d99e00'];
+  if(type!=='arrow'){
+    const ring=document.createElement('div');ring.className='fxring';ring.style.borderColor=cols[0];fx.appendChild(ring);
+    ring.animate([{transform:'scale(.3)',opacity:.9},{transform:'scale(2.8)',opacity:0}],{duration:680,easing:'ease-out',fill:'forwards'});
+  }
+  const st=document.createElement('div');st.className='fxstamp '+type;
+  st.innerHTML=type==='done'?'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>':type==='none'?'<b>0</b><small>No toadflax</small>':`<svg viewBox="0 0 24 24"><path d="${d>0?'M5 12h14M13 6l6 6-6 6':'M19 12H5M11 6l-6 6 6 6'}"/></svg>`;
+  fx.appendChild(st);
+  if(type==='arrow')st.animate([{transform:`translateX(${-d*70}px) scale(.5)`,opacity:0},{transform:'translateX(0) scale(1.05)',opacity:1,offset:.4},{transform:`translateX(${d*90}px) scale(.8)`,opacity:0}],{duration:640,easing:'ease-out',fill:'forwards'});
+  else st.animate([{transform:'scale(.2) rotate(-28deg)',opacity:0},{transform:'scale(1.2) rotate(5deg)',opacity:1,offset:.32},{transform:'scale(1) rotate(0)',opacity:1,offset:.62},{transform:'scale(1.08)',opacity:0}],{duration:800,easing:'ease-out',fill:'forwards'});
+  const n=type==='arrow'?0:type==='done'?18:12;
+  for(let i=0;i<n;i++){
+    const dot=document.createElement('div');dot.className='fxdot';dot.style.background=cols[i%cols.length];if(i%3===0)dot.style.borderRadius='50%';fx.appendChild(dot);
+    const a=(i/n)*Math.PI*2+Math.random()*.4,r=110+Math.random()*150,dx=Math.cos(a)*r,dy=Math.sin(a)*r;
+    dot.animate([{transform:'translate(0,0) scale(1) rotate(0)',opacity:1},{transform:`translate(${dx}px,${dy}px) scale(.5) rotate(${Math.round(Math.random()*540-270)}deg)`,opacity:0}],{duration:700+Math.random()*350,easing:'cubic-bezier(.1,.7,.3,1)',fill:'forwards'});
+  }
+  setTimeout(()=>fx.remove(),1150);
+}
+const confirmTwice=(a,b)=>confirm(a)&&confirm(b);
+function doResetGrid(){
+  const s=S(),n=Object.values(s.cells).filter(c=>c.done||touched(c)||c.n).length;
+  if(!confirmTwice(`Reset the grid?\n\nThis erases all ${n} entered cell${n===1?'':'s'} in the current session (${s.site||'no site'}, ${s.date}). Site, date and observers are kept.`,
+    'Are you sure?\n\nThis cannot be undone with the Undo button. A backup copy is saved first (Sessions > Restore from backup copy).'))return;
+  backupNow(true);
+  s.cells={};Object.keys(undo).forEach(k=>{if(k.startsWith(db.cur+':'))delete undo[k]});
+  save();closeSheet();toast('Grid reset: all cells cleared.');
 }
 function closeSheet(){$('#sheet').classList.remove('open');cur=null;renderGrid()}
 
@@ -392,8 +486,8 @@ $('#panel').addEventListener('click',e=>{
       const inp=b.closest('.ctl').querySelector('input');inp.value='';flash(inp);
       save();refresh();renderGrid();
     }else if(b.dataset.undof){undoField(b.dataset.undof)}
-    else if(b.id==='prev'){const p=prevOf(cur);if(p)openCell(p)}
-    else if(b.id==='next'){const p=nextOf(cur);if(p)openCell(p)}
+    else if(b.id==='prev'){const p=prevOf(cur);if(p)openCell(p,'prev')}
+    else if(b.id==='next'){const p=nextOf(cur);if(p)openCell(p,'next')}
     else if(b.id==='undo'||b.id==='undoTop')doUndo();
     else if(b.id==='clr'){
       push();Object.assign(c,{s1:null,s2:null,g:null,ch:null,m:null,h:null,n:'',done:false});save();openCell(cur);
@@ -402,7 +496,7 @@ $('#panel').addEventListener('click',e=>{
       if(b.id==='none')Object.assign(c,{s1:0,s2:0,g:0,ch:0,m:null,h:null});
       if(c.s1===null&&c.s2===null)c.s1=0;if(c.g===null)c.g=0;if(c.ch===null)c.ch=0;c.done=true;save();
       const nx=nextOf(cur);
-      if(nx)openCell(nx);
+      if(nx)openCell(nx,b.id==='none'?'none':'done');
       else{
         closeSheet();
         const all=Object.values(S().cells).filter(x=>x.done).length;
@@ -414,6 +508,7 @@ $('#panel').addEventListener('click',e=>{
     else if(b.dataset.sid){db.cur=b.dataset.sid;save(false);renderHeader();closeSheet()}
     else if(b.id==='del'&&confirm('Delete this session and its data? Export first if unsure.')){
       delete db.sessions[db.cur];db.cur=Object.keys(db.sessions)[0]||null;save(false);S();renderHeader();closeSheet()}
+    else if(b.id==='resetGrid')doResetGrid();
     else if(b.id==='restoreBtn')showSnaps();
     else if(b.id==='importBtn')$('#csvFile').click();
     else if(b.id==='backBtn')showSessions();
@@ -459,6 +554,7 @@ function showSessions(){
     <div class="list">${list.map(s=>{const d=Object.values(s.cells).filter(c=>c.done).length;
       return `<button data-sid="${s.id}">${s.id===db.cur?'● ':''}${esc(s.site||'(no site)')} — ${s.date} — ${esc([s.obs1,s.obs2].filter(Boolean).join(' & ')||'?')} <span class="hint">(${d}/100)</span></button>`}).join('')}</div>
     <button id="del">Delete current session</button>
+    <button id="resetGrid" class="danger">Reset grid (erase all cells in this session)</button>
     <div class="sect"><b>Screen</b>
       <div class="hint" id="wlstat">${wlText()}</div></div>
     <div class="sect"><b>Backup &amp; restore</b>
@@ -477,9 +573,10 @@ const countCells=d=>Object.values(d.sessions||{}).reduce((n,s)=>n+Object.values(
 function queueBackup(force){if(!backupReady)return;clearTimeout(bt);bt=setTimeout(()=>backupNow(force),force?0:1500)}
 async function backupNow(force){
   try{
-    const d=await idb(),data=JSON.stringify(db),now=Date.now(),st=d.transaction('snap','readwrite').objectStore('snap');
+    const data=JSON.stringify(db),now=Date.now(),has=hasData(db);
+    const d=await idb(),st=d.transaction('snap','readwrite').objectStore('snap');
     st.put({id:'latest',t:now,data});
-    if(hasData(db)&&(force||now-lastSnap>600000)){
+    if(has&&(force||now-lastSnap>600000)){
       lastSnap=now;st.put({id:'snap-'+now,t:now,data});
       st.getAll().onsuccess=e=>e.target.result.filter(r=>r.id!=='latest').sort((a,b)=>b.t-a.t).slice(12).forEach(r=>st.delete(r.id));
     }
@@ -572,6 +669,7 @@ async function exportCsv(){
   const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=name;a.click();
 }
 $('#btnExport').onclick=exportCsv;
+$('#btnReset').onclick=doResetGrid;
 
 
 // =====================================================================
@@ -580,7 +678,7 @@ $('#btnExport').onclick=exportCsv;
 function show(view){
   ['menu','app','tapp'].forEach(id=>$('#'+id).hidden=id!==view);
   $('#sheet').classList.remove('open');$('#tsheet').classList.remove('open');cur=null;tcur=null;
-  if(view==='menu')renderMenu();else if(view==='app'){renderHeader();renderGrid()}else renderT('pop');
+  if(view==='menu')renderMenu();else if(view==='app'){renderHeader();renderGrid();fitGrid()}else renderT('pop');
   window.scrollTo(0,0);
 }
 function renderMenu(){
@@ -626,6 +724,9 @@ function renderT(mode){
     b.onclick=()=>openFrame(n);
     box.appendChild(b);
   }
+  const ln=document.createElement('div');ln.className='tline';ln.innerHTML='<i></i>';box.appendChild(ln);
+  layoutLine();
+  if(mode==='pop'&&!reduceMotion())ln.animate([{transform:'scaleX(0)',opacity:0},{transform:'scaleX(1)',opacity:1}],{duration:700,easing:'cubic-bezier(.2,.8,.3,1)'});
   $('#tprog').textContent=`${done} / 10 frames done`;
   const c=$('#tContinue');c.hidden=!next;if(next)c.textContent=`Continue: frame ${next} ▸`;c.dataset.n=next;
   if(mode){
@@ -634,13 +735,33 @@ function renderT(mode){
   }else box.scrollLeft=keep;
   fish();
 }
+function layoutLine(){
+  const box=$('#tframes'),ns=box.querySelectorAll('.tnode'),ln=box.querySelector('.tline');
+  if(!ns.length||!ln)return;
+  const dot=ns[0].querySelector('.dot'),y=ns[0].offsetTop+dot.offsetTop+dot.offsetHeight/2;
+  const cx=n=>n.offsetLeft+n.offsetWidth/2,x0=cx(ns[0]),x1=cx(ns[ns.length-1]);
+  ln.style.left=x0+'px';ln.style.width=(x1-x0)+'px';ln.style.top=(y-3)+'px';
+  let k=0;while(k<ns.length&&ns[k].classList.contains('done'))k++;   // green up to the last finished frame
+  ln.firstChild.style.width=(k>1?cx(ns[k-1])-x0:0)+'px';
+}
+function fitGrid(){
+  const g=$('#grid'),app=$('#app');
+  if(!g||app.hidden)return;
+  if(!matchMedia('(orientation:landscape) and (min-width:900px)').matches){app.classList.remove('fit');g.style.removeProperty('--ch');return}
+  const pad=parseFloat(getComputedStyle(app).paddingBottom)||0;
+  let below=0;for(let e=g.nextElementSibling;e;e=e.nextElementSibling)below+=e.offsetHeight+12;
+  const top=g.getBoundingClientRect().top+window.scrollY,gap=6;
+  const ch=Math.max(38,Math.min(96,(window.innerHeight-top-below-pad-gap*9)/10));
+  app.classList.add('fit');g.style.setProperty('--ch',ch.toFixed(1)+'px');
+}
 let fishQ=false;
 function fish(){
   const box=$('#tframes'),c=box.scrollLeft+box.clientWidth/2,R=Math.max(1,box.clientWidth*.5);
   box.querySelectorAll('.tnode').forEach(nd=>{nd.style.setProperty('--k',Math.max(0,1-Math.abs(nd.offsetLeft+nd.offsetWidth/2-c)/R).toFixed(3))});
 }
 $('#tframes').addEventListener('scroll',()=>{if(fishQ)return;fishQ=true;requestAnimationFrame(()=>{fishQ=false;fish()})},{passive:true});
-window.addEventListener('resize',fish);
+window.addEventListener('resize',()=>{fish();layoutLine();fitGrid()});
+window.addEventListener('orientationchange',()=>setTimeout(()=>{fish();layoutLine();fitGrid()},250));
 $('#tNew').onclick=()=>{
   const has=Object.values(TS().frames).some(tHas);
   if(has&&!confirm('Start a new transect?\n\nThe current one stays saved under Sessions.'))return;
@@ -738,6 +859,14 @@ function openFrame(n,dir){
   const pin=panel.querySelector('.tpin');
   if(pin&&col)pin.animate([{transform:`translateX(${(prevN-n)*col}px)`},{transform:`translateX(${-dir*7}px)`,offset:.8},{transform:'translateX(0)'}],{duration:dur,easing:'cubic-bezier(.3,.7,.3,1)'});
 }
+function doResetT(){
+  const s=TS(),n=Object.values(s.frames).filter(tHas).length;
+  if(!confirmTwice(`Reset the transect?\n\nThis erases all ${n} entered frame${n===1?'':'s'} in the current transect (${s.site||'no site'}, ${s.date}). Site, date and observers are kept.`,
+    'Are you sure?\n\nThis cannot be undone with the Undo button. A backup copy is saved first (Grid > Sessions > Restore from backup copy).'))return;
+  backupNow(true);
+  s.frames={};Object.keys(tundo).forEach(k=>{if(k.startsWith(db.tcur+':'))delete tundo[k]});
+  save();closeFrame();renderT('pop');toast('Transect reset: all frames cleared.');
+}
 function startNewT(){
   $('#tsheet').classList.remove('open');tcur=null;newTSession();renderT('pop');openFrame(1);
 }
@@ -795,7 +924,8 @@ $('#tpanel').addEventListener('click',e=>{
       }
     }
   }else{
-    if(b.id==='tnew'){newTSession();closeFrame();renderT()}
+    if(b.id==='tReset')doResetT();
+    else if(b.id==='tnew'){newTSession();closeFrame();renderT()}
     else if(b.dataset.tsid){db.tcur=b.dataset.tsid;save(false);closeFrame();renderT()}
     else if(b.id==='tdel'&&confirm('Delete this transect session and its data? Export first if unsure.')){
       delete db.tsessions[db.tcur];db.tcur=Object.keys(db.tsessions)[0]||null;save(false);TS();closeFrame();renderT()}
@@ -842,6 +972,7 @@ $('#tSessions').onclick=()=>{
     <div class="list">${list.map(s=>{const d=Object.values(s.frames).filter(f=>f.done).length;
       return `<button data-tsid="${s.id}">${s.id===db.tcur?'● ':''}${esc(s.site||'(no site)')} — ${s.date} — ${esc([s.obs1,s.obs2].filter(Boolean).join(' & ')||'?')} <span class="hint">(${d}/10)</span></button>`}).join('')}</div>
     <button id="tdel">Delete current transect session</button>
+    <button id="tReset" class="danger">Reset transect (erase all frames in this session)</button>
     <div class="hint">Your hidden backup copy covers transect data too (see Grid → Sessions → Restore from backup copy).</div>`;
   $('#tsheet').classList.add('open');
 };
@@ -868,8 +999,28 @@ async function exportT(){
   const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=name;a.click();
 }
 $('#tExport').onclick=exportT;
+$('#tResetBtn').onclick=doResetT;
 
 if(!db.cur||!db.sessions[db.cur])newSession();
+// While an entry screen is open the page behind it cannot scroll or move
+let lockY=0,locked=false;
+function syncLock(){
+  const open=$('#sheet').classList.contains('open')||$('#tsheet').classList.contains('open');
+  if(open&&!locked){locked=true;lockY=window.scrollY;document.body.style.top=-lockY+'px';document.documentElement.classList.add('lock')}
+  else if(!open&&locked){locked=false;document.documentElement.classList.remove('lock');document.body.style.top='';window.scrollTo(0,lockY)}
+}
+['#sheet','#tsheet'].forEach(s=>new MutationObserver(syncLock).observe($(s),{attributes:true,attributeFilter:['class']}));
+// Site / observer boxes: keyboard for finger taps only (Pencil taps keep it hidden, Scribble still works)
+['site','obs1','obs2','tsite','tobs1','tobs2'].forEach(id=>{
+  const el=$('#'+id);el.classList.add('kb');
+  el.addEventListener('pointerdown',e=>{
+    const finger=e.pointerType==='touch'||e.pointerType==='mouse';
+    const wasFocused=document.activeElement===el;
+    el.inputMode=finger?'text':'none';el.classList.toggle('typing',finger);
+    if(finger&&wasFocused){el.blur();setTimeout(()=>el.focus(),0)} // already focused by the Pencil: refocus so the keyboard can appear
+  });
+  el.addEventListener('blur',()=>{el.inputMode='none';el.classList.remove('typing')});
+});
 document.querySelectorAll('.foot').forEach(el=>el.textContent=`Grid Data v${VERSION} · Created by Jackson R Strand · © ${new Date().getFullYear()} Jackson R Strand`);
 renderHeader();renderGrid();show('menu');
 (async()=>{
