@@ -42,8 +42,8 @@ button:disabled{opacity:.5}
 .cell.cur{outline:4px solid var(--accent)}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);max-width:90vw;background:#3b0f0d;color:#fff;border-radius:12px;padding:12px 16px;font-weight:700;z-index:60;opacity:0;pointer-events:none;transition:opacity .25s}
 #toast.on{opacity:1}
-#sheet{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:5}
-#sheet.open{display:flex}
+#sheet,#tsheet{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:5}
+#sheet.open,#tsheet.open{display:flex}
 .panel{background:var(--bg);width:100%;max-width:860px;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.45)}
 .ph{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .ph h2{margin:0;font-size:26px}
@@ -87,12 +87,94 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .list{display:flex;flex-direction:column;gap:6px}
 .list button{text-align:left;font-weight:600}
 .hint{font-size:14px;font-weight:600;color:var(--mute)}
-#foot{margin-top:auto;padding-top:10px;text-align:center;font-size:13px;font-weight:600;color:var(--mute)}
+[hidden]{display:none!important}
+.foot{margin-top:auto;padding-top:10px;text-align:center;font-size:13px;font-weight:600;color:var(--mute)}
 @media(max-width:700px){header{grid-template-columns:1fr 1fr}header label:first-child{grid-column:1/-1}.ctr{grid-template-columns:1fr}}
+/* ---- main menu ---- */
+#menu{max-width:900px;margin:0 auto;padding:max(24px,env(safe-area-inset-top)) 18px 18px;display:flex;flex-direction:column;gap:22px;min-height:100%}
+#menu h1{margin:8px 0 0;text-align:center;font-size:34px}
+#menu .sub2{text-align:center;color:var(--mute);font-weight:600;margin-top:-14px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.mcard{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;min-height:210px;padding:22px;border-radius:22px;border:4px solid var(--c);background:var(--card);background:color-mix(in srgb,var(--c) 12%,var(--card));text-align:left}
+.mcard b{font-size:32px;color:var(--c)}
+.mcard span{font-size:16px;font-weight:600;color:var(--ink)}
+.mcard small{font-size:14px;font-weight:700;color:var(--mute)}
+.mcard.g{--c:#1b6b2a}.mcard.t{--c:#0a6c76}
+/* ---- transect ---- */
+#tapp{max-width:900px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;min-height:100%}
+#tframes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.tframe{aspect-ratio:1.25;font-size:30px}
+.tframe small{font-size:13px}
+.panel.wide{max-width:1120px}
+.tsec h3{margin:0 0 6px;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.tcov{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.tmx{display:grid;grid-template-columns:96px repeat(4,minmax(0,1fr));gap:10px;align-items:stretch}
+.tmx .th{align-self:end;text-align:center;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.trl{display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--c);color:#fff;font-weight:800;font-size:15px;text-transform:uppercase;text-align:center}
+.tf{--c:var(--line);display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:14px;border:3px solid var(--c);background:var(--card);background:color-mix(in srgb,var(--c) 12%,var(--card))}
+.tf .tl{background:var(--c);color:#fff;border-radius:7px;padding:3px 6px;text-align:center;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+.tf .tl:empty{display:none}
+.tf input{width:100%;min-width:0;text-align:center;font-size:30px;font-weight:800;min-height:48px;padding:2px 2px;border:3px solid var(--c);caret-color:transparent}
+.tf input[data-ttext]{font-size:20px}
+.tf .tb{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.tf .tb.rest{grid-template-columns:1fr 1fr 1.6fr}
+.tf .tb.tgt{grid-template-columns:1fr 1fr 1.1fr 1.2fr}
+.tf .tb button.rb{font-size:15px;letter-spacing:0;background:var(--c);color:#fff;border-color:var(--c)}
+.tdm{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.tdm button{height:46px;padding:0;font-size:26px;font-weight:800;border-color:var(--c);color:var(--c)}
+.tdm button.on{background:var(--c);color:#fff}
+.tf .tb button{height:34px;padding:0;font-size:24px;border-color:var(--c);color:var(--t,var(--c));font-weight:800}
+.tf[data-g=tg]{--c:#d99e00;--t:#6b4a00;border-width:4px;background:color-mix(in srgb,#f2b705 22%,var(--card))}
+.tf[data-g=tg] .tl{background:#f2b705;color:#1d1500;font-size:15px}
+.tf[data-g=tg] input{font-size:38px}
+.tf[data-g=tg] .tb button{color:var(--t)}
+.tf[data-g=tg] .tb button.rb{background:#f2b705;border-color:#d99e00;color:#1d1500}.tf[data-g=pl]{--c:#3a8a4b}.tf[data-g=gr]{--c:#8a5a2b}.tf[data-g=dm]{--c:#b3201f}
+.tf[data-g=mat]{--c:#0a6c76}.tf[data-g=imm]{--c:#b85600}
+.trl[data-g=mat]{--c:#0a6c76}.trl[data-g=imm]{--c:#b85600}
+.hsum{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
+.hb{display:flex;gap:8px;align-items:center}
+.tph{flex-wrap:wrap}
+.ttchip{--c:var(--line);display:flex;align-items:baseline;gap:8px;border:3px solid var(--c);border-radius:12px;padding:4px 12px;background:var(--card)}
+.ttchip b{font-size:26px}.ttchip .ts{font-size:13px;font-weight:700;color:var(--mute)}
+.ttchip.ok{--c:#1b6b2a}.ttchip.bad{--c:#b8860b}
+.ttchip.ok .ts{color:#1b6b2a}.ttchip.bad .ts{color:#8a6d0f}
+.dmh{--c:#b3201f;display:flex;align-items:center;gap:6px}
+.dmh span{font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--c)}
+.dmh button{width:44px;height:44px;padding:0;font-size:22px;font-weight:800;border-color:var(--c);color:var(--c)}
+.dmh button.on{background:var(--c);color:#fff}
+.tl.wl{position:relative;padding:0;background:transparent;text-transform:none}
+.tf .tl input.wn{display:block;background:#fff;border:2px solid transparent;color:#111;border-radius:7px;font-size:15px;font-weight:700;letter-spacing:0;text-transform:none;text-align:left;min-height:32px;height:32px;padding:2px 10px;width:100%;caret-color:transparent}
+.tl.wl.hasx input.wn{padding-right:34px}
+.tf .tl input.wn::placeholder{color:#59655c;font-weight:600}
+.tf .tl input.wn:focus{border-color:#ffd54a;outline:none}
+.tl.wl .xk{width:26px;height:26px;margin-top:-13px;right:4px;color:#3b463e;background:rgba(0,0,0,.07)}
+.chips{display:flex;align-items:center;gap:6px;flex:1;min-width:0;margin:0 12px;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips .seen{font-size:12px;font-weight:800;color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
+.chips button{padding:3px 11px;font-size:14px;border-radius:999px;border-color:#3a8a4b;color:var(--ink);text-transform:none;letter-spacing:0;background:color-mix(in srgb,#3a8a4b 16%,var(--card))}
+.hintsm{font-size:12px;font-weight:600;text-transform:none;letter-spacing:0;margin-right:auto;margin-left:12px}
+.h3row{display:flex;align-items:center;justify-content:space-between}
+.tinyadd{padding:5px 12px;font-size:14px;border-style:dashed;text-transform:none;letter-spacing:0}
+.ttotal{--c:var(--line);justify-content:center;align-items:center;text-align:center}
+.ttotal .tv{font-size:40px;font-weight:800;line-height:1.1}
+.ttotal .ts{font-size:13px;font-weight:700;color:var(--mute)}
+.ttotal.ok{--c:#1b6b2a}.ttotal.bad{--c:#b8860b}
+.ttotal.ok .ts{color:#1b6b2a}.ttotal.bad .ts{color:#8a6d0f}
+@media(max-width:760px){.tcov{grid-template-columns:repeat(3,minmax(0,1fr))}#tframes{grid-template-columns:repeat(2,minmax(0,1fr))}.mgrid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div id="app">
+<div id="menu" class="view">
+  <h1>Grid Data</h1>
+  <div class="sub2">Choose a data sheet</div>
+  <div class="mgrid">
+    <button class="mcard g" id="goGrid"><b>Grid</b><span>10×10 grid: stems, galls, chomps, % mature, height</span><small id="mgSub"></small></button>
+    <button class="mcard t" id="goTrans"><b>Transect</b><span>SIMP transect: 10 frames of cover, counts and heights</span><small id="mtSub"></small></button>
+  </div>
+  <footer class="foot"></footer>
+</div>
+
+<div id="app" class="view" hidden>
   <header>
     <label>Site<input id="site" autocomplete="off" inputmode="none"></label>
     <label>Date<input id="date" type="date"></label>
@@ -100,26 +182,54 @@ textarea{width:100%;min-height:90px;resize:vertical}
     <label>Observer 2<input id="obs2" autocomplete="off" inputmode="none"></label>
   </header>
   <div class="bar">
-    <span id="prog"></span><span class="sp"></span>
+    <button id="btnMenu">‹ Menu</button><span id="prog"></span><span class="sp"></span>
     <button id="btnSessions">Sessions</button>
     <button id="btnExport" class="pri">Export CSV</button>
   </div>
   <div id="grid"></div>
   <div class="hint">Green = done, yellow = started, dot = has notes, ! = check this cell. Cells are numbered in your zigzag walking order.</div>
-  <footer id="foot"></footer>
+  <footer class="foot"></footer>
+</div>
+
+<div id="tapp" class="view" hidden>
+  <header>
+    <label>Site<input id="tsite" autocomplete="off" inputmode="none"></label>
+    <label>Date<input id="tdate" type="date"></label>
+    <label>Observer 1<input id="tobs1" autocomplete="off" inputmode="none"></label>
+    <label>Observer 2<input id="tobs2" autocomplete="off" inputmode="none"></label>
+  </header>
+  <div class="bar">
+    <button id="tMenu">‹ Menu</button><span id="tprog"></span><span class="sp"></span>
+    <button id="tSessions">Sessions</button>
+    <button id="tExport" class="pri">Export CSV</button>
+  </div>
+  <div id="tframes"></div>
+  <div class="hint">Green = frame done, yellow = started. Tap a frame to enter everything for it on one screen.</div>
+  <footer class="foot"></footer>
 </div>
 
 <div id="toast"></div>
+<datalist id="weedlist"></datalist>
 <div id="sheet"><div class="panel" id="panel"></div></div>
+<div id="tsheet" class="sheetx"><div class="panel wide" id="tpanel"></div></div>
 <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" hidden>
 
 <script>
-const N=100, KEY='grids.v1', VERSION='1.0.0';
+const N=100, KEY='grids.v1', VERSION='1.3.0';
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.sessions)db={cur:null,sessions:{}};
 const FIELDS={s1:{},s2:{},g:{},ch:{},m:{max:100,dec:0},h:{dec:1}};
+// Transect (SIMP) frame fields: cover %, mature/immature counts, heights
+const COVERS=['ct','cf','cs','cg','cd','cl','cm']; // fixed cover boxes; 'Other' weeds are a separate list (ow)
+const TFIELDS={ow:{max:100,dec:0}};COVERS.forEach(k=>TFIELDS[k]={max:100,dec:0});['nm','ni'].forEach(k=>TFIELDS[k]={});['mt','ms','ma','it','is','ia'].forEach(k=>TFIELDS[k]={dec:1});
+const TKEYS=Object.keys(TFIELDS).filter(k=>k!=='ow');
 function migrate(d){
+  d.tsessions=d.tsessions||{};
+  Object.values(d.tsessions).forEach(s=>Object.values(s.frames||{}).forEach(f=>{
+    if(!Array.isArray(f.ow))f.ow=[{n:'',v:f.co??null}];delete f.co;
+    TKEYS.forEach(k=>{if(f[k]===undefined)f[k]=null});if(f.dm===undefined)f.dm='';
+  }));
   Object.values(d.sessions).forEach(s=>{
     if(s.obs!==undefined){s.obs1=s.obs;delete s.obs}
     s.obs1=s.obs1||'';s.obs2=s.obs2||'';
@@ -177,7 +287,7 @@ function refresh(){
   if(cur==null)return;const c=cell(cur);
   const t=$('#tot');if(t)t.textContent=stems(c)??'–';
     const w=$('#warn');if(w){const a=warns(c);w.hidden=!a.length;w.textContent=a.length?'⚠ '+a.join(' '):''}
-  const u=$('#undo');if(u)u.disabled=!(undo[ukey()]||[]).length;
+  const dis=!(undo[ukey()]||[]).length;['#undo','#undoTop'].forEach(s=>{const u=$(s);if(u)u.disabled=dis});
 }
 
 // Undo history (per session + cell, kept in memory)
@@ -206,7 +316,7 @@ function openCell(n){
   const q5=k=>qb(k,5,'+5')+qb(k,10,'+10');
   const w=warns(c);
   $('#panel').innerHTML=`<div class="ph"><div class="navh"><button id="prev" ${pv?'':'disabled'}>← ${pv??''}</button><h2>Cell ${n}</h2><button id="next" ${nx?'':'disabled'}>${nx??''} →</button></div>
-    <span class="tot">Stems total: <b id="tot">${stems(c)??'–'}</b></span><button id="x">Close</button></div>
+    <span class="tot">Stems total: <b id="tot">${stems(c)??'–'}</b></span><div class="hb"><button id="undoTop" class="ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button><button id="x">Close</button></div></div>
     <div class="warn" id="warn" ${w.length?'':'hidden'}>${w.length?'⚠ '+esc(w.join(' ')):''}</div>
     <div class="ctr">${ctl('s1','Stems · '+esc(S().obs1||'Obs 1'),q5('s1'))}${ctl('s2','Stems · '+esc(S().obs2||'Obs 2'),q5('s2'))}${ctl('g','Galls',q5('g'))}</div>
     <div class="ctr">${ctl('ch','Chomps',q5('ch'))}${ctl('m','% Mature',qb('m',-5,'−5')+qb('m',5,'+5')+qb('m',100,'100'),10)}${ctl('h','Avg height',qb('h',-0.1,'−0.1')+qb('h',0.1,'+0.1'),1)}</div>
@@ -235,7 +345,7 @@ $('#panel').addEventListener('click',e=>{
     }else if(b.dataset.undof){undoField(b.dataset.undof)}
     else if(b.id==='prev'){const p=prevOf(cur);if(p)openCell(p)}
     else if(b.id==='next'){const p=nextOf(cur);if(p)openCell(p)}
-    else if(b.id==='undo')doUndo();
+    else if(b.id==='undo'||b.id==='undoTop')doUndo();
     else if(b.id==='clr'){
       push();Object.assign(c,{s1:null,s2:null,g:null,ch:null,m:null,h:null,n:'',done:false});save();openCell(cur);
     }else if(b.id==='none'||b.id==='done'){
@@ -281,7 +391,7 @@ const readable=v=>/\d/.test(v);
 let toastT=null;
 function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('on'),7000)}
 const codes=s=>[...s.trim()].slice(0,4).map(ch=>'“'+ch+'” U+'+ch.codePointAt(0).toString(16).toUpperCase().padStart(4,'0')).join(', ');
-const fit=(k,x)=>{const f=FIELDS[k];x=Math.max(0,Math.min(f.max??Infinity,x));return f.dec!=null?Math.round(x*10**f.dec)/10**f.dec:Math.round(x)};
+const fit=(k,x)=>{const f=FIELDS[k]||TFIELDS[k]||{};x=Math.max(0,Math.min(f.max??Infinity,x));return f.dec!=null?Math.round(x*10**f.dec)/10**f.dec:Math.round(x)};
 const num=(v,k)=>{const p=v.split('+').map(parseFloat).filter(x=>!isNaN(x));return p.length?fit(k,p.reduce((a,x)=>a+x,0)):null};
 $('#panel').addEventListener('change',e=>{
   if(cur==null||!e.target.dataset.in)return;
@@ -312,8 +422,9 @@ $('#btnSessions').onclick=showSessions;
 // ---------- hidden backup copy (IndexedDB) ----------
 let backupReady=false,lastSnap=0,bt=null;
 const idb=()=>new Promise((res,rej)=>{const r=indexedDB.open('grids-backup',1);r.onupgradeneeded=()=>r.result.createObjectStore('snap',{keyPath:'id'});r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
-const hasData=d=>Object.values(d.sessions||{}).some(s=>Object.values(s.cells||{}).some(c=>c.done||touched(c)||c.n));
-const countCells=d=>Object.values(d.sessions||{}).reduce((n,s)=>n+Object.values(s.cells||{}).filter(c=>c.done||touched(c)||c.n).length,0);
+const tHas=f=>f.done||TKEYS.some(k=>f[k]!=null)||!!f.dm||(f.ow||[]).some(w=>w.v!=null);
+const hasData=d=>Object.values(d.sessions||{}).some(s=>Object.values(s.cells||{}).some(c=>c.done||touched(c)||c.n))||Object.values(d.tsessions||{}).some(s=>Object.values(s.frames||{}).some(tHas));
+const countCells=d=>Object.values(d.sessions||{}).reduce((n,s)=>n+Object.values(s.cells||{}).filter(c=>c.done||touched(c)||c.n).length,0)+Object.values(d.tsessions||{}).reduce((n,s)=>n+Object.values(s.frames||{}).filter(tHas).length,0);
 function queueBackup(force){if(!backupReady)return;clearTimeout(bt);bt=setTimeout(()=>backupNow(force),force?0:1500)}
 async function backupNow(force){
   try{
@@ -413,9 +524,221 @@ async function exportCsv(){
 }
 $('#btnExport').onclick=exportCsv;
 
+
+// =====================================================================
+// Main menu + Transect (SIMP) data sheet
+// =====================================================================
+function show(view){
+  ['menu','app','tapp'].forEach(id=>$('#'+id).hidden=id!==view);
+  $('#sheet').classList.remove('open');$('#tsheet').classList.remove('open');cur=null;tcur=null;
+  if(view==='menu')renderMenu();else if(view==='app'){renderHeader();renderGrid()}else renderT();
+  window.scrollTo(0,0);
+}
+function renderMenu(){
+  const g=db.sessions[db.cur],t=db.tsessions[db.tcur];
+  const gd=g?Object.values(g.cells).filter(c=>c.done).length:0,td=t?Object.values(t.frames).filter(f=>f.done).length:0;
+  $('#mgSub').textContent=g?`${g.site||'(no site)'} · ${g.date} · ${gd}/100 cells done`:'';
+  $('#mtSub').textContent=t?`${t.site||'(no site)'} · ${t.date} · ${td}/10 frames done`:'No transect yet';
+}
+$('#goGrid').onclick=()=>show('app');
+$('#goTrans').onclick=()=>show('tapp');
+$('#btnMenu').onclick=()=>show('menu');
+$('#tMenu').onclick=()=>show('menu');
+
+function newTSession(){
+  const id='t'+Date.now(),prev=db.tsessions[db.tcur]||db.sessions[db.cur]||{};
+  db.tsessions[id]={id,site:prev.site||'',date:today(),obs1:prev.obs1||'',obs2:prev.obs2||'',frames:{}};
+  db.tcur=id;save(false);return db.tsessions[id];
+}
+const TS=()=>db.tsessions[db.tcur]||newTSession();
+const frame=n=>TS().frames[n]||(TS().frames[n]=blankFrame());
+const blankFrame=()=>Object.assign({dm:'',done:false,ow:[{n:'',v:null}]},Object.fromEntries(TKEYS.map(k=>[k,null])));
+const covTot=f=>{const v=[...COVERS.map(k=>f[k]),...f.ow.map(w=>w.v)].filter(x=>x!=null);return v.length?v.reduce((a,b)=>a+b,0):null};
+// 100 minus every cover box except the one named (k:key or w:index)
+const restOf=(f,except)=>100-(COVERS.reduce((a,k)=>a+(except==='k:'+k?0:(f[k]??0)),0)+f.ow.reduce((a,w,i)=>a+(except==='w:'+i?0:(w.v??0)),0));
+const seenWeeds=()=>{const m=new Map();Object.keys(TS().frames).sort((a,b)=>a-b).forEach(n=>TS().frames[n].ow.forEach(w=>{const nm=w.n.trim();if(nm&&!m.has(nm.toLowerCase()))m.set(nm.toLowerCase(),nm)}));return [...m.values()]};
+const tstate=n=>{const f=TS().frames[n];if(!f)return '';if(f.done)return 'done';if(tHas(f))return 'part';return ''};
+let tcur=null;
+['site','date','obs1','obs2'].forEach(k=>$('#t'+k).addEventListener('input',e=>{TS()[k]=e.target.value;save()}));
+function renderT(){
+  const s=TS();
+  $('#tsite').value=s.site;$('#tdate').value=s.date;$('#tobs1').value=s.obs1;$('#tobs2').value=s.obs2;
+  let done=0;$('#tframes').innerHTML='';
+  for(let n=1;n<=10;n++){
+    const f=s.frames[n],st=tstate(n);if(st==='done')done++;
+    const b=document.createElement('button');
+    b.className='cell tframe '+st+(tcur===n?' cur':'');
+    b.innerHTML=`${n}`+(f&&tHas(f)?`<small>Tgt ${f.ct??'–'}% · M${f.nm??'–'}/I${f.ni??'–'}</small>`:'');
+    b.onclick=()=>openFrame(n);
+    $('#tframes').appendChild(b);
+  }
+  $('#tprog').textContent=`${done} / 10 frames done`;
+}
+
+// ----- frame entry screen: everything for one frame in one place -----
+const tundo={};
+const tkey=()=>db.tcur+':'+tcur;
+function tpush(){const k=tkey();(tundo[k]=tundo[k]||[]).push(JSON.stringify(frame(tcur)));if(tundo[k].length>100)tundo[k].shift()}
+function tdoUndo(){const a=tundo[tkey()];if(!a||!a.length)return;TS().frames[tcur]=JSON.parse(a.pop());save();openFrame(tcur)}
+let tpend=false;
+function refreshT(){
+  if(tcur==null)return;const f=frame(tcur),tot=covTot(f),box=$('#ttotbox');
+  if(box){
+    $('#ttot').textContent=tot??'–';
+    box.classList.toggle('ok',tot===100);box.classList.toggle('bad',tot!=null&&tot!==100);
+    $('#ttots').textContent=tot==null?'cover total':tot===100?'= 100 ✓':'not 100';
+  }
+  const dis=!(tundo[tkey()]||[]).length;['#tundo','#tundoTop'].forEach(s=>{const u=$(s);if(u)u.disabled=dis});
+}
+function openFrame(n){
+  tcur=n;const f=frame(n);tpend=false;
+  // carry the other-weed names forward from the previous frame (values stay blank)
+  if(!tHas(f)&&!f.ow.some(w=>w.n)){for(let j=n-1;j>=1;j--){const pf=TS().frames[j];if(pf&&pf.ow.some(w=>w.n)){f.ow=pf.ow.map(w=>({n:w.n,v:null}));break}}}
+  const xsvg='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+  const fld=(k,label,grp,step)=>`<div class="tf" data-g="${grp}"><div class="tl">${label}</div>
+    <input data-tin="${k}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${f[k]??''}">
+    <div class="tb${k==='ct'?' tgt':COVERS.includes(k)?' rest':''}"><button data-tk="${k}" data-d="${-step}" aria-label="Decrease ${label||k}">−</button><button data-tk="${k}" data-d="${step}" aria-label="Increase ${label||k}">+</button>${k==='ct'?`<button class="rb" data-tset="${k}" data-v="5" aria-label="Set target to 5">5</button><button class="rb" data-tset="${k}" data-v="10" aria-label="Set target to 10">10</button>`:COVERS.includes(k)?`<button class="rb" data-trest="${k}" aria-label="Set ${label} to the rest of the cover">Rest</button>`:''}</div></div>`;
+  const weed=(w,i)=>`<div class="tf" data-g="pl"><div class="tl wl${f.ow.length>1?' hasx':''}"><input class="wn" list="weedlist" data-town="${i}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="✎ Weed name" value="${esc(w.n)}" aria-label="Name of other weed ${i+1}">${f.ow.length>1?`<button class="xk r" data-towdel="${i}" aria-label="Remove other weed ${i+1}">${xsvg}</button>`:''}</div>
+    <input data-tow="${i}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${w.v??''}">
+    <div class="tb rest"><button data-twk="${i}" data-d="-5" aria-label="Decrease other weed ${i+1}">−</button><button data-twk="${i}" data-d="5" aria-label="Increase other weed ${i+1}">+</button><button class="rb" data-trestw="${i}" aria-label="Set other weed ${i+1} to the rest of the cover">Rest</button></div></div>`;
+  // weeds already seen in this transect that are not in this frame yet: tap to add
+  const here=new Set(f.ow.map(w=>w.n.trim().toLowerCase()));
+  const seen=seenWeeds().filter(nm=>!here.has(nm.toLowerCase()));
+  const chipsHtml=seen.length?`<div class="chips"><span class="seen">Seen:</span>${seen.map(nm=>`<button data-tchip="${esc(nm)}">${esc(nm)}</button>`).join('')}</div>`:`<span class="hintsm">Write each weed's name in its white box</span>`;
+  const undoSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>';
+  $('#tpanel').innerHTML=`<div class="ph tph"><div class="navh"><button id="tprev" ${n>1?'':'disabled'}>← ${n>1?n-1:''}</button><h2>Frame ${n}</h2><button id="tnext" ${n<10?'':'disabled'}>${n<10?n+1:''} →</button></div>
+      <div class="hsum"><div class="ttchip" id="ttotbox"><span class="ts" style="color:inherit">Total</span><b id="ttot">–</b><span class="ts" id="ttots"></span></div>
+        <div class="dmh"><span>Damage</span>${[1,2,3,4].map(d=>`<button data-tdm="${d}" class="${f.dm===d?'on':''}" aria-label="Damage ${d}">${d}</button>`).join('')}</div></div>
+      <div class="hb"><button id="tundoTop" class="ib">${undoSvg}Undo</button><button id="tx">Close</button></div></div>
+    <div class="tsec"><h3 class="h3row"><span>Cover (%)</span>${chipsHtml}${f.ow.length<5?'<button class="tinyadd" id="towadd">＋ Add another other weed</button>':''}</h3><div class="tcov">
+      ${fld('ct','★ Target','tg',5)}${f.ow.map(weed).join('')}${fld('cf','Forb','pl',5)}${fld('cs','Shrub','pl',5)}${fld('cg','Grass','pl',5)}
+      ${fld('cd','Ground','gr',5)}${fld('cl','Litter','gr',5)}${fld('cm','Moss','gr',5)}
+    </div></div>
+    <div class="tsec"><h3>Counts and heights</h3><div class="tmx">
+      <div></div><div class="th">Count</div><div class="th">Tall</div><div class="th">Short</div><div class="th">Avg</div>
+      <div class="trl" data-g="mat">Mature</div>${fld('nm','','mat',1)}${fld('mt','','mat',1)}${fld('ms','','mat',1)}${fld('ma','','mat',1)}
+      <div class="trl" data-g="imm">Immature</div>${fld('ni','','imm',1)}${fld('it','','imm',1)}${fld('is','','imm',1)}${fld('ia','','imm',1)}
+    </div></div>
+    <div class="nav"><button id="tundo" class="ib">${undoSvg}Undo</button><button id="tclr">Clear frame</button><button id="tdone" class="pri">Done ✓ → ${n<10?'frame '+(n+1):'finish'}</button></div>`;
+  $('#tsheet').classList.add('open');renderT();refreshT();
+  $('#weedlist').innerHTML=seenWeeds().map(nm=>`<option value="${esc(nm)}">`).join('');
+}
+function closeFrame(){$('#tsheet').classList.remove('open');tcur=null;renderT()}
+$('#tpanel').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.id==='tx'){closeFrame();return}
+  if(tcur!=null){
+    const f=frame(tcur);
+    if(b.dataset.tk){
+      const k=b.dataset.tk;tpush();f[k]=fit(k,(f[k]??0)+Number(b.dataset.d));f.done=false;
+      const inp=b.closest('.tf').querySelector('input');inp.value=f[k];flash(inp);save();refreshT();renderT();
+    }else if(b.dataset.tchip!==undefined){
+      const nm=b.dataset.tchip,slot=f.ow.find(w=>!w.n.trim());
+      if(!slot&&f.ow.length>=5){toast('This frame already has 5 other weeds. Remove one first.');return}
+      tpush();if(slot)slot.n=nm;else f.ow.push({n:nm,v:null});
+      f.done=false;save();openFrame(tcur);
+    }else if(b.dataset.tset){
+      const k=b.dataset.tset;tpush();f[k]=Number(b.dataset.v);f.done=false;
+      const inp=b.closest('.tf').querySelector('input[data-tin]');inp.value=f[k];flash(inp);save();refreshT();renderT();
+    }else if(b.dataset.twk){
+      const i=Number(b.dataset.twk),w=f.ow[i];tpush();w.v=fit('ow',(w.v??0)+Number(b.dataset.d));f.done=false;
+      const inp=b.closest('.tf').querySelector('input[data-tow]');inp.value=w.v;flash(inp);save();refreshT();renderT();
+    }else if(b.dataset.trest||b.dataset.trestw!==undefined){
+      tpush();const isW=b.dataset.trestw!==undefined,key=isW?b.dataset.trestw:b.dataset.trest;
+      const r=restOf(f,isW?'w:'+key:'k:'+key),v=Math.max(0,r);
+      if(isW)f.ow[Number(key)].v=v;else f[key]=v;f.done=false;
+      const inp=b.closest('.tf').querySelector(isW?'input[data-tow]':'input[data-tin]');inp.value=v;flash(inp);save();refreshT();renderT();
+      if(r<0)toast('The other cover boxes already add up to '+(100-r)+', more than 100.');
+    }else if(b.dataset.towdel!==undefined){
+      tpush();f.ow.splice(Number(b.dataset.towdel),1);if(!f.ow.length)f.ow.push({n:'',v:null});f.done=false;save();openFrame(tcur);
+    }else if(b.id==='towadd'){
+      if(f.ow.length<5){tpush();f.ow.push({n:'',v:null});save();openFrame(tcur)}
+    }else if(b.dataset.tdm){
+      const d=Number(b.dataset.tdm);tpush();f.dm=(f.dm===d)?'':d;f.done=false;
+      b.parentElement.querySelectorAll('button').forEach(x=>x.classList.toggle('on',Number(x.dataset.tdm)===f.dm));
+      save();renderT();
+    }
+    else if(b.id==='tprev'){if(tcur>1)openFrame(tcur-1)}
+    else if(b.id==='tnext'){if(tcur<10)openFrame(tcur+1)}
+    else if(b.id==='tundo'||b.id==='tundoTop')tdoUndo();
+    else if(b.id==='tclr'){tpush();Object.assign(f,Object.fromEntries(TKEYS.map(k=>[k,null])),{dm:'',done:false,ow:f.ow.map(w=>({n:w.n,v:null}))});save();openFrame(tcur)}
+    else if(b.id==='tdone'){
+      tpush();f.done=true;save();
+      if(tcur<10)openFrame(tcur+1);
+      else{
+        closeFrame();
+        const all=Object.values(TS().frames).filter(x=>x.done).length;
+        if(all>=10&&confirm('All 10 frames are done! Export a backup CSV now?'))exportT();
+      }
+    }
+  }else{
+    if(b.id==='tnew'){newTSession();closeFrame();renderT()}
+    else if(b.dataset.tsid){db.tcur=b.dataset.tsid;save(false);closeFrame();renderT()}
+    else if(b.id==='tdel'&&confirm('Delete this transect session and its data? Export first if unsure.')){
+      delete db.tsessions[db.tcur];db.tcur=Object.keys(db.tsessions)[0]||null;save(false);TS();closeFrame();renderT()}
+  }
+});
+$('#tpanel').addEventListener('focusin',e=>{const d=e.target.dataset;if(d.tin||d.tow!==undefined||d.town!==undefined)tpend=true});
+$('#tpanel').addEventListener('input',e=>{
+  if(tcur==null)return;const f=frame(tcur),d=e.target.dataset;
+  if(d.tin||d.tow!==undefined){
+    if(e.isComposing)return;
+    if(tpend){tpush();tpend=false}
+    const raw=e.target.value,v=clean(raw);
+    if(raw.trim()!==''&&!readable(v))return;
+    if(d.tin)f[d.tin]=num(v,d.tin);else f.ow[Number(d.tow)].v=num(v,'ow');
+    f.done=false;refreshT();
+  }else if(d.town!==undefined){if(tpend){tpush();tpend=false}f.ow[Number(d.town)].n=e.target.value}
+  else return;
+  save();renderT();
+});
+$('#tpanel').addEventListener('change',e=>{
+  const d=e.target.dataset;if(tcur==null||!(d.tin||d.tow!==undefined))return;
+  const f=frame(tcur),isW=d.tow!==undefined,raw=e.target.value,v=clean(raw),old=isW?f.ow[Number(d.tow)].v:f[d.tin];
+  if(raw.trim()!==''&&!readable(v)){e.target.value=old??'';toast('Could not read that as a number: '+codes(raw)+'. Try again, or use the + / − buttons.');return}
+  const n=num(v,isW?'ow':d.tin);if(isW)f.ow[Number(d.tow)].v=n;else f[d.tin]=n;
+  e.target.value=n??'';flash(e.target);save();refreshT();renderT();
+});
+$('#tsheet').addEventListener('click',e=>{if(e.target.id==='tsheet')closeFrame()});
+
+$('#tSessions').onclick=()=>{
+  tcur=null;
+  const list=Object.values(db.tsessions).sort((a,b)=>(b.date+b.id).localeCompare(a.date+a.id));
+  $('#tpanel').innerHTML=`<div class="ph"><h2>Transect sessions</h2><button id="tx">Close</button></div>
+    <button class="pri" id="tnew">+ New transect (copies site &amp; observers)</button>
+    <div class="list">${list.map(s=>{const d=Object.values(s.frames).filter(f=>f.done).length;
+      return `<button data-tsid="${s.id}">${s.id===db.tcur?'● ':''}${esc(s.site||'(no site)')} — ${s.date} — ${esc([s.obs1,s.obs2].filter(Boolean).join(' & ')||'?')} <span class="hint">(${d}/10)</span></button>`}).join('')}</div>
+    <button id="tdel">Delete current transect session</button>
+    <div class="hint">Your hidden backup copy covers transect data too (see Grid → Sessions → Restore from backup copy).</div>`;
+  $('#tsheet').classList.add('open');
+};
+
+function tcsv(s){
+  const fr=Object.entries(s.frames).filter(([n,f])=>tHas(f));
+  const nw=Math.max(1,...fr.map(([n,f])=>f.ow.length));
+  const wh=Array.from({length:nw},(_,i)=>[`other${i+1}_name`,`other${i+1}_pct`]).flat();
+  const rows=[['site','date','obs1','obs2','frame','target','other_total',...wh,'forb','shrub','grass','ground','litter','moss','total','damage','mature_count','immature_count','mature_tall','mature_short','mature_avg','immature_tall','immature_short','immature_avg']];
+  for(let n=1;n<=10;n++){
+    const f=s.frames[n];if(!f||!tHas(f))continue;
+    const wv=Array.from({length:nw},(_,i)=>f.ow[i]?[f.ow[i].n,f.ow[i].v??'']:['','']).flat();
+    const any=f.ow.some(w=>w.v!=null);
+    rows.push([s.site,s.date,s.obs1,s.obs2,n,f.ct??'',any?f.ow.reduce((a,w)=>a+(w.v??0),0):'',...wv,f.cf??'',f.cs??'',f.cg??'',f.cd??'',f.cl??'',f.cm??'',covTot(f)??'',f.dm,f.nm??'',f.ni??'',f.mt??'',f.ms??'',f.ma??'',f.it??'',f.is??'',f.ia??'']);
+  }
+  return rows.map(r=>r.map(q).join(',')).join('\n');
+}
+async function exportT(){
+  const s=TS(),name=`transect_${(s.site||'site').replace(/\W+/g,'_')}_${s.date}.csv`;
+  const file=new File([tcsv(s)],name,{type:'text/csv'});
+  try{
+    if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:name});return}
+  }catch(e){if(e.name==='AbortError')return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=name;a.click();
+}
+$('#tExport').onclick=exportT;
+
 if(!db.cur||!db.sessions[db.cur])newSession();
-$('#foot').textContent=`Grid Data v${VERSION} · Created by Jackson R Strand · © ${new Date().getFullYear()} Jackson R Strand`;
-renderHeader();renderGrid();
+document.querySelectorAll('.foot').forEach(el=>el.textContent=`Grid Data v${VERSION} · Created by Jackson R Strand · © ${new Date().getFullYear()} Jackson R Strand`);
+renderHeader();renderGrid();show('menu');
 (async()=>{
   try{
     if(!hasData(db)){

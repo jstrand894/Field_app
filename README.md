@@ -27,7 +27,25 @@ It mirrors the layout of the original Numbers sheet: 100 cells numbered 1–10 a
 - **Export CSV** through the iPad share sheet (Files, AirDrop, email, etc.).
 - **Works with no internet** once installed (see below).
 
-## CSV format
+## Main menu and the Transect (SIMP) sheet
+
+The app opens on a **main menu** with two data sheets: **Grid** (everything above) and **Transect**, a digital version of the SIMP 2026 form. Use **‹ Menu** at the top left of either sheet to switch. Each sheet has its own sessions and its own CSV export.
+
+The paper form puts the 10 frames in two separate tables, so you scroll between cover and heights. Here **each frame has all of its information on one screen**, and you finish it before moving to the next:
+
+- **Cover (%)** for Target, Other, Forb, Shrub, Grass, Ground, Litter, and Moss (−/+ moves by 5). **Target** is the gold box with a star so it stands out, and it has **5** and **10** shortcut buttons (it never needs Rest). **Total** and **Damage** sit in the top bar so the cover boxes have the room.
+- **Total** adds up automatically and turns green at 100, amber otherwise (it never blocks you).
+- **Rest button:** every cover box has a **Rest** button that fills that box with whatever is left to reach 100 (100 minus all the other cover boxes), so you can enter 5 target, 10 forb, 25 grass, then tap Rest on litter.
+- **Other weeds:** the Other category is a list. Write the weed's name in the white box at the top of each weed's card (Pencil) and its percent below. Tap **＋ Add another other weed** (up to 5) for more; the ✕ on a box removes it. New frames start with the weed names from the previous frame (values blank), since the same weeds usually repeat. Any weed you have named earlier in the same transect but that is not in the current frame shows as a **Seen:** chip next to the Cover heading; tap it to fill an empty weed box (or add a new one) without writing the name again.
+- **Damage** is a 1 / 2 / 3 / 4 button set in the top bar. Tap a number to choose it, tap it again to clear it.
+- **Undo** is at the top of the frame screen (and the grid cell screen) as well as at the bottom.
+- **Counts and heights** as a Mature / Immature table: Count, Tall, Short, and Avg.
+- **← / →** move between frames, **Done ✓ → frame N** saves and advances, and **Undo** and **Clear frame** work like in the grid.
+- Site, Date, and the two observers are set once at the top; a new transect copies them from the last one. The hidden backup copy covers transect data too.
+
+Transect CSV columns: `site, date, obs1, obs2, frame, target, other_total, other1_name, other1_pct, (other2_name, other2_pct, ... as many as used), forb, shrub, grass, ground, litter, moss, total, damage, mature_count, immature_count, mature_tall, mature_short, mature_avg, immature_tall, immature_short, immature_avg`.
+
+## CSV format (Grid)
 
 One row per cell that has data:
 
