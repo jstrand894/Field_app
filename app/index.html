@@ -116,17 +116,6 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .foot{margin-top:auto;padding-top:10px;text-align:center;font-size:13px;font-weight:600;color:var(--mute)}
 @media(max-width:700px){header{grid-template-columns:1fr 1fr}header label:first-child{grid-column:1/-1}.ctr{grid-template-columns:1fr}}
 /* ---- main menu ---- */
-#menu{max-width:1200px;margin:0 auto;padding:max(24px,env(safe-area-inset-top)) 18px 18px;display:flex;flex-direction:column;gap:22px;min-height:100%}
-#menu h1{margin:8px 0 0;text-align:center;font-size:clamp(26px,4vw,38px);line-height:1.15}
-#menu .sub2{text-align:center;color:var(--mute);font-weight:600;margin-top:-14px}
-.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.mcard{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:10px;min-height:210px;padding:22px;border-radius:22px;border:4px solid var(--c);background:var(--card);background:color-mix(in srgb,var(--c) 12%,var(--card));text-align:left}
-.mcard b{font-size:32px;color:var(--c);line-height:1}
-.mtag{font-size:14px!important;font-weight:800!important;letter-spacing:.04em;text-transform:uppercase;color:var(--mute)!important}
-.mdiag{width:100%;border-radius:14px;background:var(--card);border:2px solid var(--line);padding:8px}
-.mdiag svg{display:block;margin:0 auto;width:100%;height:250px}
-.mlist{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px;font-weight:600;color:var(--ink);line-height:1.35}
-.mlist strong{color:var(--c)}
 .dc{fill:var(--card);stroke:var(--line);stroke-width:1.2}
 .dc.st{fill:#7ccf88;stroke:#1b6b2a}.dc.en{fill:#f2b705;stroke:#b8860b}
 .dp{fill:none;stroke:#d99e00;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;opacity:.95}
@@ -137,9 +126,35 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .dfr{fill:var(--card);stroke:#0a6c76;stroke-width:2}
 .dfn{font:800 11px -apple-system,system-ui,sans-serif;fill:var(--ink);text-anchor:middle;dominant-baseline:central}
 .dcap{font:700 10px -apple-system,system-ui,sans-serif;fill:var(--mute);text-anchor:middle}
-.mcard span{font-size:16px;font-weight:600;color:var(--ink)}
-.mcard small{font-size:14px;font-weight:700;color:var(--mute)}
+/* ---- main menu ---- */
+#menu{position:fixed;top:0;bottom:0;left:0;right:0;overflow-y:auto;max-width:1180px;margin:0 auto;padding:max(26px,env(safe-area-inset-top)) 22px max(18px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:22px}
+.mhead{display:flex;align-items:center;gap:14px}
+.mmark{flex:none;width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#2a8a43,#14592a);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(20,89,42,.3)}
+.mmark svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+#menu h1{margin:0;font-size:clamp(24px,3.4vw,34px);line-height:1.1;font-weight:800;letter-spacing:-.01em}
+#menu .sub2{margin-top:4px;color:var(--mute);font-weight:600;font-size:15px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
+.mcard{--c:#1b6b2a;display:flex;flex-direction:column;align-items:stretch;gap:14px;padding:20px;text-align:left;border-radius:26px;background:var(--card);border:1px solid color-mix(in srgb,var(--line) 40%,transparent);box-shadow:0 1px 2px rgba(0,0,0,.06),0 12px 30px rgba(0,0,0,.09);color:var(--ink);font-weight:500;transition:transform .15s,box-shadow .15s}
+.mcard:active{transform:scale(.99);filter:none;box-shadow:0 1px 2px rgba(0,0,0,.06),0 6px 16px rgba(0,0,0,.08)}
 .mcard.g{--c:#1b6b2a}.mcard.t{--c:#0a6c76}
+.mtop{display:flex;align-items:center;gap:14px}
+.mico{flex:none;width:50px;height:50px;border-radius:15px;background:var(--c);display:flex;align-items:center;justify-content:center}
+.mico svg{width:28px;height:28px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.mtt{flex:1;min-width:0}
+.mtt b{display:block;font-size:26px;font-weight:800;line-height:1.05;color:var(--ink)}
+.mtag{display:block;margin-top:3px;font-size:13px;font-weight:700;color:var(--mute);letter-spacing:.02em}
+.mgo{flex:none;width:38px;height:38px;border-radius:50%;background:color-mix(in srgb,var(--c) 14%,var(--card));color:color-mix(in srgb,var(--c) 65%,var(--ink));display:flex;align-items:center;justify-content:center}
+.mgo svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.mdiag{width:100%;border-radius:18px;background:color-mix(in srgb,var(--c) 7%,var(--card));padding:10px}
+.mdiag svg{display:block;margin:0 auto;width:100%;height:265px}
+.mchips{display:flex;flex-wrap:wrap;gap:6px}
+.mchips i{font-style:normal;font-size:13px;font-weight:700;padding:4px 11px;border-radius:999px;background:color-mix(in srgb,var(--c) 11%,var(--card));color:var(--ink)}
+.mhow{margin:0;font-size:15px;font-weight:600;color:var(--mute);line-height:1.4}
+.mhow strong{color:color-mix(in srgb,var(--c) 65%,var(--ink))}
+.mstat{display:flex;flex-direction:column;gap:7px;margin-top:auto;padding-top:4px}
+.mbar{height:8px;border-radius:99px;background:color-mix(in srgb,var(--line) 30%,var(--card));overflow:hidden}
+.mbar i{display:block;height:100%;width:0;border-radius:99px;background:var(--c);transition:width .6s cubic-bezier(.2,.8,.3,1)}
+.mstat small{font-size:13px;font-weight:700;color:var(--mute)}
 /* ---- transect ---- */
 #tapp{max-width:1500px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;min-height:100%}
 .tl-wrap{position:relative}
@@ -277,7 +292,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .ttotal .ts{font-size:13px;font-weight:700;color:var(--mute)}
 .ttotal.ok{--c:#1b6b2a}.ttotal.bad{--c:#b8860b}
 .ttotal.ok .ts{color:#1b6b2a}.ttotal.bad .ts{color:#8a6d0f}
-@media(max-width:900px){.mgrid{grid-template-columns:1fr}.mdiag svg{height:230px}}
+@media(max-width:900px){.mgrid{grid-template-columns:1fr}.mdiag svg{height:190px}.mhead{justify-content:center;text-align:center}}
 @media(max-width:760px){.tcov{grid-template-columns:repeat(3,minmax(0,1fr))}.mgrid{grid-template-columns:1fr}}
 /* notes / sketch pads: write or draw with the Pencil */
 #gridrow{display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"g g" "l r";gap:12px}
@@ -303,28 +318,28 @@ textarea{width:100%;min-height:90px;resize:vertical}
 </head>
 <body>
 <div id="menu" class="view">
-  <h1>Toadflax Field Data Collection</h1>
-  <div class="sub2">Choose a sampling method</div>
+  <div class="mhead">
+    <div class="mmark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V9"/><path d="M12 13c-4 0-6-2.6-6-6 4 0 6 2.2 6 6z"/><path d="M12 11c0-3.4 2.2-5.6 6-5.6 0 3.6-2 5.6-6 5.6z"/><path d="M8 21h8"/></svg></div>
+    <div><h1>Toadflax Field Data Collection</h1><div class="sub2">Choose a sampling method</div></div>
+  </div>
   <div class="mgrid">
     <button class="mcard g" id="goGrid">
-      <b>Grid</b>
-      <span class="mtag">10 × 10 plot · 100 cells</span>
+      <div class="mtop"><span class="mico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg></span>
+        <span class="mtt"><b>Grid</b><span class="mtag">10 × 10 plot · 100 cells</span></span>
+        <span class="mgo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></span></div>
       <div class="mdiag" id="dgGrid" aria-hidden="true"></div>
-      <ul class="mlist">
-        <li>Walk the plot in a <strong>zigzag</strong>: cells 1 to 10, then 20 back to 11, then 21 to 30, and so on.</li>
-        <li>For each cell record <strong>stems</strong> (two observers), <strong>galls</strong>, <strong>chomps</strong>, <strong>% mature</strong>, <strong>avg height</strong> and notes.</li>
-      </ul>
-      <small id="mgSub"></small>
+      <div class="mchips"><i>Stems · 2 observers</i><i>Galls</i><i>Chomps</i><i>% mature</i><i>Avg height</i><i>Notes</i></div>
+      <p class="mhow">Walk the plot in a <strong>zigzag</strong>: cells 1 to 10, then 20 back to 11, then 21 to 30, and so on.</p>
+      <div class="mstat"><div class="mbar"><i id="mgBar"></i></div><small id="mgSub"></small></div>
     </button>
     <button class="mcard t" id="goTrans">
-      <b>Transect</b>
-      <span class="mtag">SIMP · 20 m line · 10 frames</span>
+      <div class="mtop"><span class="mico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15h18"/><path d="M5 15v3M9 15v2M13 15v3M17 15v2M21 15v3"/><rect x="5" y="6" width="5" height="5" rx="1"/><rect x="13" y="6" width="5" height="5" rx="1"/></svg></span>
+        <span class="mtt"><b>Transect</b><span class="mtag">SIMP · 20 m line · 10 frames</span></span>
+        <span class="mgo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></span></div>
       <div class="mdiag" id="dgTrans" aria-hidden="true"></div>
-      <ul class="mlist">
-        <li>One frame every <strong>2 m</strong>, starting at 2 m and ending at 20 m (frames 1 to 10).</li>
-        <li>For each frame record <strong>cover %</strong> (target, other weeds, forb, shrub, grass, ground, litter, moss), <strong>damage</strong> 1 to 4, and <strong>mature / immature</strong> counts with tall, short and average heights.</li>
-      </ul>
-      <small id="mtSub"></small>
+      <div class="mchips"><i>Cover % · 8 types</i><i>Damage 1–4</i><i>Mature / immature</i><i>Tall · short · avg</i></div>
+      <p class="mhow">One frame every <strong>2 m</strong>, starting at 2 m and ending at 20 m (frames 1 to 10).</p>
+      <div class="mstat"><div class="mbar"><i id="mtBar"></i></div><small id="mtSub"></small></div>
     </button>
   </div>
   <footer class="foot"></footer>
@@ -376,7 +391,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
 <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" hidden>
 
 <script>
-const N=100, KEY='grids.v1', VERSION='1.14.3';
+const N=100, KEY='grids.v1', VERSION='1.16.0';
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.sessions)db={cur:null,sessions:{}};
@@ -770,6 +785,7 @@ function renderMenu(){
   const gd=g?Object.values(g.cells).filter(c=>c.done).length:0,td=t?Object.values(t.frames).filter(f=>f.done).length:0;
   $('#mgSub').textContent=g?`${g.site||'(no site)'} · ${g.date} · ${gd}/100 cells done`:'';
   $('#mtSub').textContent=t?`${t.site||'(no site)'} · ${t.date} · ${td}/10 frames done`:'No transect yet';
+  $('#mgBar').style.width=gd+'%';$('#mtBar').style.width=(td*10)+'%';
 }
 $('#goGrid').onclick=()=>show('app');
 $('#goTrans').onclick=()=>show('tapp');
@@ -841,14 +857,28 @@ function fitGrid(){
   app.classList.add('fit');g.style.setProperty('--ch',ch.toFixed(1)+'px');
 }
 // ---------- notes / sketch pads (Pencil, finger or mouse) ----------
+// Strokes are NOT part of the main saved data. Each stroke is its own tiny record in a separate IndexedDB
+// database, written in the background, so lifting the pen never triggers a big save.
 const PAD_COLORS=['#111111','#c62f2f','#1b6b2a','#1f5fbf','#d99e00'];
 const PADS=[];
-// Pad strokes are saved a moment after you stop drawing (not at every pen lift), and always when the app is hidden or closed
-function padSaveSoon(){lastPadAct=Date.now();clearTimeout(padT);padT=setTimeout(()=>{padT=null;if(penDown){padSaveSoon();return}save()},1200)}
-function flushPad(){if(padT){clearTimeout(padT);padT=null;save()}}
-document.addEventListener('visibilitychange',()=>{if(document.hidden)flushPad()});
-window.addEventListener('pagehide',flushPad);
-function makePad(root,title,getStrokes){
+let padDBp=null,padSeq=0;
+const padDB=()=>padDBp||(padDBp=new Promise((res,rej)=>{const r=indexedDB.open('grids-pads',1);r.onupgradeneeded=()=>{r.result.createObjectStore('strokes',{keyPath:'id'}).createIndex('pad','pad')};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}));
+const padWrite=fn=>padDB().then(d=>new Promise(res=>{const tx=d.transaction('strokes','readwrite');fn(tx.objectStore('strokes'));tx.oncomplete=res;tx.onerror=res;tx.onabort=res})).catch(()=>{});
+const newId=()=>String(Date.now()).padStart(14,'0')+'-'+String(++padSeq).padStart(5,'0');
+const padCache={},padReady={};
+function padGet(kind,side){
+  const sess=kind==='g'?S():TS(),key=kind+':'+sess.id+':'+side;
+  if(!padCache[key]){
+    const arr=padCache[key]=[];
+    padReady[key]=padDB().then(d=>new Promise(res=>{const r=d.transaction('strokes').objectStore('strokes').index('pad').getAll(key);r.onsuccess=()=>{arr.unshift(...r.result.sort((a,b)=>a.id<b.id?-1:1));res()};r.onerror=()=>res()})).catch(()=>{}).then(()=>{
+      // bring over drawings that earlier versions kept inside the main saved data
+      const old=sess.pads&&sess.pads[side];
+      if(old&&old.length){const recs=old.map(s=>({id:newId(),pad:key,c:s.c,w:s.w,p:s.p}));arr.push(...recs);padWrite(st=>recs.forEach(x=>st.put(x))).then(()=>{delete sess.pads[side];save(false)})}
+    });
+  }
+  return {key,arr:padCache[key],ready:padReady[key]};
+}
+function makePad(root,title,kind,side){
   const svg=p=>`<svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`;
   root.innerHTML=`<div class="padbar"><b>${title}</b>${PAD_COLORS.map((c,i)=>`<button class="pc${i?'':' on'}" data-c="${c}" style="--pc:${c}" aria-label="Pen colour ${i+1}"></button>`).join('')}
     <button class="pb" data-act="erase" aria-label="Eraser">${svg('<path d="M7 21h12"/><path d="M5 13l7-8 7 7-6 7H9z"/>')}</button>
@@ -856,9 +886,10 @@ function makePad(root,title,getStrokes){
     <button class="pb" data-act="clear" aria-label="Clear pad">${svg('<path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/>')}</button></div>
     <div class="padbody"><canvas></canvas></div>`;
   const body=root.querySelector('.padbody'),cv=root.querySelector('canvas'),cx=cv.getContext('2d',{desynchronized:true});
-  let color=PAD_COLORS[0],erase=false,W=1,H=1,cur=null;
+  let color=PAD_COLORS[0],erase=false,W=1,H=1,cur=null,box=null,watching='';
   const WIDTH=2.6;                                    // pen width in pixels at the pad's normal width; stored relative to pad width
   const px=v=>v/1000*W;                               // stored coordinates are thousandths of the pad width
+  function line(c,w,p0,p1){cx.strokeStyle=c;cx.lineWidth=Math.max(1,px(w));cx.lineCap='round';cx.lineJoin='round';cx.beginPath();cx.moveTo(px(p0[0]),px(p0[1]));cx.lineTo(px(p1[0]),px(p1[1]));cx.stroke()}
   function stroke(s){
     cx.strokeStyle=s.c;cx.lineWidth=Math.max(1,px(s.w));cx.lineCap='round';cx.lineJoin='round';
     cx.beginPath();cx.moveTo(px(s.p[0]),px(s.p[1]));
@@ -866,54 +897,60 @@ function makePad(root,title,getStrokes){
     if(s.p.length===2)cx.lineTo(px(s.p[0])+.01,px(s.p[1]));
     cx.stroke();
   }
-  function redraw(){cx.clearRect(0,0,cv.width,cv.height);cx.setTransform(devicePixelRatio||1,0,0,devicePixelRatio||1,0,0);getStrokes().forEach(stroke)}
+  function redraw(){
+    const g=padGet(kind,side);
+    cx.setTransform(1,0,0,1,0,0);cx.clearRect(0,0,cv.width,cv.height);cx.setTransform(devicePixelRatio||1,0,0,devicePixelRatio||1,0,0);
+    g.arr.forEach(stroke);
+    if(watching!==g.key){watching=g.key;g.ready.then(()=>{if(watching===g.key)redraw()})}   // repaint once this pad's strokes finish loading
+  }
   function size(){
     const r=body.getBoundingClientRect(),d=devicePixelRatio||1;W=Math.max(1,r.width);H=Math.max(1,r.height);
     cv.width=Math.round(W*d);cv.height=Math.round(H*d);redraw();
   }
   new ResizeObserver(size).observe(body);
-  const pt=e=>{const r=cv.getBoundingClientRect();return [Math.round((e.clientX-r.left)/W*1000),Math.round((e.clientY-r.top)/W*1000)]};
+  const pt=e=>[Math.round((e.clientX-box.left)/W*1000),Math.round((e.clientY-box.top)/W*1000)];   // pad position measured once per stroke
   function eraseAt(x,y){
-    const ss=getStrokes(),R=14/W*1000;let hit=false;
-    for(let i=ss.length-1;i>=0;i--){const p=ss[i].p;for(let k=0;k<p.length;k+=2){if(Math.hypot(p[k]-x,p[k+1]-y)<R){ss.splice(i,1);hit=true;break}}}
-    if(hit){redraw();padSaveSoon()}
+    const g=padGet(kind,side),ss=g.arr,R=14/W*1000,gone=[];
+    for(let i=ss.length-1;i>=0;i--){const p=ss[i].p;for(let k=0;k<p.length;k+=2){if(Math.hypot(p[k]-x,p[k+1]-y)<R){gone.push(ss.splice(i,1)[0].id);break}}}
+    if(gone.length){redraw();padWrite(st=>gone.forEach(id=>st.delete(id)))}
   }
   cv.addEventListener('pointerdown',e=>{
     if(e.pointerType==='mouse'&&e.button!==0)return;
-    const rr=cv.getBoundingClientRect();if(Math.abs(rr.width-W)>1||Math.abs(rr.height-H)>1)size(); // never store coordinates against a stale size
+    box=cv.getBoundingClientRect();if(Math.abs(box.width-W)>1||Math.abs(box.height-H)>1){size();box=cv.getBoundingClientRect()}   // never store coordinates against a stale size
     try{cv.setPointerCapture(e.pointerId)}catch(err){}
-    const [x,y]=pt(e);
-    penDown=true;
+    const [x,y]=pt(e);penDown=true;
     if(erase){cur={erase:true};eraseAt(x,y);return}
     cur={c:color,w:WIDTH/W*1000,p:[x,y]};
   });
   cv.addEventListener('pointermove',e=>{
     if(!cur)return;
-    const list=e.getCoalescedEvents?e.getCoalescedEvents():[e];
+    const list=e.getCoalescedEvents?e.getCoalescedEvents():[];
     for(const ev of (list.length?list:[e])){
       const [x,y]=pt(ev);
       if(cur.erase){eraseAt(x,y);continue}
       const n=cur.p.length,lx=cur.p[n-2],ly=cur.p[n-1];
-      if(Math.hypot(x-lx,y-ly)<.8/W*1000)continue;
-      cur.p.push(x,y);
-      cx.strokeStyle=cur.c;cx.lineWidth=Math.max(1,px(cur.w));cx.lineCap='round';cx.lineJoin='round';
-      cx.beginPath();cx.moveTo(px(lx),px(ly));cx.lineTo(px(x),px(y));cx.stroke();
+      if(Math.hypot(x-lx,y-ly)<1/W*1000)continue;
+      cur.p.push(x,y);line(cur.c,cur.w,[lx,ly],[x,y]);
     }
   });
-  const end=()=>{penDown=false;if(cur&&!cur.erase){getStrokes().push({c:cur.c,w:Math.round(cur.w*10)/10,p:cur.p});padSaveSoon()}cur=null};
+  const end=()=>{
+    penDown=false;
+    if(cur&&!cur.erase){const g=padGet(kind,side),rec={id:newId(),pad:g.key,c:cur.c,w:Math.round(cur.w*10)/10,p:cur.p};g.arr.push(rec);padWrite(st=>st.put(rec))}
+    cur=null;
+  };
   cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
   root.querySelector('.padbar').addEventListener('click',e=>{
     const b=e.target.closest('button');if(!b)return;
+    const g=padGet(kind,side);
     if(b.dataset.c){color=b.dataset.c;erase=false;root.querySelectorAll('.pc').forEach(x=>x.classList.toggle('on',x===b));root.querySelector('[data-act=erase]').classList.remove('on')}
     else if(b.dataset.act==='erase'){erase=!erase;b.classList.toggle('on',erase);if(erase)root.querySelectorAll('.pc').forEach(x=>x.classList.remove('on'));else root.querySelector(`.pc[data-c="${color}"]`).classList.add('on')}
-    else if(b.dataset.act==='undo'){getStrokes().pop();redraw();padSaveSoon()}
-    else if(b.dataset.act==='clear'){if(getStrokes().length&&confirm('Clear everything on this pad?')){getStrokes().length=0;redraw();padSaveSoon()}}
+    else if(b.dataset.act==='undo'){const r=g.arr.pop();if(r){redraw();padWrite(st=>st.delete(r.id))}}
+    else if(b.dataset.act==='clear'){if(g.arr.length&&confirm('Clear everything on this pad?')){const ids=g.arr.map(x=>x.id);g.arr.length=0;redraw();padWrite(st=>ids.forEach(i=>st.delete(i)))}}
   });
   const pad={redraw,size};PADS.push(pad);return pad;
 }
-const padStrokes=(owner,side)=>()=>{const s=owner();s.pads=s.pads||{l:[],r:[]};return s.pads[side]};
-makePad($('#padL'),'Notes',padStrokes(()=>S(),'l'));makePad($('#padR'),'Sketch',padStrokes(()=>S(),'r'));
-makePad($('#tpadL'),'Notes',padStrokes(()=>TS(),'l'));makePad($('#tpadR'),'Sketch',padStrokes(()=>TS(),'r'));
+makePad($('#padL'),'Notes','g','l');makePad($('#padR'),'Sketch','g','r');
+makePad($('#tpadL'),'Notes','t','l');makePad($('#tpadR'),'Sketch','t','r');
 const redrawPads=()=>PADS.forEach(p=>p.size()); // re-measures (the screen may have just been shown) and redraws
 let fishQ=false;
 function fish(){
