@@ -44,7 +44,7 @@ button:disabled{opacity:.5}
 .cell.cur{outline:4px solid var(--accent)}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);max-width:90vw;background:#3b0f0d;color:#fff;border-radius:12px;padding:12px 16px;font-weight:700;z-index:60;opacity:0;pointer-events:none;transition:opacity .25s}
 #toast.on{opacity:1}
-#sheet,#tsheet{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:5}
+#sheet,#tsheet{overflow:hidden;position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:5}
 #sheet.open,#tsheet.open{display:flex}
 .panel{background:var(--bg);width:100%;max-width:1120px;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.45)}
 .ph{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -78,7 +78,7 @@ button:disabled{opacity:.5}
 .sub{font-size:14px;color:var(--mute);min-height:18px}
 .ctl .quick button{padding:8px 11px;font-size:15px}
 .danger{border-color:var(--warn);color:var(--warn)}
-.gwrap{position:relative;overflow:hidden;display:flex;flex-direction:column}
+.gwrap{position:relative;overflow:hidden;display:flex;flex-direction:column;flex:0 0 auto}
 .gbody{display:flex;flex-direction:column;gap:12px;will-change:transform,opacity}
 .gbody.leaving{position:absolute;left:0;top:0}
 .fx{position:fixed;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center;z-index:8;overflow:hidden}
@@ -91,8 +91,11 @@ button:disabled{opacity:.5}
 .fxstamp.arrow svg{width:54px;height:54px}
 .fxstamp b{font-size:54px;line-height:1}.fxstamp small{font-size:14px;font-weight:800}
 .fxdot{position:absolute;width:12px;height:12px;border-radius:3px}
-html.lock,html.lock body{overflow:hidden}
-html.lock body{position:fixed;left:0;right:0;width:100%}
+html,body{overflow:hidden;overscroll-behavior:none}
+body{position:fixed;inset:0;width:100%}
+/* each screen is its own scroller (only scrolls when its content is taller than the display); nothing stretches or pulls to refresh */
+#app,#tapp,#menu{position:fixed;top:0;bottom:0;left:0;right:0;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+html.lock .view{overflow:hidden}
 .panel{overscroll-behavior:contain;position:relative}
 #sheet,#tsheet{overscroll-behavior:contain;touch-action:none}
 .panel{touch-action:pan-y}
@@ -114,11 +117,26 @@ textarea{width:100%;min-height:90px;resize:vertical}
 @media(max-width:700px){header{grid-template-columns:1fr 1fr}header label:first-child{grid-column:1/-1}.ctr{grid-template-columns:1fr}}
 /* ---- main menu ---- */
 #menu{max-width:1200px;margin:0 auto;padding:max(24px,env(safe-area-inset-top)) 18px 18px;display:flex;flex-direction:column;gap:22px;min-height:100%}
-#menu h1{margin:8px 0 0;text-align:center;font-size:34px}
+#menu h1{margin:8px 0 0;text-align:center;font-size:clamp(26px,4vw,38px);line-height:1.15}
 #menu .sub2{text-align:center;color:var(--mute);font-weight:600;margin-top:-14px}
 .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.mcard{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;min-height:210px;padding:22px;border-radius:22px;border:4px solid var(--c);background:var(--card);background:color-mix(in srgb,var(--c) 12%,var(--card));text-align:left}
-.mcard b{font-size:32px;color:var(--c)}
+.mcard{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:10px;min-height:210px;padding:22px;border-radius:22px;border:4px solid var(--c);background:var(--card);background:color-mix(in srgb,var(--c) 12%,var(--card));text-align:left}
+.mcard b{font-size:32px;color:var(--c);line-height:1}
+.mtag{font-size:14px!important;font-weight:800!important;letter-spacing:.04em;text-transform:uppercase;color:var(--mute)!important}
+.mdiag{width:100%;border-radius:14px;background:var(--card);border:2px solid var(--line);padding:8px}
+.mdiag svg{display:block;margin:0 auto;width:100%;height:250px}
+.mlist{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px;font-weight:600;color:var(--ink);line-height:1.35}
+.mlist strong{color:var(--c)}
+.dc{fill:var(--card);stroke:var(--line);stroke-width:1.2}
+.dc.st{fill:#7ccf88;stroke:#1b6b2a}.dc.en{fill:#f2b705;stroke:#b8860b}
+.dp{fill:none;stroke:#d99e00;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;opacity:.95}
+.dt{font:800 7.5px -apple-system,system-ui,sans-serif;fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.dtape{fill:color-mix(in srgb,#f2b705 70%,var(--card));stroke:#b8860b;stroke-width:1.5}
+.dtick{stroke:var(--ink);stroke-width:1.5;stroke-linecap:round}
+.dlab{font:700 9px -apple-system,system-ui,sans-serif;fill:var(--mute);text-anchor:middle}
+.dfr{fill:var(--card);stroke:#0a6c76;stroke-width:2}
+.dfn{font:800 11px -apple-system,system-ui,sans-serif;fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.dcap{font:700 10px -apple-system,system-ui,sans-serif;fill:var(--mute);text-anchor:middle}
 .mcard span{font-size:16px;font-weight:600;color:var(--ink)}
 .mcard small{font-size:14px;font-weight:700;color:var(--mute)}
 .mcard.g{--c:#1b6b2a}.mcard.t{--c:#0a6c76}
@@ -170,12 +188,31 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .tn.part{background:var(--part);border-color:#8a6d0f}
 .tn.cur{transform:scale(1.1)}
 .fhead{display:flex;flex-direction:column;gap:5px}
-.fbodywrap{position:relative;overflow:hidden;display:flex;flex-direction:column}
+.fbodywrap{position:relative;overflow:hidden;display:flex;flex-direction:column;flex:0 0 auto}
 .fbody{display:flex;flex-direction:column;gap:5px;will-change:transform,opacity}
 .fbody.leaving{position:absolute;left:0;top:0}
+.fnav{position:sticky;bottom:0;z-index:4;background:var(--bg);padding-top:6px;margin-top:auto}
+/* when the screen is short (iPad mini / landscape) the frame form shrinks step by step until it fits */
+#tpanel.c1 .tf input:not(.wn){min-height:50px;font-size:28px}
+#tpanel.c1 .tf .tb button{height:30px}
+#tpanel.c1 .tf{padding:4px 6px;gap:4px}
+#tpanel.c1 .tn{width:26px;height:26px;font-size:13px}
+#tpanel.c1 .tsec h3{margin-bottom:2px}
+#tpanel.c2 .tf input:not(.wn){min-height:42px;font-size:24px}
+#tpanel.c2 .tf .tb button{height:26px;font-size:20px}
+#tpanel.c2 .hintsm{display:none}
+#tpanel.c2 .tm{padding:2px 0 7px;font-size:11px}
+#tpanel.c2 .ph h2{font-size:20px}
+#tpanel.c2 .dmh button{width:34px;height:34px;font-size:18px}
+#tpanel.c3 .tf input:not(.wn){min-height:34px;font-size:20px}
+#tpanel.c3 .tf .tb button{height:22px;font-size:17px}
+#tpanel.c3 .tf .tl{font-size:11px;padding:1px 4px}
+#tpanel.c3 .tf{gap:3px;padding:3px 5px}
+#tpanel.c3 .trl{font-size:12px}
+#tpanel.c3 .tinyadd{padding:2px 8px;font-size:12px}
 #tpanel{touch-action:pan-y}
 .panel.wide{max-width:1400px;padding:8px 12px;gap:5px;max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px)}
-#tsheet{padding:8px}
+#tsheet{padding:8px 8px max(8px,env(safe-area-inset-bottom))}
 .tsec h3{margin:0 0 4px;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
 .tcov{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
 .tmx{display:grid;grid-template-columns:96px repeat(4,minmax(0,1fr));gap:8px;align-items:stretch}
@@ -231,19 +268,39 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .ttotal .ts{font-size:13px;font-weight:700;color:var(--mute)}
 .ttotal.ok{--c:#1b6b2a}.ttotal.bad{--c:#b8860b}
 .ttotal.ok .ts{color:#1b6b2a}.ttotal.bad .ts{color:#8a6d0f}
+@media(max-width:900px){.mgrid{grid-template-columns:1fr}.mdiag svg{height:230px}}
 @media(max-width:760px){.tcov{grid-template-columns:repeat(3,minmax(0,1fr))}.mgrid{grid-template-columns:1fr}}
-/* iPad landscape: use the full width; cells become wide tiles so the whole 10x10 grid fits without scrolling */
-#app.fit .cell{aspect-ratio:auto;height:var(--ch,60px);font-size:clamp(16px,2vw,24px);flex-direction:row;gap:8px}
-#app.fit .cell small{font-size:clamp(11px,1.25vw,15px)}
+/* iPad landscape: square cells sized so the whole 10x10 grid fits on screen without scrolling */
+#app.fit #grid{grid-template-columns:repeat(10,var(--ch,60px));justify-content:center}
+#app.fit .cell{aspect-ratio:1;width:var(--ch);height:var(--ch);font-size:calc(var(--ch)*.4)}
+#app.fit .cell small{font-size:calc(var(--ch)*.24)}
 </style>
 </head>
 <body>
 <div id="menu" class="view">
-  <h1>Grid Data</h1>
-  <div class="sub2">Choose a data sheet</div>
+  <h1>Toadflax Field Data Collection</h1>
+  <div class="sub2">Choose a sampling method</div>
   <div class="mgrid">
-    <button class="mcard g" id="goGrid"><b>Grid</b><span>10×10 grid: stems, galls, chomps, % mature, height</span><small id="mgSub"></small></button>
-    <button class="mcard t" id="goTrans"><b>Transect</b><span>SIMP transect: 10 frames of cover, counts and heights</span><small id="mtSub"></small></button>
+    <button class="mcard g" id="goGrid">
+      <b>Grid</b>
+      <span class="mtag">10 × 10 plot · 100 cells</span>
+      <div class="mdiag" id="dgGrid" aria-hidden="true"></div>
+      <ul class="mlist">
+        <li>Walk the plot in a <strong>zigzag</strong>: cells 1 to 10, then 20 back to 11, then 21 to 30, and so on.</li>
+        <li>For each cell record <strong>stems</strong> (two observers), <strong>galls</strong>, <strong>chomps</strong>, <strong>% mature</strong>, <strong>avg height</strong> and notes.</li>
+      </ul>
+      <small id="mgSub"></small>
+    </button>
+    <button class="mcard t" id="goTrans">
+      <b>Transect</b>
+      <span class="mtag">SIMP · 20 m line · 10 frames</span>
+      <div class="mdiag" id="dgTrans" aria-hidden="true"></div>
+      <ul class="mlist">
+        <li>One frame every <strong>2 m</strong>, starting at 2 m and ending at 20 m (frames 1 to 10).</li>
+        <li>For each frame record <strong>cover %</strong> (target, other weeds, forb, shrub, grass, ground, litter, moss), <strong>damage</strong> 1 to 4, and <strong>mature / immature</strong> counts with tall, short and average heights.</li>
+      </ul>
+      <small id="mtSub"></small>
+    </button>
   </div>
   <footer class="foot"></footer>
 </div>
@@ -293,7 +350,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
 <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" hidden>
 
 <script>
-const N=100, KEY='grids.v1', VERSION='1.9.1';
+const N=100, KEY='grids.v1', VERSION='1.12.0';
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.sessions)db={cur:null,sessions:{}};
@@ -679,7 +736,21 @@ function show(view){
   ['menu','app','tapp'].forEach(id=>$('#'+id).hidden=id!==view);
   $('#sheet').classList.remove('open');$('#tsheet').classList.remove('open');cur=null;tcur=null;
   if(view==='menu')renderMenu();else if(view==='app'){renderHeader();renderGrid();fitGrid()}else renderT('pop');
-  window.scrollTo(0,0);
+  document.querySelectorAll('.view').forEach(v=>{v.scrollTop=0});
+}
+// Diagrams of the two sampling methods on the main menu
+function buildDiagrams(){
+  // Grid: 10x10 cells with the zigzag walking path
+  const s=16,gp=2,n=10,W=n*(s+gp)-gp,ctr=num=>{const r=Math.floor((num-1)/10),c=(num-1)%10;return [c*(s+gp)+s/2,r*(s+gp)+s/2]};
+  let cells='';for(let r=0;r<n;r++)for(let c=0;c<n;c++){const num=r*10+c+1,cls=num===1?' st':num===91?' en':'';cells+=`<rect class="dc${cls}" x="${c*(s+gp)}" y="${r*(s+gp)}" width="${s}" height="${s}" rx="3"/>`}
+  const pts=ORDER.map(k=>ctr(k).join(',')).join(' ');
+  const lab=[1,10,11,20,91].map(k=>{const [x,y]=ctr(k);return `<text class="dt" x="${x}" y="${y}">${k}</text>`}).join('');
+  $('#dgGrid').innerHTML=`<svg viewBox="-4 -4 ${W+8} ${W+8}" role="img"><defs><marker id="ah" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 8 4 0 8z" fill="#d99e00"/></marker></defs>${cells}<polyline class="dp" points="${pts}" marker-end="url(#ah)"/>${lab}</svg>`;
+  // Transect: a 20 m tape with a frame every 2 m starting at 2 m
+  const X=m=>24+m/20*352;let tick='',lbl='',fr='';
+  for(let m=0;m<=20;m+=2){tick+=`<line class="dtick" x1="${X(m)}" y1="82" x2="${X(m)}" y2="${m%10===0?100:94}"/>`;lbl+=`<text class="dlab" x="${X(m)}" y="114">${m===0||m===20?m+' m':m}</text>`}
+  for(let i=1;i<=10;i++){const x=X(i*2);fr+=`<line x1="${x}" y1="64" x2="${x}" y2="82" stroke="#0a6c76" stroke-width="1.5" stroke-dasharray="2 3"/><rect class="dfr" x="${x-13}" y="36" width="26" height="26" rx="5"/><text class="dfn" x="${x}" y="49.5">${i}</text>`}
+  $('#dgTrans').innerHTML=`<svg viewBox="0 0 400 124" role="img"><rect class="dtape" x="${X(0)}" y="74" width="352" height="10" rx="5"/>${tick}${lbl}${fr}<text class="dcap" x="200" y="18">each square = one frame, every 2 m along the 20 m line</text></svg>`;
 }
 function renderMenu(){
   const g=db.sessions[db.cur],t=db.tsessions[db.tcur];
@@ -750,8 +821,9 @@ function fitGrid(){
   if(!matchMedia('(orientation:landscape) and (min-width:900px)').matches){app.classList.remove('fit');g.style.removeProperty('--ch');return}
   const pad=parseFloat(getComputedStyle(app).paddingBottom)||0;
   let below=0;for(let e=g.nextElementSibling;e;e=e.nextElementSibling)below+=e.offsetHeight+12;
-  const top=g.getBoundingClientRect().top+window.scrollY,gap=6;
-  const ch=Math.max(38,Math.min(96,(window.innerHeight-top-below-pad-gap*9)/10));
+  const top=g.getBoundingClientRect().top+app.scrollTop,gap=6;
+  const byH=(window.innerHeight-top-below-pad-gap*9)/10,byW=(g.clientWidth-gap*9)/10;
+  const ch=Math.max(36,Math.min(96,byH,byW));
   app.classList.add('fit');g.style.setProperty('--ch',ch.toFixed(1)+'px');
 }
 let fishQ=false;
@@ -819,13 +891,22 @@ function buildFrame(n){
       <div class="trl" data-g="mat">Mature</div>${fld('nm','','mat',1)}${fld('mt','','mat',1,1)}${fld('ms','','mat',1,1)}${fld('ma','','mat',1,1)}
       <div class="trl" data-g="imm">Immature</div>${fld('ni','','imm',1)}${fld('it','','imm',1,1)}${fld('is','','imm',1,1)}${fld('ia','','imm',1,1)}
     </div></div>
-    <div class="nav"><button id="tundo" class="ib">${undoSvg}Undo</button><button id="tclr">Clear frame</button><button id="tdone" class="pri">Done ✓ → ${n<10?'frame '+(n+1):'finish'}</button></div>`;
-  return {head,body};
+`;
+  const nav=`<div class="nav"><button id="tundo" class="ib">${undoSvg}Undo</button><button id="tclr">Clear frame</button><button id="tdone" class="pri">Done ✓ → ${n<10?'frame '+(n+1):'finish'}</button></div>`;
+  return {head,body,nav};
 }
+function fitFrame(){
+  const p=$('#tpanel');
+  if(!p||!p.querySelector('.fbodywrap')||!$('#tsheet').classList.contains('open'))return;
+  p.classList.remove('c1','c2','c3');
+  for(const c of ['c1','c2','c3']){if(p.scrollHeight<=p.clientHeight+1)break;p.classList.add(c)}
+}
+window.addEventListener('resize',()=>fitFrame());
+window.addEventListener('orientationchange',()=>setTimeout(fitFrame,250));
 function mountFrame(n){ // instant full render; returns whether the panel was already open
-  const {head,body}=buildFrame(n),panel=$('#tpanel'),was=$('#tsheet').classList.contains('open');
-  panel.innerHTML=`<div class="fhead">${head}</div><div class="fbodywrap"><div class="fbody">${body}</div></div>`;
-  panel.scrollTop=0;$('#tsheet').classList.add('open');refreshT();
+  const {head,body,nav}=buildFrame(n),panel=$('#tpanel'),was=$('#tsheet').classList.contains('open');
+  panel.innerHTML=`<div class="fhead">${head}</div><div class="fbodywrap"><div class="fbody">${body}</div></div><div class="fnav">${nav}</div>`;
+  panel.scrollTop=0;$('#tsheet').classList.add('open');fitFrame();refreshT();
   $('#weedlist').innerHTML=seenWeeds().map(nm=>`<option value="${esc(nm)}">`).join('');
   return was;
 }
@@ -841,23 +922,21 @@ const reduceMotion=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion: r
 // Moving along the transect: the old page slides off one side while the new page slides in from the other
 // (both visible at once, with a little spring), and the gold marker hops along the ruler to the new spot.
 function openFrame(n,dir){
-  const panel=$('#tpanel'),wrap=panel.querySelector('.fbodywrap');
+  const panel=$('#tpanel'),sheet=$('#tsheet');
   tnav++;
-  if(!dir||!wrap||reduceMotion()||!$('#tsheet').classList.contains('open')){renderFrame(n);return}
-  const prevN=tcur,col=(panel.querySelector('.ttl')||{clientWidth:0}).clientWidth/10;
-  wrap.querySelectorAll('.fbody.leaving').forEach(x=>x.remove());             // finish any slide still running
-  const old=wrap.querySelector('.fbody');
-  old.classList.add('leaving');old.style.width=old.offsetWidth+'px';old.style.pointerEvents='none';
-  old.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));
-  const {head,body}=buildFrame(n);
-  panel.querySelector('.fhead').innerHTML=head;
-  const nu=document.createElement('div');nu.className='fbody';nu.innerHTML=body;wrap.appendChild(nu);
-  refreshT();$('#weedlist').innerHTML=seenWeeds().map(nm=>`<option value="${esc(nm)}">`).join('');
-  const D=Math.min(panel.clientWidth,860),dur=480;
-  old.animate([{transform:'translateX(0) scale(1)',opacity:1},{transform:`translateX(${-dir*D}px) scale(.92)`,opacity:0}],{duration:dur,easing:'cubic-bezier(.5,0,.3,1)',fill:'forwards'}).onfinish=()=>old.remove();
-  nu.animate([{transform:`translateX(${dir*D}px) scale(.92)`,opacity:0},{transform:`translateX(${-dir*12}px) scale(1)`,opacity:1,offset:.78},{transform:'translateX(0) scale(1)',opacity:1}],{duration:dur+80,easing:'cubic-bezier(.22,.8,.3,1)'});
-  const pin=panel.querySelector('.tpin');
-  if(pin&&col)pin.animate([{transform:`translateX(${(prevN-n)*col}px)`},{transform:`translateX(${-dir*7}px)`,offset:.8},{transform:'translateX(0)'}],{duration:dur,easing:'cubic-bezier(.3,.7,.3,1)'});
+  if(!dir||reduceMotion()||!sheet.classList.contains('open')||!panel.querySelector('.fbodywrap')){renderFrame(n);return}
+  // Two rigid cards moving together: a copy of the current card slides away while the live card (already showing
+  // the new frame) slides in from the other side, same distance, same speed, nothing fading or scaling.
+  sheet.querySelectorAll('.ghost').forEach(g=>g.remove());
+  const r=panel.getBoundingClientRect(),ghost=panel.cloneNode(true);
+  ghost.removeAttribute('id');ghost.classList.add('ghost');ghost.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));
+  Object.assign(ghost.style,{position:'fixed',left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',margin:'0',pointerEvents:'none',zIndex:'7'});
+  sheet.appendChild(ghost);
+  mountFrame(n);
+  const D=r.width+24,opt={duration:340,easing:'cubic-bezier(.4,0,.2,1)'};
+  ghost.animate([{transform:'translateX(0)'},{transform:`translateX(${-dir*D}px)`}],{...opt,fill:'forwards'}).onfinish=()=>ghost.remove();
+  setTimeout(()=>ghost.remove(),700);
+  panel.animate([{transform:`translateX(${dir*D}px)`},{transform:'translateX(0)'}],opt);
 }
 function doResetT(){
   const s=TS(),n=Object.values(s.frames).filter(tHas).length;
@@ -1002,13 +1081,8 @@ $('#tExport').onclick=exportT;
 $('#tResetBtn').onclick=doResetT;
 
 if(!db.cur||!db.sessions[db.cur])newSession();
-// While an entry screen is open the page behind it cannot scroll or move
-let lockY=0,locked=false;
-function syncLock(){
-  const open=$('#sheet').classList.contains('open')||$('#tsheet').classList.contains('open');
-  if(open&&!locked){locked=true;lockY=window.scrollY;document.body.style.top=-lockY+'px';document.documentElement.classList.add('lock')}
-  else if(!open&&locked){locked=false;document.documentElement.classList.remove('lock');document.body.style.top='';window.scrollTo(0,lockY)}
-}
+// While an entry screen is open the screen behind it cannot scroll or move
+function syncLock(){document.documentElement.classList.toggle('lock',$('#sheet').classList.contains('open')||$('#tsheet').classList.contains('open'))}
 ['#sheet','#tsheet'].forEach(s=>new MutationObserver(syncLock).observe($(s),{attributes:true,attributeFilter:['class']}));
 // Site / observer boxes: keyboard for finger taps only (Pencil taps keep it hidden, Scribble still works)
 ['site','obs1','obs2','tsite','tobs1','tobs2'].forEach(id=>{
@@ -1021,6 +1095,7 @@ function syncLock(){
   });
   el.addEventListener('blur',()=>{el.inputMode='none';el.classList.remove('typing')});
 });
+buildDiagrams();
 document.querySelectorAll('.foot').forEach(el=>el.textContent=`Grid Data v${VERSION} · Created by Jackson R Strand · © ${new Date().getFullYear()} Jackson R Strand`);
 renderHeader();renderGrid();show('menu');
 (async()=>{
