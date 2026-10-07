@@ -351,14 +351,16 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 .fl.wl .xk{width:26px;height:26px;margin-top:-13px;right:4px;color:#3b463e;background:rgba(0,0,0,.07)}
 /* scroll wheel (forb / shrub / grass, steps of 5) */
 .wheel{position:relative;flex:1 1 auto;min-height:calc(var(--wr)*3);border-radius:12px;border:3px solid var(--c);background:var(--card);overflow:hidden}
-.wscroll{position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-y;-webkit-mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent);mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent)}
+.wscroll{contain:layout paint;position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-y;-webkit-mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent);mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent)}
 .wscroll::-webkit-scrollbar{display:none}
-.wi{height:var(--wr);display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-size:calc(var(--wr)*.72);font-weight:800;color:var(--ink);will-change:transform,opacity;cursor:pointer;-webkit-user-select:none;user-select:none}
+.wi{height:var(--wr);display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-size:calc(var(--wr)*.72);font-weight:800;color:var(--ink);cursor:pointer;-webkit-user-select:none;user-select:none}
 .wi[data-v=""]{color:var(--mute)}
 @property --wh{syntax:'<length>';inherits:true;initial-value:32px}
 .wheel{--wh:var(--wr);transition:--wh .22s cubic-bezier(.2,.85,.25,1)}
-.wheel.hov{--wh:calc(var(--wr)*2.1)}
-.wheel.hov .wscroll{-webkit-mask-image:none;mask-image:none}
+.wheel.hov{--wh:var(--wf,calc(var(--wr)*2.1))}
+.wheel .wi{transition:opacity .18s}
+.wheel.hov .wi{opacity:0!important}
+.wheel.hov .wscroll,.sliding .wscroll{-webkit-mask-image:none;mask-image:none}
 .wsin{position:sticky;display:block;z-index:3;width:100%;height:var(--wh);margin:calc((var(--wr) - var(--wh))/2) 0 calc((var(--wh) + var(--wr))/-2);top:calc((var(--wr) - var(--wh))/2);padding:0;border:0;border-radius:10px;background:transparent;color:transparent;caret-color:transparent;text-align:center;font:inherit;font-size:calc(var(--wr)*.72 + (var(--wh) - var(--wr))*.3);font-weight:800;touch-action:pan-y;-webkit-user-select:text;user-select:text}
 .ctl .wsin{font-size:calc(var(--wr)*.85 + (var(--wh) - var(--wr))*.3)}
 .wsin:focus{outline:none}
@@ -546,7 +548,7 @@ textarea.wpin{min-height:min(44vh,360px);font-size:30px;resize:none;font-weight:
 <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" hidden>
 
 <script>
-const N=100, KEY='grids.v1', VERSION='1.18.0';
+const N=100, KEY='grids.v1', VERSION='1.19.0';
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.sessions)db={cur:null,sessions:{}};
@@ -641,7 +643,7 @@ function undoField(f){
 function doUndo(){const a=undo[ukey()];if(!a||!a.length)return;S().cells[cur]=JSON.parse(a.pop());save();openCell(cur)}
 let pend=false; // first edit after focusing a box saves one undo step
 
-const GSPEC={s1:[300,1],s2:[300,1],g:[300,1],ch:[300,1],m:[100,5]};
+const GSPEC={s1:[300,1],s2:[300,1],g:[300,1],ch:[300,1],m:[100,10]};
 function buildCell(n){
   cur=n;const c=cell(n);pend=false;
   const pv=prevOf(n),nx=nextOf(n);
@@ -658,7 +660,7 @@ function buildCell(n){
     <div class="warn" id="warn" ${w.length?'':'hidden'}>${w.length?'⚠ '+esc(w.join(' ')):''}</div>
     <div class="hint">Swipe a wheel up or down (or tap a number) to choose, or use the + / − buttons; write on a wheel's middle box with the Pencil. Avg height is a plain box: write it with the Pencil. In each box header, the left icon undoes that box and the right icon clears it.</div>
     <div class="gentry"><div class="gbody"><div class="ctr">${ctl('s1','Stems · '+esc(S().obs1||'Obs 1'),q5('s1'))}${ctl('s2','Stems · '+esc(S().obs2||'Obs 2'),q5('s2'))}${ctl('g','Galls',q5('g'))}</div>
-    <div class="ctr">${ctl('ch','Chomps',q5('ch'))}${ctl('m','% Mature',qb('m',-5,'−5')+qb('m',5,'+5')+qb('m',100,'100'),10)}${ctl('h','Avg height',qb('h',-0.1,'−0.1')+qb('h',0.1,'+0.1'),1)}</div>
+    <div class="ctr">${ctl('ch','Chomps',q5('ch'))}${ctl('m','% Mature',qb('m',-10,'−10')+qb('m',10,'+10')+qb('m',100,'100'),10)}${ctl('h','Avg height',qb('h',-0.1,'−0.1')+qb('h',0.1,'+0.1'),1)}</div>
     <textarea id="notes" inputmode="none" placeholder="Notes (write with the Pencil)">${esc(c.n)}</textarea></div></div>
     <div class="nav"><button id="undo" class="ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button><button id="clr">Clear cell</button><button id="none">No toadflax ✓</button><button id="done" class="pri">Done ✓ → ${nx??'finish'}</button></div>`;
   return html;
@@ -674,24 +676,47 @@ function mountCell(n){ // instant render
 function openCell(n,kind){
   const panel=$('#panel'),sheet=$('#sheet');
   if(!kind||reduceMotion()||!sheet.classList.contains('open')||cur==null||!panel.querySelector('.gentry')){mountCell(n);return}
-  slideEntry(panel,()=>mountCell(n),kind==='prev'?-1:1);
+  slideEntry(panel,n,kind==='prev'?-1:1);
   if(kind==='done'||kind==='none')fxBurst(kind);
+}
+// Move to another cell without rebuilding the screen: same wheels, same boxes, new numbers.
+function updateCellInPlace(n){
+  cur=n;pend=false;const c=cell(n),pv=prevOf(n),nx=nextOf(n);
+  const pb=$('#prev'),nb=$('#next'),db=$('#done');
+  pb.disabled=!pv;pb.textContent='← '+(pv??'');nb.disabled=!nx;nb.textContent=(nx??'')+' →';
+  $('#panel h2').textContent='Cell '+n;
+  db.textContent='Done ✓ → '+(nx??'finish');
+  $('#notes').value=c.n;
+  const hi=$('#panel input[data-in="h"]');if(hi)hi.value=c.h??'';
+  $('#panel').querySelectorAll('.wscroll').forEach(w=>w.dispatchEvent(new CustomEvent('setv',{detail:{v:c[w.dataset.wk],instant:true}})));
+  $('#panel').scrollTop=0;renderGrid();refresh();
 }
 // Only the six entry boxes slide: a copy of the old boxes leaves one side while the new ones come in from the other.
 // The title, buttons, hint and notes stay where they are.
-function slideEntry(panel,mount,dir){
+function slideEntry(panel,n,dir){
   const old=panel.querySelector('.gentry .gbody');
   old.querySelectorAll('input').forEach(el=>el.setAttribute('value',el.value));
   old.querySelectorAll('textarea').forEach(el=>{el.textContent=el.value});
-  const tops=[...old.querySelectorAll('.wscroll')].map(x=>x.scrollTop),ghost=old.cloneNode(true);
+  const ghost=old.cloneNode(true);
   ghost.classList.add('leaving');ghost.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));
+  // the copy only needs the rows you can actually see: keep a few around the middle and drop the other ~1,000
+  const ow=[...old.querySelectorAll('.wscroll')];
+  ghost.querySelectorAll('.wscroll').forEach((g,i)=>{
+    const o=ow[i],first=o.querySelector('.wi'),r=first?first.offsetHeight:36||36,top=o.scrollTop,idx=Math.round(top/r),its=[...g.querySelectorAll('.wi')],lo=Math.max(0,idx-4),hi=idx+4;
+    its.forEach((it,k)=>{if(k<lo||k>hi)it.remove()});
+    const keep=its.filter(it=>it.isConnected);
+    g.style.overflow='hidden';g.style.scrollSnapType='none';g.style.paddingBottom='0px';
+    if(keep[0])keep[0].style.marginTop=(lo*r-top)+'px';
+    const si=g.querySelector('.wsin');if(si)si.remove();
+  });
   Object.assign(ghost.style,{width:old.offsetWidth+'px',height:old.offsetHeight+'px'});
-  mount();
-  const entry=panel.querySelector('.gentry'),nb=entry.querySelector('.gbody');
-  entry.appendChild(ghost);ghost.querySelectorAll('.wscroll').forEach((g,i)=>{g.scrollTop=tops[i]||0});
+  panel.classList.add('sliding');
+  updateCellInPlace(n);   // the wheels and boxes stay in the page; they just jump to the new cell's numbers
+  const entry=panel.querySelector('.gentry'),nb=old;
+  entry.appendChild(ghost);
   const D=entry.clientWidth+24,opt={duration:340,easing:'cubic-bezier(.4,0,.2,1)'};
   ghost.animate([{transform:'translateX(0)'},{transform:`translateX(${-dir*D}px)`}],{...opt,fill:'forwards'}).onfinish=()=>ghost.remove();
-  setTimeout(()=>ghost.remove(),700);
+  setTimeout(()=>{ghost.remove();panel.classList.remove('sliding')},420);
   nb.animate([{transform:`translateX(${dir*D}px)`},{transform:'translateX(0)'}],opt);
 }
 // Little celebration overlay: a stamp, a ring and confetti, so you can tell which button you pressed
@@ -1260,6 +1285,7 @@ function navHtml(n){
 // ---- scroll wheels (forb / shrub / grass): vertical, snap in steps of 5, bend away from the centre ----
 // root: where to look; ad: {get(w), set(w,v), begin(w), change(), end()} connect a wheel to the data of the transect frame or grid cell
 function wheelCore(root,ad){
+  const pending=[];   // all wheels are measured together, then laid out together, so the page reflows twice instead of twice per wheel
   root.querySelectorAll('.wscroll').forEach(w=>{
     const max=Number(w.dataset.max),step=Number(w.dataset.step),last=Math.round(max/step)+1;
     // Pencil layer: a see-through text box sitting on the middle row. A finger drag passes through it (pan-y) and scrolls the wheel;
@@ -1269,7 +1295,9 @@ function wheelCore(root,ad){
     const items=[...w.querySelectorAll('.wi')];let gesture=false,settle=0,raf=0,geo={h:0,r:36,p:0},user=false,userT=0;
         const idxOf=v=>(v===''||v==null)?0:Math.min(last,Math.max(1,Math.round(Number(v)/step)+1));
     let curIdx=idxOf(ad.get(w));
-    const layout=()=>{const h=w.clientHeight,r=items[0].offsetHeight||36,p=Math.max(0,(h-r)/2);w.style.paddingTop=w.style.paddingBottom=p+'px';inp.style.setProperty('--sp',p+'px');geo={h,r,p}};
+    let m={h:0,r:36};
+    const measure=()=>{m={h:w.clientHeight,r:items[0].offsetHeight||36}},applyPad=()=>{const p=Math.max(0,(m.h-m.r)/2);w.style.paddingTop=w.style.paddingBottom=p+'px';inp.style.setProperty('--sp',p+'px');w.parentElement.style.setProperty('--wf',Math.max(m.r,m.h-4)+'px');geo={h:m.h,r:m.r,p}};
+    const layout=()=>{measure();applyPad()};
     const paint=()=>{const c=w.scrollTop+geo.h/2,mid=Math.round((c-geo.p-geo.r/2)/geo.r);   // only the rows near the middle are visible, so only they are drawn
       for(let i=Math.max(0,mid-5);i<=Math.min(last,mid+5);i++){const it=items[i],d=((geo.p+i*geo.r+geo.r/2)-c)/geo.r,a=Math.min(Math.abs(d),3);it.style.transform=`perspective(230px) rotateX(${(-d*22).toFixed(1)}deg) scale(${(1-a*.06).toFixed(3)})`;it.style.opacity=(1-a*.22).toFixed(2)}};
     const setIdx=(i,smooth)=>w.scrollTo({top:i*geo.r,behavior:smooth?'smooth':'auto'});
@@ -1303,11 +1331,12 @@ function wheelCore(root,ad){
       if(was){save();ad.end()}
       refreshOff(ad.get(w),true);
     });
-    layout();setIdx(curIdx,false);paint();refreshOff(ad.get(w));
+    refreshOff(ad.get(w));
+    pending.push({measure,applyPad,scroll:()=>setIdx(curIdx,false),paint});
     const relayout=()=>{layout();setIdx(curIdx,false);paint()};
-    new ResizeObserver(relayout).observe(w);w.addEventListener('relayout',relayout);
+    let firstRO=true;new ResizeObserver(()=>{if(firstRO){firstRO=false;if(w.clientHeight===geo.h)return}relayout()}).observe(w);w.addEventListener('relayout',relayout);
     // + / - / Rest buttons move the wheel to the new value without writing anything themselves
-    w.addEventListener('setv',e=>{user=false;clearTimeout(userT);curIdx=idxOf(e.detail);setIdx(curIdx,!reduceMotion());refreshOff(e.detail)});
+    w.addEventListener('setv',e=>{const d=e.detail,inst=d&&typeof d==='object',v=inst?d.v:d;user=false;clearTimeout(userT);curIdx=idxOf(v);setIdx(curIdx,!inst&&!reduceMotion());refreshOff(v,inst)});
     w.addEventListener('scroll',()=>{
       if(!raf)raf=requestAnimationFrame(()=>{raf=0;paint()});
       if(!user)return;arm();                                    // keep the window open through the momentum after the finger lifts
@@ -1319,8 +1348,9 @@ function wheelCore(root,ad){
         clearTimeout(settle);settle=setTimeout(()=>{gesture=false;ad.end()},220);
       }
     },{passive:true});
-    items.forEach((it,i)=>it.addEventListener('click',()=>{arm();setIdx(i,true)}));
+    w.addEventListener('click',e=>{const it=e.target.closest('.wi');if(it){arm();setIdx(items.indexOf(it),true)}});   // one listener per wheel, not one per row
   });
+  ['measure','applyPad','scroll','paint'].forEach(k=>pending.forEach(x=>x[k]()));
 }
 function initWheels(root){   // transect frame
   wheelCore(root,{
