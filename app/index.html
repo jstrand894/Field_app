@@ -50,6 +50,7 @@ button:disabled{opacity:.5}
 .ph{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .ph h2{margin:0;font-size:26px}
 .navh{display:flex;align-items:center;gap:10px}
+.navh h2{width:176px;text-align:center;white-space:nowrap;overflow:hidden}
 .navh button{min-width:78px;font-size:20px;padding:10px 14px}
 .ctr{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .tot{font-size:16px;font-weight:700;color:var(--mute)}.tot b{color:var(--ink);font-size:26px}
@@ -216,7 +217,8 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .tline i{display:block;height:100%;border-radius:3px;background:var(--accent);transition:width .5s}
 .ttwrap{display:flex;flex-direction:column}
 /* distance ruler above the frame bubbles: frame N is N x 2 m along the 20 m transect */
-.tms{display:grid;grid-template-columns:repeat(10,minmax(0,1fr))}
+.tms{position:relative;display:grid;grid-template-columns:repeat(10,minmax(0,1fr))}
+.tm.tmcur{position:absolute;z-index:2;top:0;bottom:0;margin:0 2px;left:calc(var(--i,0)*10%);width:calc(10% - 4px);pointer-events:none;display:flex;align-items:flex-start;justify-content:center;transition:left .55s cubic-bezier(.3,1.25,.4,1)}
 /* modern distance tape: rounded segments with ruler ticks; frame N sits at N x 2 m */
 .tm{position:relative;margin:0 2px;border:2px solid var(--line);border-radius:10px 10px 5px 5px;background:color-mix(in srgb,var(--line) 16%,var(--card));text-align:center;font-size:12px;font-weight:800;line-height:1;color:var(--mute);padding:4px 0 9px;overflow:hidden;transition:background .25s,border-color .25s,color .25s}
 .tm::after{content:"";position:absolute;left:7px;right:7px;bottom:3px;height:4px;opacity:.55;background:repeating-linear-gradient(90deg,currentColor 0 2px,transparent 2px 25%)}
@@ -236,7 +238,8 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .fnav{position:sticky;bottom:0;z-index:4;background:var(--bg);padding-top:6px;margin-top:auto}
 /* when the screen is short (iPad mini / landscape) the frame form shrinks step by step until it fits */
 #tpanel{touch-action:pan-y}
-.panel.wide{max-width:1400px;padding:8px 12px;gap:5px;max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px)}
+.panel.wide{max-width:1400px;padding:8px 12px;gap:5px;height:calc(100vh - 16px);height:calc(100dvh - 16px);max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px)}
+.panel.wide>.fhead,.panel.wide>.fnav{flex:0 0 auto}
 #tsheet{padding:8px 8px max(8px,env(safe-area-inset-bottom))}
 .tsec h3{margin:0 0 4px;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
 .tdm{display:grid;grid-template-columns:1fr 1fr;gap:6px}
@@ -292,12 +295,12 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 @property --bh{syntax:'<length>';inherits:true;initial-value:44px}
 @property --wr{syntax:'<length>';inherits:true;initial-value:32px}
 @property --lh{syntax:'<length>';inherits:true;initial-value:28px}
-.panel.wide{--bh:44px;--wr:32px;--lh:28px;transition:--bh .45s cubic-bezier(.2,.85,.25,1),--wr .45s cubic-bezier(.2,.85,.25,1),--lh .45s cubic-bezier(.2,.85,.25,1)}
-.panel.wide.nofit,.panel.wide.nofit *{transition:none!important}
+.panel.wide .fbody{--bh:44px;--wr:32px;--lh:28px;transition:--bh .45s cubic-bezier(.2,.85,.25,1),--wr .45s cubic-bezier(.2,.85,.25,1),--lh .45s cubic-bezier(.2,.85,.25,1)}
+.panel.wide.nofit,.panel.wide.nofit .fbodywrap,.panel.wide.nofit .fbodywrap *{transition:none!important}
 .fin,.fl,.fsc button,.fc{transition:font-size .45s cubic-bezier(.2,.85,.25,1),height .45s cubic-bezier(.2,.85,.25,1),padding .45s cubic-bezier(.2,.85,.25,1),gap .45s cubic-bezier(.2,.85,.25,1)}
-.panel.wide.c1{--bh:38px;--wr:29px;--lh:26px}
-.panel.wide.c2{--bh:32px;--wr:26px;--lh:24px}
-.panel.wide.c3{--bh:28px;--wr:23px;--lh:20px}
+.panel.wide .fbody.c1{--bh:38px;--wr:29px;--lh:26px}
+.panel.wide .fbody.c2{--bh:32px;--wr:26px;--lh:24px}
+.panel.wide .fbody.c3{--bh:28px;--wr:23px;--lh:20px}
 .roll{display:inline-block}
 @property --p{syntax:'<percentage>';inherits:true;initial-value:0%}
 .ttl{transition:--p .55s cubic-bezier(.3,1.1,.4,1)}
@@ -305,8 +308,8 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 .tn{transition:transform .3s cubic-bezier(.3,1.4,.5,1),background .3s,border-color .3s}
 .dmb button{transition:background .25s,color .25s,transform .2s,height .45s cubic-bezier(.2,.85,.25,1),font-size .45s cubic-bezier(.2,.85,.25,1)}
 .dmb button.on{transform:scale(1.06)}
-.dmrow{display:flex;align-items:stretch}
-.dmrow>.fc{flex:1 1 0;margin-left:8px;flex-direction:row;align-items:center;padding:6px 8px}
+.dmrow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:stretch}
+.dmrow>.fc{grid-column:2/-1;flex-direction:row;align-items:center;padding:6px 8px}
 .dmb{flex:1;display:flex;gap:8px}
 .dmb button{flex:1;height:46px;padding:0;font-size:24px;font-weight:800;border-radius:12px;border:3px solid var(--c);color:var(--c)}
 .dmb button.on{background:var(--c);color:#fff}
@@ -346,32 +349,31 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 .reveal{display:grid;grid-template-rows:0fr;opacity:0;margin-top:-8px;transition:grid-template-rows .45s cubic-bezier(.2,.85,.25,1),opacity .3s ease,margin-top .45s cubic-bezier(.2,.85,.25,1)}
 .reveal.on{grid-template-rows:1fr;opacity:1;margin-top:0}
 .rvin{overflow:hidden;min-height:0;display:flex;flex-direction:column;gap:8px}
-.mirow{display:flex;align-items:stretch}
-.trl{--c:var(--line);flex:0 0 92px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:var(--c);color:#fff;font-weight:800;font-size:15px;text-transform:uppercase;text-align:center}
+.mirow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:stretch}
+.trl{--c:var(--line);display:flex;align-items:center;justify-content:center;border-radius:14px;background:var(--c);color:#fff;font-weight:800;font-size:15px;text-transform:uppercase;text-align:center}
 .trl[data-g=mat]{--c:#0a6c76}.trl[data-g=imm]{--c:#b85600}.trl[data-g=dm]{--c:#b3201f}
-.mirow>.cnt{flex:1 1 0;margin-left:8px}
-.hbx{flex:0 0 0;min-width:0;overflow:hidden;opacity:0;transform:scale(.8);margin-left:0;visibility:hidden;transition:flex-grow .42s cubic-bezier(.2,.85,.25,1),margin-left .42s cubic-bezier(.2,.85,.25,1),opacity .3s,transform .42s cubic-bezier(.2,.85,.25,1),visibility 0s .42s}
-.hbx.on{flex:1 1 0;opacity:1;transform:none;margin-left:8px;visibility:visible;transition-delay:0s}
-.hbx>.fc{height:100%;min-width:150px}
+.hbx{min-width:0;opacity:0;transform:scale(.85);visibility:hidden;transition:opacity .3s,transform .42s cubic-bezier(.2,.85,.25,1),visibility 0s .42s}
+.hbx.on{opacity:1;transform:none;visibility:visible;transition-delay:0s}
+.hbx>.fc{height:100%}
 .hbx .fin{min-height:calc(var(--bh)*2 + 6px)}
 .fnav{position:sticky;bottom:0;z-index:4;background:var(--bg);padding-top:6px;margin-top:auto}
 .fnav #tdone{flex:2}
 #tnotes .ndot{display:none;width:9px;height:9px;border-radius:50%;background:#f2b705;margin-left:6px}
 #tnotes.has .ndot{display:inline-block}
-.panel.wide.c1 .fl{font-size:12px}
-.panel.wide.c1 .tsec h3{margin-bottom:2px}
-.panel.wide.c1 .fsc button{height:30px}
-.panel.wide.c2 .hintsm{display:none}
-.panel.wide.c1 .dmb button{height:40px}
-.panel.wide.c2 .dmb button{height:34px;font-size:20px}
-.panel.wide.c3 .dmb button{height:28px;font-size:17px}
-.panel.wide.c2 .fsc button{height:26px;font-size:13px}
-.panel.wide.c2 .fin{font-size:26px}
-.panel.wide.c3 .fl{font-size:11px}
-.panel.wide.c3 .fin{font-size:20px}
-.panel.wide.c3 .fsc button{height:22px;font-size:12px}
-.panel.wide.c3 .tinyadd{padding:2px 8px;font-size:12px}
-.panel.wide.c3 .fc{gap:3px;padding:3px 5px 5px}
+.panel.wide .fbody.c1 .fl{font-size:12px}
+.panel.wide .fbody.c1 .tsec h3{margin-bottom:2px}
+.panel.wide .fbody.c1 .fsc button{height:30px}
+.panel.wide .fbody.c2 .hintsm{display:none}
+.panel.wide .fbody.c1 .dmb button{height:40px}
+.panel.wide .fbody.c2 .dmb button{height:34px;font-size:20px}
+.panel.wide .fbody.c3 .dmb button{height:28px;font-size:17px}
+.panel.wide .fbody.c2 .fsc button{height:26px;font-size:13px}
+.panel.wide .fbody.c2 .fin{font-size:26px}
+.panel.wide .fbody.c3 .fl{font-size:11px}
+.panel.wide .fbody.c3 .fin{font-size:20px}
+.panel.wide .fbody.c3 .fsc button{height:22px;font-size:12px}
+.panel.wide .fbody.c3 .tinyadd{padding:2px 8px;font-size:12px}
+.panel.wide .fbody.c3 .fc{gap:3px;padding:3px 5px 5px}
 .hpanel header label.span2{grid-column:1/-1}
 .hs i.sm{font-weight:600;margin-left:2px}
 /* ===== write-in pop-out (other weed names, frame notes) ===== */
@@ -1165,7 +1167,7 @@ function refreshT(){
     $('#ttots').textContent=tot==null?'cover total':tot===100?'= 100 ✓':'not 100';
   }
   document.querySelectorAll('.ttl .tn').forEach(b=>{const i=Number(b.dataset.tgo);b.className='tn '+tstate(i)+(i===tcur?' cur':'')});
-  document.querySelectorAll('.tms .tm').forEach(m=>{const i=Number(m.dataset.tmi),st=tstate(i);m.className='tm'+(i===tcur?' cur':st==='done'?' dn':st==='part'?' pt':'')});
+  document.querySelectorAll('.tms .tm[data-tmi]').forEach(m=>{const st=tstate(Number(m.dataset.tmi));m.className='tm'+(st==='done'?' dn':st==='part'?' pt':'')});
   const u=$('#tundoTop');if(u)u.disabled=!(tundo[tkey()]||[]).length;
   syncReveal(f);
 }
@@ -1185,7 +1187,7 @@ function headHtml(n){
       <div class="hsum"><div class="ttchip" id="ttotbox"><span class="ts" style="color:inherit">Total</span><b id="ttot">–</b><span class="ts" id="ttots"></span></div></div>
       <div class="hb"><button id="tundoTop" class="ib">${SV('<path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/>')}Undo</button><button id="tx">Close</button></div></div>
     <div class="ttwrap" aria-label="Transect timeline, 20 m long">
-      <div class="tms">${ALLN.map(i=>`<div class="tm${i===n?' cur':tstate(i)==='done'?' dn':tstate(i)==='part'?' pt':''}" data-tmi="${i}">${frameM(i)} m</div>`).join('')}</div>
+      <div class="tms"><div class="tm cur tmcur" id="tmcur" style="--i:${n-1}">${frameM(n)} m</div>${ALLN.map(i=>`<div class="tm${tstate(i)==='done'?' dn':tstate(i)==='part'?' pt':''}" data-tmi="${i}">${frameM(i)} m</div>`).join('')}</div>
       <div class="ttl" style="--p:${(n-.5)*10}%">${ALLN.map(i=>`<button class="tn ${tstate(i)}${i===n?' cur':''}" data-tgo="${i}" aria-label="Go to frame ${i}, ${frameM(i)} metres">${i}</button>`).join('')}<span class="tpin" style="left:calc(${(n-.5)*10}% - 19px)"></span></div>
     </div>`;
 }
@@ -1253,18 +1255,18 @@ function initWheels(root){
 function fitFrame(ch=[]){
   const p=$('#tpanel');
   if(!p||!p.querySelector('.fbodywrap')||!$('#tsheet').classList.contains('open')){ch.forEach(([e,on])=>e.classList.toggle('on',on));return}
-  const CS=['c1','c2','c3'],old=CS.filter(c=>p.classList.contains(c)),animate=ch.length&&!reduceMotion();
+  const bd=p.querySelector('.fbody:not(.leaving)'),CS=['c1','c2','c3'],old=CS.filter(c=>bd.classList.contains(c)),animate=ch.length&&!reduceMotion();
   p.classList.add('nofit');
   ch.forEach(([e,on])=>e.classList.toggle('on',on));
-  p.classList.remove(...CS);
-  for(const c of CS){if(p.scrollHeight<=p.clientHeight+1)break;p.classList.add(c)}
-  const fin=CS.filter(c=>p.classList.contains(c)),relayout=()=>p.querySelectorAll('.wscroll').forEach(w=>w.dispatchEvent(new Event('relayout')));   // wheels re-centre on their value at the new row size
+  bd.classList.remove(...CS);
+  for(const c of CS){if(p.scrollHeight<=p.clientHeight+1)break;bd.classList.add(c)}
+  const fin=CS.filter(c=>bd.classList.contains(c)),relayout=()=>p.querySelectorAll('.wscroll').forEach(w=>w.dispatchEvent(new Event('relayout')));   // wheels re-centre on their value at the new row size
   if(!animate){p.classList.remove('nofit');relayout();return}
   ch.forEach(([e,on])=>e.classList.toggle('on',!on));
-  p.classList.remove(...CS);p.classList.add(...old);
+  bd.classList.remove(...CS);bd.classList.add(...old);
   void p.offsetHeight;p.classList.remove('nofit');void p.offsetHeight;
   ch.forEach(([e,on])=>e.classList.toggle('on',on));
-  p.classList.remove(...CS);p.classList.add(...fin);
+  bd.classList.remove(...CS);bd.classList.add(...fin);
   clearTimeout(ffT);ffT=setTimeout(relayout,480);
 }
 window.addEventListener('resize',()=>fitFrame());
@@ -1292,6 +1294,7 @@ function updateHead(n,dir){
   $('#tprev').disabled=n<=1;$('#tnext').disabled=n>=10;
   roll($('#tpn'),n>1?String(n-1):'',-dir);roll($('#tnn'),n<10?String(n+1):'',dir);
   roll($('#tdoneLbl'),n<10?'frame '+(n+1):'finish',dir);
+  const tc=$('#tmcur');if(tc){tc.style.setProperty('--i',n-1);roll(tc,frameM(n)+' m',dir)}
   const ttl=document.querySelector('.ttl');if(ttl){ttl.style.setProperty('--p',(n-.5)*10+'%');const pin=ttl.querySelector('.tpin');if(pin)pin.style.left=`calc(${(n-.5)*10}% - 19px)`}
 }
 // only the entry card slides: the old card moves off one side while the new one comes in from the other
