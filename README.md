@@ -31,7 +31,7 @@ It mirrors the layout of the original Numbers sheet: 100 cells numbered 1–10 a
 - **Notes box** for Apple Pencil (Scribble).
 - **Done → Next** marks a cell complete and jumps to the next one. Blank stems, galls, and chomps are saved as 0, so a real zero is recorded rather than left empty. % mature and height stay blank unless you enter them. **← Prev** goes back.
 - **Compact site / date / observer bar:** on both the Grid and Transect screens, Site, Date and Observers are shown as one slim bar in the top row, which leaves more room for the grid. Tap it and a panel drops down from the top with large input boxes over a darkened, blurred screen; tap **Done**, the dark area, or press Esc to close it (it slides back up). The bar updates as you type.
-- **Sessions:** Site, Date, Observer 1, and Observer 2 are set once (the names label the stems counters). "New session" copies the site and observers, and each session's data is kept separate. Switch or delete sessions from the **Sessions** button.
+- **The grid list:** tapping **Grid** on the main menu opens a list of every grid you have started (site, date, observers, a progress bar, and a **✓ Complete** / **In progress** badge). Tap one to open it, the trash icon deletes it (it asks first and saves a backup copy), and **＋ New grid** copies the site and observers into a new one. **‹ Grids** returns to the list. Site, Date, Observer 1 and Observer 2 are set once per grid (the names label the stems counters). Backup restore, CSV import and the screen stay-awake status are under **Backup & more** on the list.
 - **Autosave:** every tap is saved on the device immediately.
 - **Export CSV** through the iPad share sheet (Files, AirDrop, email, etc.).
 - **Works with no internet** once installed (see below).
@@ -42,11 +42,11 @@ The app opens on a **main menu** titled *Toadflax Field Data Collection*. Each s
 
 **Distance ruler:** each transect is 20 m long and the frames are every 2 m starting at 2 m, so frame 1 = 2 m, frame 2 = 4 m, ... frame 10 = 20 m. A tape-measure style ruler (rounded segments with tick marks that fill green as frames are finished) sits above the numbered bubbles, both on the transect screen and inside each frame (the current frame is highlighted and its distance is shown next to the frame title), so you always know where you are on the line. The CSV has a `distance_m` column.
 
-**The transect list:** tapping **Transect** on the main menu opens a list of every transect you have started: its name, site, date and observers, a 10-segment strip showing which frames are done, and a **✓ Complete** or **In progress** badge. Tap one to open it; the trash icon deletes it (it asks first and saves a backup copy). **＋ New transect** starts another. When you finish frame 10 the app offers to export a CSV and then **takes you back to this list**, with the finished transect highlighted. **‹ Transects** at the top of the transect screen returns to the list.
+**The transect list:** tapping **Transect** on the main menu opens a list of every transect you have started: its site (which is the transect's name), date and observers, a 10-segment strip showing which frames are done, and a **✓ Complete** or **In progress** badge. Tap one to open it; the trash icon deletes it (it asks first and saves a backup copy). **＋ New transect** starts another. When you finish frame 10 the app offers to export a CSV and then **takes you back to this list**, with the finished transect highlighted. **‹ Transects** at the top of the transect screen returns to the list.
 
-**Starting a transect:** a new transect copies the site and observers from the last one, and the site / name / observers panel **drops down automatically** so you can confirm or change them. Each transect has its own **name** (default "Transect 1", "Transect 2", ...); change it in that panel and it shows in the list, the top bar and the CSV file name.
+**Starting a transect:** a new transect copies the site and observers from the last one, and the site / date / observers panel **drops down automatically** so you can confirm or change them. The **site is the transect's name**: it shows in the list, the top bar and the CSV file name.
 
-**Reset:** the red **Reset** button in the top bar of the transect screen erases every frame in the current transect (name, site, date and observers are kept), asks twice, and saves a backup copy first.
+**Reset:** the red **Reset** button in the top bar of the transect screen erases every frame in the current transect (site, date and observers are kept), asks twice, and saves a backup copy first.
 
 **Motion:** the frame screen has a **static header** (frame title and distance, total, damage 0–4, Undo, Close, and the ruler / timeline) over **one entry card**. Moving to the next or previous frame (arrows, a dot on the timeline, Done, or a finger swipe) slides only the entry card off one side while the next card slides in from the other, at the same speed. The header stays put and animates to the new frame: the numbers roll, the gold marker glides along the ruler and the progress line fills. On the transect overview the line behaves like a carousel: the bubble in the middle grows while the ones at the edges shrink and fade (frame 1 is the biggest at the start of the line and frame 10 at the end), the frames pop in one after another, and the next-up bubble pulses. Turn on iPad *Reduce Motion* and the animations switch off.
 
@@ -55,7 +55,8 @@ The app opens on a **main menu** titled *Toadflax Field Data Collection*. Each s
 The paper form puts the 10 frames in two separate tables, so you scroll between cover and heights. Here **each frame has all of its information on one screen**, and you finish it before moving to the next:
 
 - **Cover (%)**: Target, Other weeds, Forb, Shrub, Grass, Ground, Litter and Moss. The number boxes (Target, other weeds, Ground, Litter, Moss) have a tall write-in area with **+ / − stacked on the left** (steps of 5). **Target** is the gold box with a star and has **5** and **10** shortcut buttons.
-- **Scroll wheels for Forb, Shrub and Grass:** a vertical wheel that snaps in steps of 5 (blank, 0, 5, 10 ... 100). Flick or drag it, or tap a number to snap to it; the numbers bend away from the centre as they scroll.
+- **Every number box is a scroll wheel with + / − buttons beside it:** swipe a wheel up or down (or tap a number) to choose, or use the buttons. Cover boxes step by 5 (Target too, with 5 and 10 shortcuts), counts by 1 (0–60), heights by 1 (0–150). The numbers bend away from the centre as they scroll. (Whole-number steps: the old Pencil-written decimals are gone from the frame screen.)
+- **Grid cells:** the same wheels + / − buttons: stems, galls and chomps (0–300), % mature (steps of 5), avg height (0–100 in 0.1 steps). The old Pencil-written number boxes are gone from the cell screen; notes are still written with the Pencil.
 - **Rest** buttons are only on Ground, Litter and the other weeds: they fill that box with whatever is left to reach 100.
 - **Total** adds up automatically and turns green at 100, amber otherwise (it never blocks you).
 - **Other weeds** are a list (up to 5). **Tap a weed's white name bar** and a large writing panel grows out of it, with a big field for the Pencil (or the keyboard with a finger) and chips for weeds already named in this transect. New frames start with the weed names from the previous frame (values blank). The ✕ on a card removes it.
@@ -65,7 +66,7 @@ The paper form puts the 10 frames in two separate tables, so you scroll between 
 - **Undo** (top bar) steps back through changes in the frame, **Clear frame** wipes it, **Done ✓ → frame N** saves and moves on.
 - The hidden backup copy covers transect data too.
 
-Transect CSV columns: `transect, site, date, obs1, obs2, frame, distance_m, target, other_total, other1_name, other1_pct, (other2_name, other2_pct, ... as many as used), forb, shrub, grass, ground, litter, moss, total, damage, mature_count, immature_count, mature_tall, mature_short, mature_avg, immature_tall, immature_short, immature_avg, notes`.
+Transect CSV columns: `site, date, obs1, obs2, frame, distance_m, target, other_total, other1_name, other1_pct, (other2_name, other2_pct, ... as many as used), forb, shrub, grass, ground, litter, moss, total, damage, mature_count, immature_count, mature_tall, mature_short, mature_avg, immature_tall, immature_short, immature_avg, notes`.
 
 ## CSV format (Grid)
 

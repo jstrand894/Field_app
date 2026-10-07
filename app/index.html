@@ -74,6 +74,9 @@ button:disabled{opacity:.5}
 .ctl[data-f] .sub{color:var(--c);font-weight:800}
 .ctl .row{display:flex;align-items:center;gap:10px;width:100%}
 .ctl .row button{width:56px;height:56px;font-size:30px;padding:0;border-radius:16px;flex:none}
+.ctl{--wr:40px;--c:var(--accent)}
+.ctl .row .wheel{flex:1;min-width:0;min-height:calc(var(--wr)*2.6);background:var(--card)}
+.ctl .wi{font-size:calc(var(--wr)*.85)}
 .ctl .row input{caret-color:transparent;flex:1;min-width:0;width:100%;text-align:center;font-size:40px;font-weight:800;padding:10px 4px;min-height:72px}
 .ctl .quick{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
 .sub{font-size:14px;color:var(--mute);min-height:18px}
@@ -234,7 +237,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .tn.part{background:var(--part);border-color:#8a6d0f}
 .tn.cur{transform:scale(1.1)}
 .fhead{display:flex;flex-direction:column;gap:5px}
-.fbodywrap{position:relative;overflow:hidden;display:flex;flex-direction:column;flex:0 0 auto}
+.fbodywrap{position:relative;overflow:hidden;flex:1 1 auto;min-height:0}
 .fnav{position:sticky;bottom:0;z-index:4;background:var(--bg);padding-top:6px;margin-top:auto}
 /* when the screen is short (iPad mini / landscape) the frame form shrinks step by step until it fits */
 #tpanel{touch-action:pan-y}
@@ -245,7 +248,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .tdm{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .tdm button{height:46px;padding:0;font-size:26px;font-weight:800;border-color:var(--c);color:var(--c)}
 .tdm button.on{background:var(--c);color:#fff}
-.ctl .row button svg{width:26px;height:26px}
+.ctl .row button svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:3.2;stroke-linecap:round;pointer-events:none}
 .ctl .row button{display:inline-flex;align-items:center;justify-content:center}
 /* every box in a row lines up: equal label bars, the number box absorbs any spare height, buttons sit at the bottom */
 .hsum{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
@@ -315,7 +318,14 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 .dmb button.on{background:var(--c);color:#fff}
 .fbody{display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:20px;border:2px solid var(--line);background:color-mix(in srgb,var(--card) 60%,var(--bg));box-shadow:0 3px 12px rgba(0,0,0,.08);will-change:transform}
 .fbody.leaving{position:absolute;left:0;top:0;pointer-events:none}
-.fbodywrap{padding:2px 2px 6px}
+.fscroll{position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;padding:2px 2px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.fscroll::-webkit-scrollbar{display:none}
+/* prompt to scroll down to the counts + heights once there is target cover */
+.dnbar{position:absolute;left:50%;bottom:10px;z-index:6;display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 26px;border-radius:999px;border:3px solid #d99e00;background:linear-gradient(180deg,#ffd54a,#f2b705);color:#1d1500;font-size:17px;font-weight:800;box-shadow:0 6px 20px rgba(0,0,0,.4);opacity:0;pointer-events:none;transform:translate(-50%,24px);transition:opacity .3s,transform .4s cubic-bezier(.2,.9,.25,1.15)}
+.dnbar.on{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+.dnbar:active{transform:translate(-50%,0) scale(.97)}
+.dnbar svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;animation:dnb 1.1s ease-in-out infinite}
+@keyframes dnb{0%,100%{transform:translateY(-3px)}50%{transform:translateY(4px)}}
 .tcov{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
 .fc{--c:var(--line);display:flex;flex-direction:column;gap:6px;padding:6px 8px 8px;border-radius:16px;border:3px solid var(--c);background:var(--card);background:color-mix(in srgb,var(--c) 11%,var(--card));min-width:0}
 .fl{position:relative;display:flex;align-items:center;justify-content:center;min-height:var(--lh);padding:0 8px;border-radius:8px;background:var(--c);color:#fff;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;text-align:center}
@@ -391,9 +401,12 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 textarea.wpin{min-height:min(44vh,360px);font-size:30px;resize:none;font-weight:600}
 .wpin.typing{caret-color:auto}
 /* ===== transect list screen ===== */
-#tlist{position:fixed;top:0;bottom:0;left:0;right:0;overflow-y:auto;overscroll-behavior:contain;max-width:1180px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 18px max(18px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:16px}
+#tlist,#glist{position:fixed;top:0;bottom:0;left:0;right:0;overflow-y:auto;overscroll-behavior:contain;max-width:1180px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 18px max(18px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:16px}
 .tltitle{margin:0;font-size:clamp(22px,3vw,30px);font-weight:800}
-#tlist .bar .sp{flex:1}
+#tlist .bar .sp,#glist .bar .sp{flex:1}
+.tlc.g{--c:#2f6b3a}
+.glbar{display:block;height:10px;border-radius:5px;background:color-mix(in srgb,var(--line) 35%,var(--card));overflow:hidden}
+.glbar i{display:block;height:100%;border-radius:5px;background:var(--c)}
 .tlgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;align-content:start}
 .tlc{--c:#0a6c76;position:relative;border-radius:22px;background:var(--card);border:1px solid color-mix(in srgb,var(--line) 40%,transparent);box-shadow:0 1px 2px rgba(0,0,0,.06),0 10px 26px rgba(0,0,0,.08);animation:cardIn .5s cubic-bezier(.34,1.4,.64,1) backwards;animation-delay:calc(var(--i,0)*70ms)}
 .tlc.done{--c:#1b6b2a}
@@ -448,10 +461,9 @@ textarea.wpin{min-height:min(44vh,360px);font-size:30px;resize:none;font-weight:
 
 <div id="app" class="view" hidden>
   <div class="bar">
-    <button id="btnMenu">‹ Menu</button><span id="prog"></span>
+    <button id="btnMenu">‹ Grids</button><span id="prog"></span>
     <button class="hsumbar" id="hsumG" aria-expanded="false" aria-controls="hoverG"></button>
     <button id="btnReset" class="danger ib" aria-label="Reset grid" title="Reset grid"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/></svg>Reset</button>
-    <button id="btnSessions">Sessions</button>
     <button id="btnExport" class="pri ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>Export CSV</button>
   </div>
   <div class="hover" id="hoverG" aria-hidden="true">
@@ -482,7 +494,6 @@ textarea.wpin{min-height:min(44vh,360px);font-size:30px;resize:none;font-weight:
     <div class="hback" data-close></div>
     <div class="hpanel" role="dialog" aria-label="Site, date and observers">
       <header>
-        <label class="span2">Transect name<input id="tname" autocomplete="off" inputmode="none"></label>
         <label>Site<input id="tsite" autocomplete="off" inputmode="none"></label>
         <label>Date<input id="tdate" type="date"></label>
         <label>Observer 1<input id="tobs1" autocomplete="off" inputmode="none"></label>
@@ -495,6 +506,12 @@ textarea.wpin{min-height:min(44vh,360px);font-size:30px;resize:none;font-weight:
   <button class="pri" id="tContinue" style="font-size:20px;padding:14px">Continue</button>
   <div class="hint">Swipe along the transect line. Green = frame done, yellow = started, gold ring = next up. Tap a frame to enter all of its information on one screen; inside a frame, swipe left or right to move to the next or previous frame.</div>
   <div class="padrow" id="tpads"><div class="pad" id="tpadL"></div><div class="pad" id="tpadR"></div></div>
+  <footer class="foot"></footer>
+</div>
+
+<div id="glist" class="view" hidden>
+  <div class="bar"><button id="glBack">‹ Menu</button><h1 class="tltitle">Grids</h1><span class="sp"></span><button id="btnSessions" class="ib">Backup &amp; more</button><button class="pri ib" id="glNew">＋ New grid</button></div>
+  <div id="glcards" class="tlgrid"></div>
   <footer class="foot"></footer>
 </div>
 
@@ -534,7 +551,7 @@ function migrate(d){
     if(!Array.isArray(f.ow))f.ow=[{n:'',v:f.co??null}];delete f.co;
     TKEYS.forEach(k=>{if(f[k]===undefined)f[k]=null});if(f.dm===undefined)f.dm='';if(f.nt===undefined)f.nt='';
   }));
-  Object.values(d.tsessions).sort((a,b)=>String(a.id).localeCompare(String(b.id))).forEach((s,i)=>{if(!s.name)s.name='Transect '+(i+1)});
+  Object.values(d.tsessions).forEach(s=>{if(!s.site&&s.name&&!/^Transect \d+$/.test(s.name))s.site=s.name;delete s.name});   // the site is the transect's name
   Object.values(d.sessions).forEach(s=>{
     if(s.obs!==undefined){s.obs1=s.obs;delete s.obs}
     s.obs1=s.obs1||'';s.obs2=s.obs2||'';
@@ -614,13 +631,14 @@ function undoField(f){
 function doUndo(){const a=undo[ukey()];if(!a||!a.length)return;S().cells[cur]=JSON.parse(a.pop());save();openCell(cur)}
 let pend=false; // first edit after focusing a box saves one undo step
 
+const GSPEC={s1:[300,1],s2:[300,1],g:[300,1],ch:[300,1],m:[100,5],h:[100,.1]};
 function buildCell(n){
   cur=n;const c=cell(n);pend=false;
   const pv=prevOf(n),nx=nextOf(n);
   const qb=(k,d,l)=>`<button data-k="${k}" data-d="${d}">${l}</button>`;
   const ctl=(key,label,quick,step=1,sub='')=>`<div class="ctl" data-f="${key}"><div class="t">${label}<button class="xk l" data-undof="${key}" aria-label="Undo ${esc(label)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg></button><button class="xk r" data-clearf="${key}" aria-label="Clear ${esc(label)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
     <div class="row"><button data-k="${key}" data-d="${-step}" aria-label="Decrease ${esc(label)}">${'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>'}</button>
-    <input data-in="${key}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${c[key]??''}">
+    ${wheelBox(`data-wk="${key}"`,GSPEC[key],label)}
     <button data-k="${key}" data-d="${step}" aria-label="Increase ${esc(label)}">${'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg>'}</button></div>
     <div class="quick">${quick}<button data-k="${key}" data-z="1">0</button></div>${sub?`<div class="sub" id="sub-${key}">${sub}</div>`:''}</div>`;
   const q5=k=>qb(k,5,'+5')+qb(k,10,'+10');
@@ -630,7 +648,7 @@ function buildCell(n){
     <div class="warn" id="warn" ${w.length?'':'hidden'}>${w.length?'⚠ '+esc(w.join(' ')):''}</div>
     <div class="ctr">${ctl('s1','Stems · '+esc(S().obs1||'Obs 1'),q5('s1'))}${ctl('s2','Stems · '+esc(S().obs2||'Obs 2'),q5('s2'))}${ctl('g','Galls',q5('g'))}</div>
     <div class="ctr">${ctl('ch','Chomps',q5('ch'))}${ctl('m','% Mature',qb('m',-5,'−5')+qb('m',5,'+5')+qb('m',100,'100'),10)}${ctl('h','Avg height',qb('h',-0.1,'−0.1')+qb('h',0.1,'+0.1'),1)}</div>
-    <div class="hint">Write numbers with the Pencil in the boxes (3+4 adds). In each box header, the left icon undoes that box and the right icon clears it.</div>
+    <div class="hint">Swipe a wheel up or down (or tap a number) to choose, or use the + / − buttons. In each box header, the left icon undoes that box and the right icon clears it.</div>
     <textarea id="notes" inputmode="none" placeholder="Notes (write with the Pencil)">${esc(c.n)}</textarea>
     <div class="nav"><button id="undo" class="ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button><button id="clr">Clear cell</button><button id="none">No toadflax ✓</button><button id="done" class="pri">Done ✓ → ${nx??'finish'}</button></div>`;
   return html;
@@ -638,7 +656,7 @@ function buildCell(n){
 function mountCell(n){ // instant render
   const html=buildCell(n),panel=$('#panel'),was=$('#sheet').classList.contains('open')&&panel.querySelector('.gwrap');
   panel.innerHTML=`<div class="gwrap"><div class="gbody">${html}</div></div>`;
-  panel.scrollTop=0;$('#sheet').classList.add('open');renderGrid();refresh();
+  panel.scrollTop=0;$('#sheet').classList.add('open');initGridWheels(panel);renderGrid();refresh();
   if(!was&&!reduceMotion())panel.animate([{transform:'translateY(56px) scale(.94)',opacity:0},{transform:'translateY(-7px) scale(1.01)',opacity:1,offset:.72},{transform:'none',opacity:1}],{duration:440,easing:'cubic-bezier(.2,.8,.3,1)'});
 }
 // kind: 'next' | 'prev' (arrows), 'done' (checked off) or 'none' (no toadflax): all slide as two cards;
@@ -674,12 +692,12 @@ const confirmTwice=(a,b)=>confirm(a)&&confirm(b);
 function doResetGrid(){
   const s=S(),n=Object.values(s.cells).filter(c=>c.done||touched(c)||c.n).length;
   if(!confirmTwice(`Reset the grid?\n\nThis erases all ${n} entered cell${n===1?'':'s'} in the current session (${s.site||'no site'}, ${s.date}). Site, date and observers are kept.`,
-    'Are you sure?\n\nThis cannot be undone with the Undo button. A backup copy is saved first (Sessions > Restore from backup copy).'))return;
+    'Are you sure?\n\nThis cannot be undone with the Undo button. A backup copy is saved first (Grids > Backup & more > Restore from backup copy).'))return;
   backupNow(true);
   s.cells={};Object.keys(undo).forEach(k=>{if(k.startsWith(db.cur+':'))delete undo[k]});
   save();closeSheet();toast('Grid reset: all cells cleared.');
 }
-function closeSheet(){$('#sheet').classList.remove('open');cur=null;renderGrid()}
+function closeSheet(){$('#sheet').classList.remove('open');cur=null;if(!$('#app').hidden)renderGrid()}
 
 $('#panel').addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
@@ -690,11 +708,11 @@ $('#panel').addEventListener('click',e=>{
       const k=b.dataset.k;push(k);
       c[k]=b.dataset.z?0:fit(k,(c[k]??0)+Number(b.dataset.d));
       c.done=false;
-      const inp=b.closest('.ctl').querySelector('input');inp.value=c[k];flash(inp);
+      syncWheel(b.closest('.ctl'),c[k]);
       save();refresh();renderGrid();
     }else if(b.dataset.clearf){
       const k=b.dataset.clearf;push(k);c[k]=null;c.done=false;
-      const inp=b.closest('.ctl').querySelector('input');inp.value='';flash(inp);
+      syncWheel(b.closest('.ctl'),null);
       save();refresh();renderGrid();
     }else if(b.dataset.undof){undoField(b.dataset.undof)}
     else if(b.id==='prev'){const p=prevOf(cur);if(p)openCell(p,'prev')}
@@ -715,12 +733,7 @@ $('#panel').addEventListener('click',e=>{
       }
     }
   }else{
-    if(b.id==='new'){newSession();renderHeader();closeSheet()}
-    else if(b.dataset.sid){db.cur=b.dataset.sid;save(false);renderHeader();closeSheet()}
-    else if(b.id==='del'&&confirm('Delete this session and its data? Export first if unsure.')){
-      delete db.sessions[db.cur];db.cur=Object.keys(db.sessions)[0]||null;save(false);S();renderHeader();closeSheet()}
-    else if(b.id==='resetGrid')doResetGrid();
-    else if(b.id==='restoreBtn')showSnaps();
+    if(b.id==='restoreBtn')showSnaps();
     else if(b.id==='importBtn')$('#csvFile').click();
     else if(b.id==='backBtn')showSessions();
     else if(b.dataset.snap)restoreSnap(b.dataset.snap);
@@ -759,13 +772,7 @@ $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()})
 
 function showSessions(){
   cur=null;
-  const list=Object.values(db.sessions).sort((a,b)=>(b.date+b.id).localeCompare(a.date+a.id));
-  $('#panel').innerHTML=`<div class="ph"><h2>Sessions</h2><button id="x">Close</button></div>
-    <button class="pri" id="new">+ New session (copies site &amp; observers)</button>
-    <div class="list">${list.map(s=>{const d=Object.values(s.cells).filter(c=>c.done).length;
-      return `<button data-sid="${s.id}">${s.id===db.cur?'● ':''}${esc(s.site||'(no site)')} — ${s.date} — ${esc([s.obs1,s.obs2].filter(Boolean).join(' & ')||'?')} <span class="hint">(${d}/100)</span></button>`}).join('')}</div>
-    <button id="del">Delete current session</button>
-    <button id="resetGrid" class="danger">Reset grid (erase all cells in this session)</button>
+  $('#panel').innerHTML=`<div class="ph"><h2>Backup &amp; more</h2><button id="x">Close</button></div>
     <div class="sect"><b>Screen</b>
       <div class="hint" id="wlstat">${wlText()}</div></div>
     <div class="sect"><b>Backup &amp; restore</b>
@@ -813,7 +820,7 @@ async function restoreSnap(id){
     if(!confirm(`Replace current data (${countCells(db)} cells) with this backup from ${when(row.t)} (${countCells(data)} cells)?`))return;
     await backupNow(true);
     db=data;if(!db.cur||!db.sessions[db.cur])db.cur=Object.keys(db.sessions)[0]||null;
-    S();save(false);renderHeader();closeSheet();
+    S();save(false);renderHeader();closeSheet();if(!$('#glist').hidden)renderGList();
   }catch(e){alert('Could not restore that backup.')}
 }
 
@@ -844,7 +851,7 @@ function importCsv(text){
     s.cells[c]={s1:numv(r,'s1'),s2:numv(r,'s2'),g:numv(r,'g'),ch:numv(r,'ch'),m:numv(r,'m'),h:numv(r,'h'),n:ix.n>=0?(r[ix.n]??''):'',done:true};n++;
   });
   if(!n){alert('No cells found in that file.');return}
-  db.sessions[id]=s;db.cur=id;save(false);renderHeader();closeSheet();
+  db.sessions[id]=s;db.cur=id;save(false);renderHeader();closeSheet();if(!$('#glist').hidden)renderGList();
   alert(`Imported ${n} cells as a new session. They are all marked done.`);
 }
 $('#csvFile').addEventListener('change',async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{importCsv(await f.text())}catch(err){alert('Could not read that file.')}});
@@ -890,10 +897,10 @@ $('#btnReset').onclick=doResetGrid;
 // =====================================================================
 function show(view,hi){
   ['G','T'].forEach(w=>hdr(w,false));closePop();
-  ['menu','app','tapp','tlist'].forEach(id=>$('#'+id).hidden=id!==view);
+  ['menu','app','tapp','tlist','glist'].forEach(id=>$('#'+id).hidden=id!==view);
   if(view==='app'||view==='tapp')redrawPads();
   $('#sheet').classList.remove('open');$('#tsheet').classList.remove('open');cur=null;tcur=null;
-  if(view==='menu')renderMenu();else if(view==='app'){renderHeader();renderGrid();fitGrid()}else if(view==='tlist')renderTList(hi);else renderT('pop');
+  if(view==='menu')renderMenu();else if(view==='app'){renderHeader();renderGrid();fitGrid()}else if(view==='tlist')renderTList(hi);else if(view==='glist')renderGList(hi);else renderT('pop');
   document.querySelectorAll('.view').forEach(v=>{v.scrollTop=0});
   if(!reduceMotion())$('#'+view).animate([{opacity:0},{opacity:1}],{duration:260,easing:'ease-out'});
 }
@@ -921,20 +928,20 @@ function buildDiagrams(){
 function renderMenu(){
   const g=db.sessions[db.cur],t=db.tsessions[db.tcur];
   const gd=g?Object.values(g.cells).filter(c=>c.done).length:0,td=t?Object.values(t.frames).filter(f=>f.done).length:0;
-  $('#mgSub').textContent=g?`${g.site||'(no site)'} · ${g.date} · ${gd}/100 cells done`:'';
+  const nG=Object.keys(db.sessions).length,gDone=Object.values(db.sessions).filter(x=>Object.values(x.cells).filter(c=>c.done).length>=N).length;
+  $('#mgSub').textContent=g?`${g.site||'(no site)'} · ${g.date} · ${gd}/100 cells · ${nG} grid${nG===1?'':'s'}, ${gDone} complete`:'No grid yet';
   const nT=Object.keys(db.tsessions).length,nDone=Object.values(db.tsessions).filter(x=>Object.values(x.frames).filter(f=>f.done).length>=10).length;
-  $('#mtSub').textContent=t?`${t.name||'Transect'} · ${t.site||'(no site)'} · ${td}/10 frames · ${nT} transect${nT===1?'':'s'}, ${nDone} complete`:'No transect yet';
+  $('#mtSub').textContent=t?`${t.site||'(no site)'} · ${td}/10 frames · ${nT} transect${nT===1?'':'s'}, ${nDone} complete`:'No transect yet';
   $('#mgBar').style.width=gd+'%';$('#mtBar').style.width=(td*10)+'%';
 }
-$('#goGrid').onclick=()=>show('app');
+$('#goGrid').onclick=()=>show('glist');
 $('#goTrans').onclick=()=>show('tlist');
-$('#btnMenu').onclick=()=>show('menu');
+$('#btnMenu').onclick=()=>show('glist');
 $('#tMenu').onclick=()=>show('tlist');
 
 function newTSession(){
   const id='t'+Date.now(),prev=db.tsessions[db.tcur]||db.sessions[db.cur]||{};
-  let nn=Object.keys(db.tsessions).length+1;const used=new Set(Object.values(db.tsessions).map(x=>x.name));while(used.has('Transect '+nn))nn++;
-  db.tsessions[id]={id,name:'Transect '+nn,site:prev.site||'',date:today(),obs1:prev.obs1||'',obs2:prev.obs2||'',frames:{}};
+  db.tsessions[id]={id,site:prev.site||'',date:today(),obs1:prev.obs1||'',obs2:prev.obs2||'',frames:{}};
   db.tcur=id;save(false);return db.tsessions[id];
 }
 const TS=()=>db.tsessions[db.tcur]||newTSession();
@@ -947,10 +954,10 @@ const restOf=(f,except)=>100-(COVERS.reduce((a,k)=>a+(except==='k:'+k?0:(f[k]??0
 const seenWeeds=()=>{const m=new Map();Object.keys(TS().frames).sort((a,b)=>a-b).forEach(n=>TS().frames[n].ow.forEach(w=>{const nm=w.n.trim();if(nm&&!m.has(nm.toLowerCase()))m.set(nm.toLowerCase(),nm)}));return [...m.values()]};
 const tstate=n=>{const f=TS().frames[n];if(!f)return '';if(f.done)return 'done';if(tHas(f))return 'part';return ''};
 let tcur=null;
-['name','site','date','obs1','obs2'].forEach(k=>$('#t'+k).addEventListener('input',e=>{TS()[k]=e.target.value;save();updateSum('T')}));
+['site','date','obs1','obs2'].forEach(k=>$('#t'+k).addEventListener('input',e=>{TS()[k]=e.target.value;save();updateSum('T')}));
 function renderT(mode){
   const s=TS(),box=$('#tframes'),keep=box.scrollLeft;updateSum('T');
-  $('#tname').value=s.name||'';$('#tsite').value=s.site;$('#tdate').value=s.date;$('#tobs1').value=s.obs1;$('#tobs2').value=s.obs2;
+  $('#tsite').value=s.site;$('#tdate').value=s.date;$('#tobs1').value=s.obs1;$('#tobs2').value=s.obs2;
   let done=0,next=0;box.innerHTML='';
   for(let n=1;n<=10;n++){if(tstate(n)==='done')done++;else if(!next)next=n}
   for(let n=1;n<=10;n++){
@@ -1169,7 +1176,7 @@ function refreshT(){
   document.querySelectorAll('.ttl .tn').forEach(b=>{const i=Number(b.dataset.tgo);b.className='tn '+tstate(i)+(i===tcur?' cur':'')});
   document.querySelectorAll('.tms .tm[data-tmi]').forEach(m=>{const st=tstate(Number(m.dataset.tmi));m.className='tm'+(st==='done'?' dn':st==='part'?' pt':'')});
   const u=$('#tundoTop');if(u)u.disabled=!(tundo[tkey()]||[]).length;
-  syncReveal(f);
+  syncReveal(f);updateDown();
 }
 function prepFrame(n){
   tcur=n;tpend=false;const f=frame(n);
@@ -1191,16 +1198,19 @@ function headHtml(n){
       <div class="ttl" style="--p:${(n-.5)*10}%">${ALLN.map(i=>`<button class="tn ${tstate(i)}${i===n?' cur':''}" data-tgo="${i}" aria-label="Go to frame ${i}, ${frameM(i)} metres">${i}</button>`).join('')}<span class="tpin" style="left:calc(${(n-.5)*10}% - 19px)"></span></div>
     </div>`;
 }
-const WHEEL_ITEMS='<div class="wi" data-v="">–</div>'+Array.from({length:21},(_,i)=>`<div class="wi" data-v="${i*WSTEP}">${i*WSTEP}</div>`).join('');
+// every number box is a vertical wheel: swipe up/down to choose, or use the + / - buttons beside it
+const WSPEC={ct:[100,5],cf:[100,5],cs:[100,5],cg:[100,5],cd:[100,5],cl:[100,5],cm:[100,5],ow:[100,5],nm:[60,1],ni:[60,1],mt:[150,1],ms:[150,1],ma:[150,1],it:[150,1],is:[150,1],ia:[150,1]};
+const wItemsCache={};
+const wItems=(max,step)=>wItemsCache[max+'|'+step]||(wItemsCache[max+'|'+step]='<div class="wi" data-v="">–</div>'+Array.from({length:Math.round(max/step)+1},(_,i)=>{const v=step<1?(i*step).toFixed(1):i*step;return `<div class="wi" data-v="${v}">${v}</div>`}).join(''));
+const pmBtns=(attr,label,step)=>`<div class="fpm"><button ${attr} data-d="${step}" aria-label="Increase ${label}">${PL}</button><button ${attr} data-d="${-step}" aria-label="Decrease ${label}">${MI}</button></div>`;
+const wheelBox=(wattr,spec,label)=>`<div class="wheel"><div class="wband"></div><div class="wscroll" ${wattr} data-max="${spec[0]}" data-step="${spec[1]}" tabindex="0" aria-label="${label}: swipe up or down to choose">${wItems(spec[0],spec[1])}</div></div>`;
+const syncWheel=(fc,v)=>{const w=fc&&fc.querySelector('.wscroll');if(w){w.dispatchEvent(new CustomEvent('setv',{detail:v}));flash(w.parentElement)}};
 function bodyHtml(n){
   const f=frame(n);
   const numCard=(k,label,grp,sc)=>`<div class="fc" data-g="${grp}"><div class="fl">${label}</div>
-      <div class="fbx"><div class="fpm"><button data-tk="${k}" data-d="${WSTEP}" aria-label="Increase ${label}">${PL}</button><button data-tk="${k}" data-d="${-WSTEP}" aria-label="Decrease ${label}">${MI}</button></div>
-        <input class="fin" data-tin="${k}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${f[k]??''}"></div>${sc?`<div class="fsc">${sc}</div>`:''}</div>`;
-  const wheelCard=(k,label,grp)=>`<div class="fc" data-g="${grp}"><div class="fl">${label}</div><div class="wheel"><div class="wband"></div><div class="wscroll" data-wk="${k}" tabindex="0" aria-label="${label} percent: scroll to choose, steps of 5">${WHEEL_ITEMS}</div></div></div>`;
+      <div class="fbx">${pmBtns(`data-tk="${k}"`,label,WSPEC[k][1])}${wheelBox(`data-wk="${k}"`,WSPEC[k],label)}</div>${sc?`<div class="fsc">${sc}</div>`:''}</div>`;
   const weed=(w,i)=>`<div class="fc" data-g="pl"><div class="fl wl${f.ow.length>1?' hasx':''}"><input class="wn" data-wname="${i}" readonly inputmode="none" placeholder="✎ Weed name" value="${esc(w.n)}" aria-label="Name of other weed ${i+1} (tap to write)">${f.ow.length>1?`<button class="xk r" data-towdel="${i}" aria-label="Remove other weed ${i+1}">${XI}</button>`:''}</div>
-      <div class="fbx"><div class="fpm"><button data-twk="${i}" data-d="${WSTEP}" aria-label="Increase other weed ${i+1}">${PL}</button><button data-twk="${i}" data-d="${-WSTEP}" aria-label="Decrease other weed ${i+1}">${MI}</button></div>
-        <input class="fin" data-tow="${i}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${w.v??''}"></div>
+      <div class="fbx">${pmBtns(`data-twk="${i}"`,'other weed '+(i+1),WSPEC.ow[1])}${wheelBox(`data-ww="${i}"`,WSPEC.ow,'Other weed '+(i+1))}</div>
       <div class="fsc"><button data-trestw="${i}" aria-label="Set other weed ${i+1} to the rest of the cover">Rest</button></div></div>`;
   const here=new Set(f.ow.map(w=>w.n.trim().toLowerCase()));
   const seen=seenWeeds().filter(nm=>!here.has(nm.toLowerCase()));
@@ -1208,11 +1218,10 @@ function bodyHtml(n){
   const rest=k=>`<button data-trest="${k}" aria-label="Set to the rest of the cover">Rest</button>`;
   const miRow=(g,label,kc,kh)=>{const n=hCount(f[kc]);
     return `<div class="mirow"><div class="trl" data-g="${g}">${label}</div>
-      <div class="fc cnt" data-g="${g}"><div class="fl">Count</div><div class="fbx"><div class="fpm"><button data-tk="${kc}" data-d="1" aria-label="Increase ${label} count">${PL}</button><button data-tk="${kc}" data-d="-1" aria-label="Decrease ${label} count">${MI}</button></div>
-        <input class="fin" data-tin="${kc}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${f[kc]??''}"></div></div>
-      ${kh.map((k,j)=>`<div class="hbx${n>=j+1?' on':''}" data-hg="${g}" data-hi="${j+1}"><div class="fc" data-g="${g}"><div class="fl">${['Tall','Short','Avg'][j]}</div><div class="fbx"><input class="fin" data-tin="${k}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${f[k]??''}"></div></div></div>`).join('')}</div>`};
+      <div class="fc cnt" data-g="${g}"><div class="fl">Count</div><div class="fbx">${pmBtns(`data-tk="${kc}"`,label+' count',1)}${wheelBox(`data-wk="${kc}"`,WSPEC[kc],label+' count')}</div></div>
+      ${kh.map((k,j)=>`<div class="hbx${n>=j+1?' on':''}" data-hg="${g}" data-hi="${j+1}"><div class="fc" data-g="${g}"><div class="fl">${['Tall','Short','Avg'][j]}</div><div class="fbx">${pmBtns(`data-tk="${k}"`,label+' '+['tall','short','avg'][j]+' height',1)}${wheelBox(`data-wk="${k}"`,WSPEC[k],label+' '+['tall','short','avg'][j]+' height')}</div></div></div>`).join('')}</div>`};
   return `<div class="tsec"><h3 class="h3row"><span>Cover (%)</span>${chipsHtml}${f.ow.length<5?'<button class="tinyadd" id="towadd">＋ Add another other weed</button>':''}</h3><div class="tcov">
-      ${numCard('ct','★ Target','tg',`<button data-tset="ct" data-v="5">5</button><button data-tset="ct" data-v="10">10</button>`)}${f.ow.map(weed).join('')}${wheelCard('cf','Forb','pl')}${wheelCard('cs','Shrub','pl')}${wheelCard('cg','Grass','pl')}
+      ${numCard('ct','★ Target','tg',`<button data-tset="ct" data-v="5">5</button><button data-tset="ct" data-v="10">10</button>`)}${f.ow.map(weed).join('')}${numCard('cf','Forb','pl')}${numCard('cs','Shrub','pl')}${numCard('cg','Grass','pl')}
       ${numCard('cd','Ground','gr',rest('cd'))}${numCard('cl','Litter','gr',rest('cl'))}${numCard('cm','Moss','gr')}
     </div></div>
     <div class="dmrow"><div class="trl" data-g="dm">Damage</div><div class="fc" data-g="dm"><div class="dmb">${[0,1,2,3,4].map(d=>`<button data-tdm="${d}" class="${dmSet(f)&&f.dm===d?'on':''}" aria-label="Damage ${d}">${d}</button>`).join('')}</div></div></div>
@@ -1222,13 +1231,16 @@ function navHtml(n){
   return `<div class="nav"><button id="tnotes" class="ib">${SV('<path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h5"/>')}Notes<i class="ndot"></i></button><button id="tclr">Clear frame</button><button id="tdone" class="pri">Done ✓ → <span class="roll" id="tdoneLbl">${n<10?'frame '+(n+1):'finish'}</span></button></div>`;
 }
 // ---- scroll wheels (forb / shrub / grass): vertical, snap in steps of 5, bend away from the centre ----
-function initWheels(root){
+// root: where to look; ad: {get(w), set(w,v), begin(w), change(), end()} connect a wheel to the data of the transect frame or grid cell
+function wheelCore(root,ad){
   root.querySelectorAll('.wscroll').forEach(w=>{
-    const k=w.dataset.wk,items=[...w.children];let gesture=false,settle=0,raf=0,geo={h:0,r:36,p:0},user=false,userT=0;
-    const idxOf=v=>(v===''||v==null)?0:Math.min(21,Math.max(1,Math.round(Number(v)/WSTEP)+1));
-    let curIdx=idxOf(frame(tcur)[k]);
-    const layout=()=>{const h=w.clientHeight,r=items[0].getBoundingClientRect().height||36,p=Math.max(0,(h-r)/2);w.style.paddingTop=w.style.paddingBottom=p+'px';geo={h,r,p}};
-    const paint=()=>{const c=w.scrollTop+geo.h/2;items.forEach((it,i)=>{const d=((geo.p+i*geo.r+geo.r/2)-c)/geo.r,a=Math.min(Math.abs(d),3);it.style.transform=`perspective(230px) rotateX(${(-d*22).toFixed(1)}deg) scale(${(1-a*.06).toFixed(3)})`;it.style.opacity=(1-a*.22).toFixed(2)})};
+    const max=Number(w.dataset.max),step=Number(w.dataset.step),last=Math.round(max/step)+1;
+    const items=[...w.children];let gesture=false,settle=0,raf=0,geo={h:0,r:36,p:0},user=false,userT=0;
+        const idxOf=v=>(v===''||v==null)?0:Math.min(last,Math.max(1,Math.round(Number(v)/step)+1));
+    let curIdx=idxOf(ad.get(w));
+    const layout=()=>{const h=w.clientHeight,r=items[0].offsetHeight||36,p=Math.max(0,(h-r)/2);w.style.paddingTop=w.style.paddingBottom=p+'px';geo={h,r,p}};
+    const paint=()=>{const c=w.scrollTop+geo.h/2,mid=Math.round((c-geo.p-geo.r/2)/geo.r);   // only the rows near the middle are visible, so only they are drawn
+      for(let i=Math.max(0,mid-5);i<=Math.min(last,mid+5);i++){const it=items[i],d=((geo.p+i*geo.r+geo.r/2)-c)/geo.r,a=Math.min(Math.abs(d),3);it.style.transform=`perspective(230px) rotateX(${(-d*22).toFixed(1)}deg) scale(${(1-a*.06).toFixed(3)})`;it.style.opacity=(1-a*.22).toFixed(2)}};
     const setIdx=(i,smooth)=>w.scrollTo({top:i*geo.r,behavior:smooth?'smooth':'auto'});
     // only a real touch / wheel / key on THIS wheel may change the data; layout changes (rows resizing) never do
     const arm=()=>{user=true;clearTimeout(userT);userT=setTimeout(()=>{user=false},450)};
@@ -1236,45 +1248,55 @@ function initWheels(root){
     layout();setIdx(curIdx,false);paint();
     const relayout=()=>{layout();setIdx(curIdx,false);paint()};
     new ResizeObserver(relayout).observe(w);w.addEventListener('relayout',relayout);
+    // + / - / Rest buttons move the wheel to the new value without writing anything themselves
+    w.addEventListener('setv',e=>{user=false;clearTimeout(userT);curIdx=idxOf(e.detail);setIdx(curIdx,!reduceMotion())});
     w.addEventListener('scroll',()=>{
       if(!raf)raf=requestAnimationFrame(()=>{raf=0;paint()});
       if(!user)return;arm();                                    // keep the window open through the momentum after the finger lifts
-      const idx=Math.max(0,Math.min(21,Math.round(w.scrollTop/geo.r)));
+      const idx=Math.max(0,Math.min(last,Math.round(w.scrollTop/geo.r)));
       if(idx!==curIdx){
-        curIdx=idx;const f=frame(tcur);
-        if(!gesture){tpush();gesture=true}
-        f[k]=idx===0?null:(idx-1)*WSTEP;f.done=false;refreshT();
-        clearTimeout(settle);settle=setTimeout(()=>{gesture=false;save();renderT()},220);
+        curIdx=idx;
+        if(!gesture){ad.begin(w);gesture=true}
+        ad.set(w,idx===0?null:Math.round((idx-1)*step*10)/10);ad.change();
+        clearTimeout(settle);settle=setTimeout(()=>{gesture=false;ad.end()},220);
       }
     },{passive:true});
     items.forEach((it,i)=>it.addEventListener('click',()=>{arm();setIdx(i,true)}));
   });
 }
-// Shrinks only the entry cards (never the header / ruler) until the form fits. With `ch` (reveal toggles) the layout is
-// measured at its final state with transitions off, then rewound and replayed so the open + shrink animate together.
-function fitFrame(ch=[]){
-  const p=$('#tpanel');
-  if(!p||!p.querySelector('.fbodywrap')||!$('#tsheet').classList.contains('open')){ch.forEach(([e,on])=>e.classList.toggle('on',on));return}
-  const bd=p.querySelector('.fbody:not(.leaving)'),CS=['c1','c2','c3'],old=CS.filter(c=>bd.classList.contains(c)),animate=ch.length&&!reduceMotion();
-  p.classList.add('nofit');
-  ch.forEach(([e,on])=>e.classList.toggle('on',on));
-  bd.classList.remove(...CS);
-  for(const c of CS){if(p.scrollHeight<=p.clientHeight+1)break;bd.classList.add(c)}
-  const fin=CS.filter(c=>bd.classList.contains(c)),relayout=()=>p.querySelectorAll('.wscroll').forEach(w=>w.dispatchEvent(new Event('relayout')));   // wheels re-centre on their value at the new row size
-  if(!animate){p.classList.remove('nofit');relayout();return}
-  ch.forEach(([e,on])=>e.classList.toggle('on',!on));
-  bd.classList.remove(...CS);bd.classList.add(...old);
-  void p.offsetHeight;p.classList.remove('nofit');void p.offsetHeight;
-  ch.forEach(([e,on])=>e.classList.toggle('on',on));
-  bd.classList.remove(...CS);bd.classList.add(...fin);
-  clearTimeout(ffT);ffT=setTimeout(relayout,480);
+function initWheels(root){   // transect frame
+  wheelCore(root,{
+    get:w=>{const f=frame(tcur);return w.dataset.ww!==undefined?(f.ow[Number(w.dataset.ww)]||{}).v:f[w.dataset.wk]},
+    set:(w,v)=>{const f=frame(tcur);if(w.dataset.ww!==undefined)f.ow[Number(w.dataset.ww)].v=v;else f[w.dataset.wk]=v},
+    begin:()=>tpush(),change:()=>{frame(tcur).done=false;refreshT()},end:()=>{save();renderT()}
+  });
 }
+function initGridWheels(root){   // grid cell
+  wheelCore(root,{
+    get:w=>cell(cur)[w.dataset.wk],
+    set:(w,v)=>{const c=cell(cur);c[w.dataset.wk]=v;c.done=false},
+    begin:w=>push(w.dataset.wk),change:()=>{refresh();renderGrid()},end:()=>save()
+  });
+}
+// Boxes keep their size; the entry area scrolls instead. This just applies reveal toggles, re-centres the wheels and shows or hides the "Counts & heights" bar.
+function updateDown(){
+  const sc=document.querySelector('#tpanel .fscroll'),bar=$('#tdown');if(!sc||!bar||tcur==null)return;
+  bar.classList.toggle('on',showMI(frame(tcur))&&sc.scrollHeight-sc.scrollTop-sc.clientHeight>40);
+}
+function fitFrame(ch=[]){
+  const p=$('#tpanel');ch.forEach(([e,on])=>e.classList.toggle('on',on));
+  if(!p||!p.querySelector('.fbodywrap')||!$('#tsheet').classList.contains('open'))return;
+  const relayout=()=>{p.querySelectorAll('.wscroll').forEach(w=>w.dispatchEvent(new Event('relayout')));updateDown()};
+  relayout();
+  if(ch.length){clearTimeout(ffT);ffT=setTimeout(relayout,500)}
+}
+$('#tpanel').addEventListener('scroll',e=>{if(e.target.classList&&e.target.classList.contains('fscroll'))updateDown()},true);
 window.addEventListener('resize',()=>fitFrame());
 window.addEventListener('orientationchange',()=>setTimeout(fitFrame,250));
 function mountFrame(n){ // full render (first open)
   prepFrame(n);
   const panel=$('#tpanel');
-  panel.innerHTML=`<div class="fhead">${headHtml(n)}</div><div class="fbodywrap"><div class="fbody">${bodyHtml(n)}</div></div><div class="fnav">${navHtml(n)}</div>`;
+  panel.innerHTML=`<div class="fhead">${headHtml(n)}</div><div class="fbodywrap"><div class="fscroll"><div class="fbody">${bodyHtml(n)}</div></div><button id="tdown" class="dnbar" aria-label="Scroll down to counts and heights">${SV('<path d="M12 4v15M6 13l6 6 6-6"/>')}Counts &amp; heights${SV('<path d="M12 4v15M6 13l6 6 6-6"/>')}</button></div><div class="fnav">${navHtml(n)}</div>`;
   panel.scrollTop=0;$('#tsheet').classList.add('open');
   initWheels(panel);fitFrame();refreshT();
 }
@@ -1299,17 +1321,17 @@ function updateHead(n,dir){
 }
 // only the entry card slides: the old card moves off one side while the new one comes in from the other
 function goFrame(n,dir){
-  const panel=$('#tpanel'),wrap=panel.querySelector('.fbodywrap'),body=wrap.querySelector('.fbody:not(.leaving)');
+  const panel=$('#tpanel'),wrap=panel.querySelector('.fbodywrap'),sc=wrap.querySelector('.fscroll'),body=sc.querySelector('.fbody');
   wrap.querySelectorAll('.fbody.leaving').forEach(x=>x.remove());
   const anim=!reduceMotion();let ghost=null;
   if(anim){
     body.querySelectorAll('input').forEach(el=>el.setAttribute('value',el.value));
     ghost=body.cloneNode(true);ghost.classList.add('leaving');ghost.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));
-    Object.assign(ghost.style,{width:body.offsetWidth+'px',height:body.offsetHeight+'px'});
+    Object.assign(ghost.style,{width:body.offsetWidth+'px',height:body.offsetHeight+'px',left:'2px',top:(2-sc.scrollTop)+'px'});
     wrap.appendChild(ghost);
     const os=body.querySelectorAll('.wscroll'),gs=ghost.querySelectorAll('.wscroll');gs.forEach((g,i)=>{g.scrollTop=os[i].scrollTop});
   }
-  prepFrame(n);body.innerHTML=bodyHtml(n);initWheels(body);updateHead(n,dir);fitFrame();refreshT();
+  sc.scrollTop=0;prepFrame(n);body.innerHTML=bodyHtml(n);initWheels(body);updateHead(n,dir);fitFrame();refreshT();
   if(!anim)return;
   const D=wrap.clientWidth+16,opt={duration:440,easing:'cubic-bezier(.4,0,.2,1)'};
   ghost.animate([{transform:'translateX(0)'},{transform:`translateX(${-dir*D}px)`}],{...opt,fill:'forwards'}).onfinish=()=>ghost.remove();
@@ -1326,6 +1348,7 @@ function slideCards(panel,sheet,mount,dir){
   ghost.removeAttribute('id');ghost.classList.add('ghost');ghost.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));
   Object.assign(ghost.style,{position:'fixed',left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',margin:'0',pointerEvents:'none',zIndex:'7'});
   sheet.appendChild(ghost);
+  {const os=panel.querySelectorAll('.wscroll'),gs=ghost.querySelectorAll('.wscroll');gs.forEach((g,i)=>{g.scrollTop=os[i].scrollTop})}
   mount();
   const D=r.width+24,opt={duration:340,easing:'cubic-bezier(.4,0,.2,1)'};
   ghost.animate([{transform:'translateX(0)'},{transform:`translateX(${-dir*D}px)`}],{...opt,fill:'forwards'}).onfinish=()=>ghost.remove();
@@ -1340,8 +1363,8 @@ function openFrame(n,dir){
 }
 function doResetT(){
   const s=TS(),n=Object.values(s.frames).filter(tHas).length;
-  if(!confirmTwice(`Reset the transect?\n\nThis erases all ${n} entered frame${n===1?'':'s'} in "${s.name}" (${s.site||'no site'}, ${s.date}). Name, site, date and observers are kept.`,
-    'Are you sure?\n\nThis cannot be undone with the Undo button. A backup copy is saved first (Grid > Sessions > Restore from backup copy).'))return;
+  if(!confirmTwice(`Reset the transect?\n\nThis erases all ${n} entered frame${n===1?'':'s'} in "${s.site||'no site'}" (${s.date}). Site, date and observers are kept.`,
+    'Are you sure?\n\nThis cannot be undone with the Undo button. A backup copy is saved first (Grids > Backup & more > Restore from backup copy).'))return;
   backupNow(true);
   s.frames={};Object.keys(tundo).forEach(k=>{if(k.startsWith(db.tcur+':'))delete tundo[k]});
   save();closeFrame();renderT('pop');toast('Transect reset: all frames cleared.');
@@ -1400,7 +1423,7 @@ $('#tpanel').addEventListener('click',e=>{
   const f=frame(tcur);
   if(b.dataset.tk){
     const k=b.dataset.tk;tpush();f[k]=fit(k,(f[k]??0)+Number(b.dataset.d));f.done=false;
-    const inp=b.closest('.fc').querySelector('input.fin');inp.value=f[k];flash(inp);save();refreshT();renderT();
+    syncWheel(b.closest('.fc'),f[k]);save();refreshT();renderT();
   }else if(b.dataset.tchip!==undefined){
     const nm=b.dataset.tchip,slot=f.ow.find(w=>!w.n.trim());
     if(!slot&&f.ow.length>=5){toast('This frame already has 5 other weeds. Remove one first.');return}
@@ -1408,15 +1431,15 @@ $('#tpanel').addEventListener('click',e=>{
     f.done=false;save();refreshBody();
   }else if(b.dataset.tset){
     const k=b.dataset.tset;tpush();f[k]=Number(b.dataset.v);f.done=false;
-    const inp=b.closest('.fc').querySelector('input.fin');inp.value=f[k];flash(inp);save();refreshT();renderT();
+    syncWheel(b.closest('.fc'),f[k]);save();refreshT();renderT();
   }else if(b.dataset.twk){
     const i=Number(b.dataset.twk),w=f.ow[i];tpush();w.v=fit('ow',(w.v??0)+Number(b.dataset.d));f.done=false;
-    const inp=b.closest('.fc').querySelector('input.fin');inp.value=w.v;flash(inp);save();refreshT();renderT();
+    syncWheel(b.closest('.fc'),w.v);save();refreshT();renderT();
   }else if(b.dataset.trest||b.dataset.trestw!==undefined){
     tpush();const isW=b.dataset.trestw!==undefined,key=isW?b.dataset.trestw:b.dataset.trest;
     const r=restOf(f,isW?'w:'+key:'k:'+key),v=Math.max(0,r);
     if(isW)f.ow[Number(key)].v=v;else f[key]=v;f.done=false;
-    const inp=b.closest('.fc').querySelector('input.fin');inp.value=v;flash(inp);save();refreshT();renderT();
+    syncWheel(b.closest('.fc'),v);save();refreshT();renderT();
     if(r<0)toast('The other cover boxes already add up to '+(100-r)+', more than 100.');
   }else if(b.dataset.towdel!==undefined){
     tpush();f.ow.splice(Number(b.dataset.towdel),1);if(!f.ow.length)f.ow.push({n:'',v:null});f.done=false;save();refreshBody();
@@ -1429,6 +1452,7 @@ $('#tpanel').addEventListener('click',e=>{
   else if(b.id==='tprev'){if(tcur>1)openFrame(tcur-1,-1)}
   else if(b.id==='tnext'){if(tcur<10)openFrame(tcur+1,1)}
   else if(b.id==='tundoTop')tdoUndo();
+  else if(b.id==='tdown'){const sc=$('#tpanel .fscroll'),rv=$('#rvMI');if(sc&&rv)sc.scrollTo({top:sc.scrollTop+rv.getBoundingClientRect().top-sc.getBoundingClientRect().top-4,behavior:reduceMotion()?'auto':'smooth'})}
   else if(b.id==='tnotes')openNotesPop(b);
   else if(b.id==='tclr'){tpush();Object.assign(f,Object.fromEntries(TKEYS.map(k=>[k,null])),{dm:'',nt:'',done:false,ow:f.ow.map(w=>({n:w.n,v:null}))});save();refreshBody();updateHead(tcur,0);refreshT()}
   else if(b.id==='tdone'){
@@ -1440,7 +1464,7 @@ $('#tpanel').addEventListener('click',e=>{
       if(missing.length)toast('Frame'+(missing.length>1?'s ':' ')+missing.join(', ')+' not marked done yet.');
       else (async()=>{
         if(confirm('Transect complete! Export a backup CSV now?'))await exportT();
-        toast(`${TS().name} complete`);show('tlist',TS().id);   // back to the transect list, with this one marked complete
+        toast(`${TS().site||'Transect'} complete`);show('tlist',TS().id);   // back to the transect list, with this one marked complete
       })();
     }
   }
@@ -1487,40 +1511,68 @@ function renderTList(hi){
     const obs=[s.obs1,s.obs2].filter(Boolean).join(' & ');
     return `<div class="tlc ${st}${s.id===hi?' hi':''}${s.id===db.tcur?' cur':''}" style="--i:${i}">
       <button class="tlopen" data-open="${s.id}">
-        <span class="tlhead"><b>${esc(s.name||'Transect')}</b><span class="tlbadge">${st==='done'?'✓ Complete':st==='prog'?'In progress':'Not started'}</span></span>
-        <span class="tlsub">${esc(s.site||'(no site)')} · ${esc(fmtDate(s.date))}${obs?' · '+esc(obs):''}</span>
+        <span class="tlhead"><b>${esc(s.site||'(no site)')}</b><span class="tlbadge">${st==='done'?'✓ Complete':st==='prog'?'In progress':'Not started'}</span></span>
+        <span class="tlsub">${esc(fmtDate(s.date))}${obs?' · '+esc(obs):''}</span>
         <span class="tlstrip">${dots}</span>
         <span class="tlprog"><small>${done} of 10 frames done</small></span>
       </button>
-      <button class="tldel" data-del="${s.id}" aria-label="Delete ${esc(s.name||'transect')}">${TRASH}</button></div>`;
+      <button class="tldel" data-del="${s.id}" aria-label="Delete transect ${esc(s.site||'')}">${TRASH}</button></div>`;
   }).join('');
 }
 $('#tlcards').addEventListener('click',e=>{
   const del=e.target.closest('[data-del]'),op=e.target.closest('[data-open]');
   if(del){
     const s=db.tsessions[del.dataset.del];if(!s)return;
-    if(!confirm(`Delete "${s.name}" and all of its frames?\n\nA backup copy is saved first.`))return;
+    if(!confirm(`Delete "${s.site||'(no site)'}" and all of its frames?\n\nA backup copy is saved first.`))return;
     backupNow(true);delete db.tsessions[s.id];if(db.tcur===s.id)db.tcur=Object.keys(db.tsessions)[0]||null;save(false);renderTList();
   }else if(op){db.tcur=op.dataset.open;save(false);show('tapp')}
 });
 $('#tlNew').onclick=startNewT;
 $('#tlBack').onclick=()=>show('menu');
 
+// ---- the grid list: every grid, done or not ----
+function renderGList(hi){
+  const box=$('#glcards'),list=Object.values(db.sessions).sort((a,b)=>Number(String(b.id).slice(1))-Number(String(a.id).slice(1)));
+  if(!list.length){box.innerHTML=`<div class="tlempty">No grids yet.<br>Tap <b>＋ New grid</b> to start one.</div>`;return}
+  box.innerHTML=list.map((s,i)=>{
+    const cs=s.cells,done=Object.values(cs).filter(c=>c.done).length,started=Object.values(cs).some(c=>c.done||touched(c)||c.n),st=done>=N?'done':started?'prog':'new';
+    const obs=[s.obs1,s.obs2].filter(Boolean).join(' & ');
+    return `<div class="tlc g ${st}${s.id===hi?' hi':''}${s.id===db.cur?' cur':''}" style="--i:${i}">
+      <button class="tlopen" data-open="${s.id}">
+        <span class="tlhead"><b>${esc(s.site||'(no site)')}</b><span class="tlbadge">${st==='done'?'✓ Complete':st==='prog'?'In progress':'Not started'}</span></span>
+        <span class="tlsub">${esc(fmtDate(s.date))}${obs?' · '+esc(obs):''}</span>
+        <span class="glbar"><i style="width:${done}%"></i></span>
+        <span class="tlprog"><small>${done} of ${N} cells done</small></span>
+      </button>
+      <button class="tldel" data-del="${s.id}" aria-label="Delete grid ${esc(s.site||'')}">${TRASH}</button></div>`;
+  }).join('');
+}
+$('#glcards').addEventListener('click',e=>{
+  const del=e.target.closest('[data-del]'),op=e.target.closest('[data-open]');
+  if(del){
+    const s=db.sessions[del.dataset.del];if(!s)return;
+    if(!confirm(`Delete the grid "${s.site||'(no site)'}" (${s.date}) and all of its cells?\n\nA backup copy is saved first.`))return;
+    backupNow(true);delete db.sessions[s.id];if(db.cur===s.id)db.cur=Object.keys(db.sessions)[0]||null;save(false);renderGList();
+  }else if(op){db.cur=op.dataset.open;save(false);show('app')}
+});
+$('#glNew').onclick=()=>{newSession();show('app');setTimeout(()=>{if(!$('#app').hidden)hdr('G',true)},480)};   // ask for the site and observers straight away
+$('#glBack').onclick=()=>show('menu');
+
 function tcsv(s){
   const fr=Object.entries(s.frames).filter(([n,f])=>tHas(f));
   const nw=Math.max(1,...fr.map(([n,f])=>f.ow.length));
   const wh=Array.from({length:nw},(_,i)=>[`other${i+1}_name`,`other${i+1}_pct`]).flat();
-  const rows=[['transect','site','date','obs1','obs2','frame','distance_m','target','other_total',...wh,'forb','shrub','grass','ground','litter','moss','total','damage','mature_count','immature_count','mature_tall','mature_short','mature_avg','immature_tall','immature_short','immature_avg','notes']];
+  const rows=[['site','date','obs1','obs2','frame','distance_m','target','other_total',...wh,'forb','shrub','grass','ground','litter','moss','total','damage','mature_count','immature_count','mature_tall','mature_short','mature_avg','immature_tall','immature_short','immature_avg','notes']];
   for(let n=1;n<=10;n++){
     const f=s.frames[n];if(!f||!tHas(f))continue;
     const wv=Array.from({length:nw},(_,i)=>f.ow[i]?[f.ow[i].n,f.ow[i].v??'']:['','']).flat();
     const any=f.ow.some(w=>w.v!=null);
-    rows.push([s.name,s.site,s.date,s.obs1,s.obs2,n,frameM(n),f.ct??'',any?f.ow.reduce((a,w)=>a+(w.v??0),0):'',...wv,f.cf??'',f.cs??'',f.cg??'',f.cd??'',f.cl??'',f.cm??'',covTot(f)??'',dmSet(f)?f.dm:'',f.nm??'',f.ni??'',f.mt??'',f.ms??'',f.ma??'',f.it??'',f.is??'',f.ia??'',f.nt||'']);
+    rows.push([s.site,s.date,s.obs1,s.obs2,n,frameM(n),f.ct??'',any?f.ow.reduce((a,w)=>a+(w.v??0),0):'',...wv,f.cf??'',f.cs??'',f.cg??'',f.cd??'',f.cl??'',f.cm??'',covTot(f)??'',dmSet(f)?f.dm:'',f.nm??'',f.ni??'',f.mt??'',f.ms??'',f.ma??'',f.it??'',f.is??'',f.ia??'',f.nt||'']);
   }
   return rows.map(r=>r.map(q).join(',')).join('\n');
 }
 async function exportT(){
-  const s=TS(),name=`transect_${(s.name||'transect').replace(/\W+/g,'_')}_${(s.site||'site').replace(/\W+/g,'_')}_${s.date}.csv`;
+  const s=TS(),name=`transect_${(s.site||'site').replace(/\W+/g,'_')}_${s.date}.csv`;
   const file=new File([tcsv(s)],name,{type:'text/csv'});
   try{
     if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:name});return}
@@ -1539,7 +1591,7 @@ function updateSum(w){
   const s=w==='G'?db.sessions[db.cur]:db.tsessions[db.tcur];if(!s)return;   // never create a session just to refresh a label
   const obs=[s.obs1,s.obs2].filter(Boolean).join(' & ');
   const ic=p=>`<svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`;
-  const first=w==='T'?`<b>${esc(s.name||'Transect')}</b>${s.site?`<i class="sm">· ${esc(s.site)}</i>`:''}`:(s.site?`<b>${esc(s.site)}</b>`:'<i>Add site</i>');
+  const first=s.site?`<b>${esc(s.site)}</b>`:'<i>Add site</i>';
   $('#hsum'+w).innerHTML=`<span class="hs">${ic('<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2"/>')}${first}</span>`
    +`<span class="hs">${ic('<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/>')}${esc(fmtDate(s.date))}</span>`
    +`<span class="hs">${ic('<circle cx="9" cy="9" r="3"/><path d="M3.5 20c.6-3 3-5 5.5-5s4.9 2 5.5 5"/><circle cx="17" cy="10" r="2.4"/><path d="M16.5 15c2.2.2 3.8 1.8 4.2 4"/>')}${obs?esc(obs):'<i>Add observers</i>'}</span>`
@@ -1558,7 +1610,7 @@ function hdr(w,open){
 document.addEventListener('keydown',e=>{if(e.key==='Escape')['G','T'].forEach(w=>hdr(w,false))});
 ['#sheet','#tsheet'].forEach(s=>new MutationObserver(syncLock).observe($(s),{attributes:true,attributeFilter:['class']}));
 // Site / observer boxes: keyboard for finger taps only (Pencil taps keep it hidden, Scribble still works)
-['site','obs1','obs2','tname','tsite','tobs1','tobs2'].forEach(id=>{
+['site','obs1','obs2','tsite','tobs1','tobs2'].forEach(id=>{
   const el=$('#'+id);el.classList.add('kb');
   el.addEventListener('pointerdown',e=>{
     const finger=e.pointerType==='touch'||e.pointerType==='mouse';
