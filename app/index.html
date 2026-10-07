@@ -117,8 +117,8 @@ textarea{width:100%;min-height:90px;resize:vertical}
 @media(max-width:700px){.ctr{grid-template-columns:1fr}}
 /* ---- compact site / date / observer bar and its drop-down ---- */
 .bar #prog,.bar #tprog{white-space:nowrap}
-.hsumbar{flex:1 1 290px;min-width:0;display:flex;align-items:center;gap:16px;padding:8px 14px;text-align:left;font-weight:700;font-size:15px;border-radius:14px;overflow:hidden}
-.hs{display:inline-flex;align-items:center;gap:7px;min-width:0;white-space:nowrap}
+.hsumbar{flex:1 1 380px;min-width:340px;display:flex;align-items:center;gap:16px;padding:8px 14px;text-align:left;font-weight:700;font-size:15px;border-radius:14px;overflow:hidden}
+.hs{display:inline-flex;align-items:center;gap:7px;min-width:0;white-space:nowrap;flex:0 0 auto}
 .hs:first-child{flex:1 1 0;min-width:70px}
 .hs b{overflow:hidden;text-overflow:ellipsis;font-weight:700}
 .hs i{font-style:normal;color:var(--mute);font-weight:600}
@@ -233,65 +233,18 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .tn.cur{transform:scale(1.1)}
 .fhead{display:flex;flex-direction:column;gap:5px}
 .fbodywrap{position:relative;overflow:hidden;display:flex;flex-direction:column;flex:0 0 auto}
-.fbody{display:flex;flex-direction:column;gap:5px;will-change:transform,opacity}
-.fbody.leaving{position:absolute;left:0;top:0}
 .fnav{position:sticky;bottom:0;z-index:4;background:var(--bg);padding-top:6px;margin-top:auto}
 /* when the screen is short (iPad mini / landscape) the frame form shrinks step by step until it fits */
-.panel.wide.c1 .tf input:not(.wn){min-height:50px;font-size:28px}
-.panel.wide.c1 .tf .tb button{height:30px}
-.panel.wide.c1 .tf{padding:4px 6px;gap:4px}
-.panel.wide.c1 .tn{width:26px;height:26px;font-size:13px}
-.panel.wide.c1 .tsec h3{margin-bottom:2px}
-.panel.wide.c2 .tf input:not(.wn){min-height:42px;font-size:24px}
-.panel.wide.c2 .tf .tb button{height:26px;font-size:20px}
-.panel.wide.c2 .hintsm{display:none}
-.panel.wide.c2 .tm{padding:2px 0 7px;font-size:11px}
-.panel.wide.c2 .ph h2{font-size:20px}
-.panel.wide.c2 .dmh button{width:34px;height:34px;font-size:18px}
-.panel.wide.c3 .tf input:not(.wn){min-height:34px;font-size:20px}
-.panel.wide.c3 .tf .tb button{height:22px;font-size:17px}
-.panel.wide.c3 .tf .tl{font-size:11px}
-.panel.wide.c3 .tf{gap:3px;padding:3px 5px}
-.panel.wide.c3 .trl{font-size:12px}
-.panel.wide.c3 .tinyadd{padding:2px 8px;font-size:12px}
 #tpanel{touch-action:pan-y}
 .panel.wide{max-width:1400px;padding:8px 12px;gap:5px;max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px)}
 #tsheet{padding:8px 8px max(8px,env(safe-area-inset-bottom))}
 .tsec h3{margin:0 0 4px;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
-.tcov{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
-.tmx{display:grid;grid-template-columns:96px repeat(4,minmax(0,1fr));gap:8px;align-items:stretch}
-.tmx .th{align-self:end;text-align:center;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
-.trl{display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--c);color:#fff;font-weight:800;font-size:15px;text-transform:uppercase;text-align:center}
-.tf{--c:var(--line);display:flex;flex-direction:column;gap:5px;padding:6px 8px;border-radius:14px;border:3px solid var(--c);background:var(--card);background:color-mix(in srgb,var(--c) 12%,var(--card))}
-.tf .tl{background:var(--c);color:#fff;border-radius:7px;padding:3px 6px;text-align:center;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
-.tf .tl:empty{display:none}
-.tf input{width:100%;min-width:0;text-align:center;font-size:32px;font-weight:800;min-height:62px;padding:2px 2px;border:3px solid var(--c);caret-color:transparent}
-.tf input[data-ttext]{font-size:20px}
-.tf .tb{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.tf.nb input{flex:1;font-size:36px}
-.tf .tb.rest{grid-template-columns:1fr 1fr 1.6fr}
-.tf .tb.tgt{grid-template-columns:1fr 1fr 1.1fr 1.2fr}
-.tf .tb button.rb{font-size:15px;letter-spacing:0;background:var(--c);color:#fff;border-color:var(--c)}
 .tdm{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .tdm button{height:46px;padding:0;font-size:26px;font-weight:800;border-color:var(--c);color:var(--c)}
 .tdm button.on{background:var(--c);color:#fff}
-.tf .tb button{height:34px;padding:0;font-size:18px;line-height:1;display:inline-flex;align-items:center;justify-content:center;border-color:var(--c);color:var(--t,var(--c));font-weight:800}
-.tf .tb button svg,.ctl .row button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:3.2;stroke-linecap:round;pointer-events:none}
 .ctl .row button svg{width:26px;height:26px}
 .ctl .row button{display:inline-flex;align-items:center;justify-content:center}
 /* every box in a row lines up: equal label bars, the number box absorbs any spare height, buttons sit at the bottom */
-.tf>input{flex:1 1 auto}
-.tf .tl{display:flex;align-items:center;justify-content:center;min-height:var(--lh,28px);padding:0 6px}
-.tf .tl.wl{padding:0}
-.tf .tl.wl input.wn{height:var(--lh,28px);min-height:var(--lh,28px)}
-.panel.wide.c1{--lh:26px}.panel.wide.c2{--lh:24px}.panel.wide.c3{--lh:20px}
-.tf[data-g=tg]{--c:#d99e00;--t:#6b4a00;border-width:4px;background:color-mix(in srgb,#f2b705 22%,var(--card))}
-.tf[data-g=tg] .tl{background:#f2b705;color:#1d1500;font-size:15px}
-.tf[data-g=tg] input{font-size:38px}
-.tf[data-g=tg] .tb button{color:var(--t)}
-.tf[data-g=tg] .tb button.rb{background:#f2b705;border-color:#d99e00;color:#1d1500}.tf[data-g=pl]{--c:#3a8a4b}.tf[data-g=gr]{--c:#8a5a2b}.tf[data-g=dm]{--c:#b3201f}
-.tf[data-g=mat]{--c:#0a6c76}.tf[data-g=imm]{--c:#b85600}
-.trl[data-g=mat]{--c:#0a6c76}.trl[data-g=imm]{--c:#b85600}
 .hsum{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
 .hb{display:flex;gap:8px;align-items:center}
 .tph{flex-wrap:wrap}
@@ -299,16 +252,6 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .ttchip b{font-size:26px}.ttchip .ts{font-size:13px;font-weight:700;color:var(--mute)}
 .ttchip.ok{--c:#1b6b2a}.ttchip.bad{--c:#b8860b}
 .ttchip.ok .ts{color:#1b6b2a}.ttchip.bad .ts{color:#8a6d0f}
-.dmh{--c:#b3201f;display:flex;align-items:center;gap:6px}
-.dmh span{font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--c)}
-.dmh button{width:40px;height:40px;padding:0;font-size:22px;font-weight:800;border-color:var(--c);color:var(--c)}
-.dmh button.on{background:var(--c);color:#fff}
-.tl.wl{position:relative;padding:0;background:transparent;text-transform:none}
-.tf .tl input.wn{display:block;background:#fff;border:2px solid transparent;color:#111;border-radius:7px;font-size:15px;font-weight:700;letter-spacing:0;text-transform:none;text-align:left;min-height:32px;height:32px;padding:2px 10px;width:100%;caret-color:transparent}
-.tl.wl.hasx input.wn{padding-right:34px}
-.tf .tl input.wn::placeholder{color:#59655c;font-weight:600}
-.tf .tl input.wn:focus{border-color:#ffd54a;outline:none}
-.tl.wl .xk{width:26px;height:26px;margin-top:-13px;right:4px;color:#3b463e;background:rgba(0,0,0,.07)}
 .chips{display:flex;align-items:center;gap:6px;flex:1;min-width:0;margin:0 12px;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
 .chips .seen{font-size:12px;font-weight:800;color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
@@ -344,6 +287,132 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 #app.fit #grid{grid-template-columns:repeat(10,var(--ch,60px));justify-content:center}
 #app.fit .cell{aspect-ratio:1;width:var(--ch);height:var(--ch);font-size:calc(var(--ch)*.4)}
 #app.fit .cell small{font-size:calc(var(--ch)*.24)}
+
+/* ===== transect frame entry screen (v2): static header, one sliding entry card ===== */
+@property --bh{syntax:'<length>';inherits:true;initial-value:44px}
+@property --wr{syntax:'<length>';inherits:true;initial-value:32px}
+@property --lh{syntax:'<length>';inherits:true;initial-value:28px}
+.panel.wide{--bh:44px;--wr:32px;--lh:28px;transition:--bh .45s cubic-bezier(.2,.85,.25,1),--wr .45s cubic-bezier(.2,.85,.25,1),--lh .45s cubic-bezier(.2,.85,.25,1)}
+.panel.wide.nofit,.panel.wide.nofit *{transition:none!important}
+.fin,.fl,.fsc button,.fc{transition:font-size .45s cubic-bezier(.2,.85,.25,1),height .45s cubic-bezier(.2,.85,.25,1),padding .45s cubic-bezier(.2,.85,.25,1),gap .45s cubic-bezier(.2,.85,.25,1)}
+.panel.wide.c1{--bh:38px;--wr:29px;--lh:26px}
+.panel.wide.c2{--bh:32px;--wr:26px;--lh:24px}
+.panel.wide.c3{--bh:28px;--wr:23px;--lh:20px}
+.roll{display:inline-block}
+@property --p{syntax:'<percentage>';inherits:true;initial-value:0%}
+.ttl{transition:--p .55s cubic-bezier(.3,1.1,.4,1)}
+.tpin{transition:left .55s cubic-bezier(.3,1.25,.4,1)}
+.tn{transition:transform .3s cubic-bezier(.3,1.4,.5,1),background .3s,border-color .3s}
+.dmb button{transition:background .25s,color .25s,transform .2s,height .45s cubic-bezier(.2,.85,.25,1),font-size .45s cubic-bezier(.2,.85,.25,1)}
+.dmb button.on{transform:scale(1.06)}
+.dmrow{display:flex;align-items:stretch}
+.dmrow>.fc{flex:1 1 0;margin-left:8px;flex-direction:row;align-items:center;padding:6px 8px}
+.dmb{flex:1;display:flex;gap:8px}
+.dmb button{flex:1;height:46px;padding:0;font-size:24px;font-weight:800;border-radius:12px;border:3px solid var(--c);color:var(--c)}
+.dmb button.on{background:var(--c);color:#fff}
+.fbody{display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:20px;border:2px solid var(--line);background:color-mix(in srgb,var(--card) 60%,var(--bg));box-shadow:0 3px 12px rgba(0,0,0,.08);will-change:transform}
+.fbody.leaving{position:absolute;left:0;top:0;pointer-events:none}
+.fbodywrap{padding:2px 2px 6px}
+.tcov{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.fc{--c:var(--line);display:flex;flex-direction:column;gap:6px;padding:6px 8px 8px;border-radius:16px;border:3px solid var(--c);background:var(--card);background:color-mix(in srgb,var(--c) 11%,var(--card));min-width:0}
+.fl{position:relative;display:flex;align-items:center;justify-content:center;min-height:var(--lh);padding:0 8px;border-radius:8px;background:var(--c);color:#fff;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;text-align:center}
+.fbx{display:flex;gap:8px;align-items:stretch;flex:1 1 auto}
+.fpm{display:flex;flex-direction:column;gap:6px}
+.fpm button{width:var(--bh);height:var(--bh);padding:0;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;border-color:var(--c);color:var(--t,var(--c))}
+.fpm button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:3.2;stroke-linecap:round;pointer-events:none}
+.fin{flex:1 1 auto;min-width:0;width:100%;text-align:center;font-size:34px;font-weight:800;min-height:calc(var(--bh)*2 + 6px);padding:2px;border:3px solid var(--c);border-radius:12px;caret-color:transparent}
+.fsc{display:flex;gap:6px}
+.fsc button{flex:1;height:34px;padding:0;font-size:15px;font-weight:800;border-radius:10px;background:var(--c);color:#fff;border-color:var(--c);display:inline-flex;align-items:center;justify-content:center}
+.fc[data-g=tg]{--c:#d99e00;--t:#6b4a00;border-width:4px;background:color-mix(in srgb,#f2b705 22%,var(--card))}
+.fc[data-g=tg] .fl{background:#f2b705;color:#1d1500;font-size:15px}
+.fc[data-g=tg] .fsc button{background:#f2b705;border-color:#d99e00;color:#1d1500}
+.fc[data-g=tg] .fin{font-size:42px}
+.fc[data-g=pl]{--c:#3a8a4b}.fc[data-g=gr]{--c:#8a5a2b}.fc[data-g=mat]{--c:#0a6c76}.fc[data-g=imm]{--c:#b85600}.fc[data-g=dm]{--c:#b3201f}
+/* other-weed name bar: tap to open the big write-in panel */
+.fl.wl{padding:0;background:transparent;text-transform:none}
+.fl.wl input.wn{display:block;width:100%;height:var(--lh);background:#fff;border:2px solid transparent;color:#111;border-radius:8px;font-size:15px;font-weight:700;text-align:left;padding:2px 10px;cursor:pointer;-webkit-user-select:none;user-select:none}
+.fl.wl input.wn::placeholder{color:#59655c;font-weight:600}
+.fl.wl input.wn:active{border-color:#ffd54a}
+.fl.wl.hasx input.wn{padding-right:34px}
+.fl.wl .xk{width:26px;height:26px;margin-top:-13px;right:4px;color:#3b463e;background:rgba(0,0,0,.07)}
+/* scroll wheel (forb / shrub / grass, steps of 5) */
+.wheel{position:relative;flex:1 1 auto;min-height:calc(var(--wr)*3);border-radius:12px;border:3px solid var(--c);background:var(--card);overflow:hidden}
+.wscroll{position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-y;-webkit-mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent);mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent)}
+.wscroll::-webkit-scrollbar{display:none}
+.wi{height:var(--wr);display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-size:calc(var(--wr)*.72);font-weight:800;color:var(--ink);will-change:transform,opacity;cursor:pointer;-webkit-user-select:none;user-select:none}
+.wi[data-v=""]{color:var(--mute)}
+.wband{position:absolute;left:5px;right:5px;top:50%;height:var(--wr);margin-top:calc(var(--wr)/-2);border-radius:10px;background:color-mix(in srgb,var(--c) 16%,transparent);border:2px solid var(--c);pointer-events:none;z-index:1}
+/* mature / immature: appears when target > 0; height boxes appear as the count grows */
+.reveal{display:grid;grid-template-rows:0fr;opacity:0;margin-top:-8px;transition:grid-template-rows .45s cubic-bezier(.2,.85,.25,1),opacity .3s ease,margin-top .45s cubic-bezier(.2,.85,.25,1)}
+.reveal.on{grid-template-rows:1fr;opacity:1;margin-top:0}
+.rvin{overflow:hidden;min-height:0;display:flex;flex-direction:column;gap:8px}
+.mirow{display:flex;align-items:stretch}
+.trl{--c:var(--line);flex:0 0 92px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:var(--c);color:#fff;font-weight:800;font-size:15px;text-transform:uppercase;text-align:center}
+.trl[data-g=mat]{--c:#0a6c76}.trl[data-g=imm]{--c:#b85600}.trl[data-g=dm]{--c:#b3201f}
+.mirow>.cnt{flex:1 1 0;margin-left:8px}
+.hbx{flex:0 0 0;min-width:0;overflow:hidden;opacity:0;transform:scale(.8);margin-left:0;visibility:hidden;transition:flex-grow .42s cubic-bezier(.2,.85,.25,1),margin-left .42s cubic-bezier(.2,.85,.25,1),opacity .3s,transform .42s cubic-bezier(.2,.85,.25,1),visibility 0s .42s}
+.hbx.on{flex:1 1 0;opacity:1;transform:none;margin-left:8px;visibility:visible;transition-delay:0s}
+.hbx>.fc{height:100%;min-width:150px}
+.hbx .fin{min-height:calc(var(--bh)*2 + 6px)}
+.fnav{position:sticky;bottom:0;z-index:4;background:var(--bg);padding-top:6px;margin-top:auto}
+.fnav #tdone{flex:2}
+#tnotes .ndot{display:none;width:9px;height:9px;border-radius:50%;background:#f2b705;margin-left:6px}
+#tnotes.has .ndot{display:inline-block}
+.panel.wide.c1 .fl{font-size:12px}
+.panel.wide.c1 .tsec h3{margin-bottom:2px}
+.panel.wide.c1 .fsc button{height:30px}
+.panel.wide.c2 .hintsm{display:none}
+.panel.wide.c1 .dmb button{height:40px}
+.panel.wide.c2 .dmb button{height:34px;font-size:20px}
+.panel.wide.c3 .dmb button{height:28px;font-size:17px}
+.panel.wide.c2 .fsc button{height:26px;font-size:13px}
+.panel.wide.c2 .fin{font-size:26px}
+.panel.wide.c3 .fl{font-size:11px}
+.panel.wide.c3 .fin{font-size:20px}
+.panel.wide.c3 .fsc button{height:22px;font-size:12px}
+.panel.wide.c3 .tinyadd{padding:2px 8px;font-size:12px}
+.panel.wide.c3 .fc{gap:3px;padding:3px 5px 5px}
+.hpanel header label.span2{grid-column:1/-1}
+.hs i.sm{font-weight:600;margin-left:2px}
+/* ===== write-in pop-out (other weed names, frame notes) ===== */
+.wpop{position:fixed;inset:0;z-index:9;pointer-events:none}
+.wpop.open{pointer-events:auto}
+.wpback{position:absolute;inset:0;background:rgba(0,0,0,.55);opacity:0;transition:opacity .3s;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.wpop.open .wpback{opacity:1}
+.wpcard{position:absolute;left:0;right:0;margin:0 auto;top:max(9%,env(safe-area-inset-top));width:min(780px,92vw);background:var(--bg);border-radius:26px;padding:16px 18px 18px;box-shadow:0 24px 70px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:12px;opacity:0;transform:scale(.5);transition:transform .45s cubic-bezier(.2,.95,.25,1.06),opacity .22s ease}
+.wpop.open .wpcard{opacity:1;transform:none}
+.wptop{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.wptop b{font-size:20px}
+.wpchips{display:flex;flex-wrap:wrap;gap:8px}
+.wpchips button{padding:6px 14px;font-size:16px;border-radius:999px;border-color:#3a8a4b;background:color-mix(in srgb,#3a8a4b 14%,var(--card))}
+.wpin{width:100%;font-size:42px;font-weight:700;min-height:120px;padding:14px 20px;border:3px solid var(--accent);border-radius:20px;background:#fff;color:#111;caret-color:transparent}
+textarea.wpin{min-height:min(44vh,360px);font-size:30px;resize:none;font-weight:600}
+.wpin.typing{caret-color:auto}
+/* ===== transect list screen ===== */
+#tlist{position:fixed;top:0;bottom:0;left:0;right:0;overflow-y:auto;overscroll-behavior:contain;max-width:1180px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 18px max(18px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:16px}
+.tltitle{margin:0;font-size:clamp(22px,3vw,30px);font-weight:800}
+#tlist .bar .sp{flex:1}
+.tlgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;align-content:start}
+.tlc{--c:#0a6c76;position:relative;border-radius:22px;background:var(--card);border:1px solid color-mix(in srgb,var(--line) 40%,transparent);box-shadow:0 1px 2px rgba(0,0,0,.06),0 10px 26px rgba(0,0,0,.08);animation:cardIn .5s cubic-bezier(.34,1.4,.64,1) backwards;animation-delay:calc(var(--i,0)*70ms)}
+.tlc.done{--c:#1b6b2a}
+.tlc.cur{box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 55%,transparent),0 10px 26px rgba(0,0,0,.08)}
+.tlc.hi{animation:cardIn .5s cubic-bezier(.34,1.4,.64,1) backwards,celebrate 1.2s ease-out .4s}
+.tlopen{display:flex;flex-direction:column;gap:12px;width:100%;text-align:left;padding:18px;border:0;background:none;border-radius:22px;color:var(--ink);font-weight:500}
+.tlhead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tlhead b{font-size:22px;font-weight:800}
+.tlbadge{font-size:12px;font-weight:800;padding:4px 11px;border-radius:999px;white-space:nowrap;background:color-mix(in srgb,var(--c) 14%,var(--card));color:color-mix(in srgb,var(--c) 70%,var(--ink))}
+.tlc.done .tlbadge{background:var(--c);color:#fff}
+.tlsub{font-size:14px;font-weight:600;color:var(--mute)}
+.tlstrip{display:flex;gap:5px}
+.tlstrip i{flex:1;height:10px;border-radius:5px;background:color-mix(in srgb,var(--line) 35%,var(--card))}
+.tlstrip i.dn{background:var(--c)}.tlstrip i.pt{background:#f2b705}
+.tlprog small{font-size:13px;font-weight:700;color:var(--mute)}
+.tldel{position:absolute;bottom:12px;right:12px;width:38px;height:38px;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;border-color:transparent;background:transparent;color:var(--mute)}
+.tldel svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.tldel:active{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.tlempty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--mute);font-weight:600;font-size:18px;border:2px dashed var(--line);border-radius:22px}
+@keyframes cardIn{from{opacity:0;transform:translateY(22px) scale(.96)}}
+@keyframes celebrate{0%,100%{box-shadow:0 0 0 0 rgba(27,107,42,0)}30%{box-shadow:0 0 0 10px rgba(27,107,42,.35)}}
 </style>
 </head>
 <body>
@@ -402,17 +471,16 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 
 <div id="tapp" class="view" hidden>
   <div class="bar">
-    <button id="tMenu">‹ Menu</button><span id="tprog"></span>
+    <button id="tMenu">‹ Transects</button><span id="tprog"></span>
     <button class="hsumbar" id="hsumT" aria-expanded="false" aria-controls="hoverT"></button>
-    <button id="tNew">＋ New transect</button>
     <button id="tResetBtn" class="danger ib" aria-label="Reset transect" title="Reset transect"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/></svg>Reset</button>
-    <button id="tSessions">Sessions</button>
     <button id="tExport" class="pri ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>Export CSV</button>
   </div>
   <div class="hover" id="hoverT" aria-hidden="true">
     <div class="hback" data-close></div>
     <div class="hpanel" role="dialog" aria-label="Site, date and observers">
       <header>
+        <label class="span2">Transect name<input id="tname" autocomplete="off" inputmode="none"></label>
         <label>Site<input id="tsite" autocomplete="off" inputmode="none"></label>
         <label>Date<input id="tdate" type="date"></label>
         <label>Observer 1<input id="tobs1" autocomplete="off" inputmode="none"></label>
@@ -428,6 +496,20 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
   <footer class="foot"></footer>
 </div>
 
+<div id="tlist" class="view" hidden>
+  <div class="bar"><button id="tlBack">‹ Menu</button><h1 class="tltitle">Transects</h1><span class="sp"></span><button class="pri ib" id="tlNew">＋ New transect</button></div>
+  <div id="tlcards" class="tlgrid"></div>
+  <footer class="foot"></footer>
+</div>
+<div id="pop" class="wpop" aria-hidden="true">
+  <div class="wpback" data-pclose></div>
+  <div class="wpcard" role="dialog">
+    <div class="wptop"><b id="popTitle"></b><button class="pri" data-pclose>Done</button></div>
+    <div class="wpchips" id="popChips" hidden></div>
+    <input id="popLine" class="wpin" autocomplete="off" autocorrect="off" inputmode="none">
+    <textarea id="popArea" class="wpin" autocomplete="off" autocorrect="off" inputmode="none" hidden></textarea>
+  </div>
+</div>
 <div id="toast"></div>
 <datalist id="weedlist"></datalist>
 <div id="sheet"><div class="panel" id="panel"></div></div>
@@ -435,7 +517,7 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" hidden>
 
 <script>
-const N=100, KEY='grids.v1', VERSION='1.17.4';
+const N=100, KEY='grids.v1', VERSION='1.18.0';
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.sessions)db={cur:null,sessions:{}};
@@ -448,8 +530,9 @@ function migrate(d){
   d.tsessions=d.tsessions||{};
   Object.values(d.tsessions).forEach(s=>Object.values(s.frames||{}).forEach(f=>{
     if(!Array.isArray(f.ow))f.ow=[{n:'',v:f.co??null}];delete f.co;
-    TKEYS.forEach(k=>{if(f[k]===undefined)f[k]=null});if(f.dm===undefined)f.dm='';
+    TKEYS.forEach(k=>{if(f[k]===undefined)f[k]=null});if(f.dm===undefined)f.dm='';if(f.nt===undefined)f.nt='';
   }));
+  Object.values(d.tsessions).sort((a,b)=>String(a.id).localeCompare(String(b.id))).forEach((s,i)=>{if(!s.name)s.name='Transect '+(i+1)});
   Object.values(d.sessions).forEach(s=>{
     if(s.obs!==undefined){s.obs1=s.obs;delete s.obs}
     s.obs1=s.obs1||'';s.obs2=s.obs2||'';
@@ -693,7 +776,7 @@ $('#btnSessions').onclick=showSessions;
 // ---------- hidden backup copy (IndexedDB) ----------
 let backupReady=false,lastSnap=0,bt=null;
 const idb=()=>new Promise((res,rej)=>{const r=indexedDB.open('grids-backup',1);r.onupgradeneeded=()=>r.result.createObjectStore('snap',{keyPath:'id'});r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
-const tHas=f=>f.done||TKEYS.some(k=>f[k]!=null)||!!f.dm||(f.ow||[]).some(w=>w.v!=null);
+const tHas=f=>f.done||TKEYS.some(k=>f[k]!=null)||(f.dm!==''&&f.dm!=null)||!!f.nt||(f.ow||[]).some(w=>w.v!=null);
 const hasData=d=>Object.values(d.sessions||{}).some(s=>Object.values(s.cells||{}).some(c=>c.done||touched(c)||c.n))||Object.values(d.tsessions||{}).some(s=>Object.values(s.frames||{}).some(tHas));
 const countCells=d=>Object.values(d.sessions||{}).reduce((n,s)=>n+Object.values(s.cells||{}).filter(c=>c.done||touched(c)||c.n).length,0)+Object.values(d.tsessions||{}).reduce((n,s)=>n+Object.values(s.frames||{}).filter(tHas).length,0);
 function queueBackup(force){if(!backupReady)return;clearTimeout(bt);bt=setTimeout(()=>backupNow(force),force?0:(Date.now()-lastPadAct<4000?6000:1500))}
@@ -803,13 +886,14 @@ $('#btnReset').onclick=doResetGrid;
 // =====================================================================
 // Main menu + Transect (SIMP) data sheet
 // =====================================================================
-function show(view){
-  ['G','T'].forEach(w=>hdr(w,false));
-  ['menu','app','tapp'].forEach(id=>$('#'+id).hidden=id!==view);
-  if(view!=='menu')redrawPads();
+function show(view,hi){
+  ['G','T'].forEach(w=>hdr(w,false));closePop();
+  ['menu','app','tapp','tlist'].forEach(id=>$('#'+id).hidden=id!==view);
+  if(view==='app'||view==='tapp')redrawPads();
   $('#sheet').classList.remove('open');$('#tsheet').classList.remove('open');cur=null;tcur=null;
-  if(view==='menu')renderMenu();else if(view==='app'){renderHeader();renderGrid();fitGrid()}else renderT('pop');
+  if(view==='menu')renderMenu();else if(view==='app'){renderHeader();renderGrid();fitGrid()}else if(view==='tlist')renderTList(hi);else renderT('pop');
   document.querySelectorAll('.view').forEach(v=>{v.scrollTop=0});
+  if(!reduceMotion())$('#'+view).animate([{opacity:0},{opacity:1}],{duration:260,easing:'ease-out'});
 }
 // Diagrams of the two sampling methods on the main menu
 function buildDiagrams(){
@@ -836,33 +920,35 @@ function renderMenu(){
   const g=db.sessions[db.cur],t=db.tsessions[db.tcur];
   const gd=g?Object.values(g.cells).filter(c=>c.done).length:0,td=t?Object.values(t.frames).filter(f=>f.done).length:0;
   $('#mgSub').textContent=g?`${g.site||'(no site)'} · ${g.date} · ${gd}/100 cells done`:'';
-  $('#mtSub').textContent=t?`${t.site||'(no site)'} · ${t.date} · ${td}/10 frames done`:'No transect yet';
+  const nT=Object.keys(db.tsessions).length,nDone=Object.values(db.tsessions).filter(x=>Object.values(x.frames).filter(f=>f.done).length>=10).length;
+  $('#mtSub').textContent=t?`${t.name||'Transect'} · ${t.site||'(no site)'} · ${td}/10 frames · ${nT} transect${nT===1?'':'s'}, ${nDone} complete`:'No transect yet';
   $('#mgBar').style.width=gd+'%';$('#mtBar').style.width=(td*10)+'%';
 }
 $('#goGrid').onclick=()=>show('app');
-$('#goTrans').onclick=()=>show('tapp');
+$('#goTrans').onclick=()=>show('tlist');
 $('#btnMenu').onclick=()=>show('menu');
-$('#tMenu').onclick=()=>show('menu');
+$('#tMenu').onclick=()=>show('tlist');
 
 function newTSession(){
   const id='t'+Date.now(),prev=db.tsessions[db.tcur]||db.sessions[db.cur]||{};
-  db.tsessions[id]={id,site:prev.site||'',date:today(),obs1:prev.obs1||'',obs2:prev.obs2||'',frames:{}};
+  let nn=Object.keys(db.tsessions).length+1;const used=new Set(Object.values(db.tsessions).map(x=>x.name));while(used.has('Transect '+nn))nn++;
+  db.tsessions[id]={id,name:'Transect '+nn,site:prev.site||'',date:today(),obs1:prev.obs1||'',obs2:prev.obs2||'',frames:{}};
   db.tcur=id;save(false);return db.tsessions[id];
 }
 const TS=()=>db.tsessions[db.tcur]||newTSession();
 const frame=n=>TS().frames[n]||(TS().frames[n]=blankFrame());
 const frameM=n=>n*2; // frame 1 = 2 m ... frame 10 = 20 m
-const blankFrame=()=>Object.assign({dm:'',done:false,ow:[{n:'',v:null}]},Object.fromEntries(TKEYS.map(k=>[k,null])));
+const blankFrame=()=>Object.assign({dm:'',nt:'',done:false,ow:[{n:'',v:null}]},Object.fromEntries(TKEYS.map(k=>[k,null])));
 const covTot=f=>{const v=[...COVERS.map(k=>f[k]),...f.ow.map(w=>w.v)].filter(x=>x!=null);return v.length?v.reduce((a,b)=>a+b,0):null};
 // 100 minus every cover box except the one named (k:key or w:index)
 const restOf=(f,except)=>100-(COVERS.reduce((a,k)=>a+(except==='k:'+k?0:(f[k]??0)),0)+f.ow.reduce((a,w,i)=>a+(except==='w:'+i?0:(w.v??0)),0));
 const seenWeeds=()=>{const m=new Map();Object.keys(TS().frames).sort((a,b)=>a-b).forEach(n=>TS().frames[n].ow.forEach(w=>{const nm=w.n.trim();if(nm&&!m.has(nm.toLowerCase()))m.set(nm.toLowerCase(),nm)}));return [...m.values()]};
 const tstate=n=>{const f=TS().frames[n];if(!f)return '';if(f.done)return 'done';if(tHas(f))return 'part';return ''};
 let tcur=null;
-['site','date','obs1','obs2'].forEach(k=>$('#t'+k).addEventListener('input',e=>{TS()[k]=e.target.value;save();updateSum('T')}));
+['name','site','date','obs1','obs2'].forEach(k=>$('#t'+k).addEventListener('input',e=>{TS()[k]=e.target.value;save();updateSum('T')}));
 function renderT(mode){
   const s=TS(),box=$('#tframes'),keep=box.scrollLeft;updateSum('T');
-  $('#tsite').value=s.site;$('#tdate').value=s.date;$('#tobs1').value=s.obs1;$('#tobs2').value=s.obs2;
+  $('#tname').value=s.name||'';$('#tsite').value=s.site;$('#tdate').value=s.date;$('#tobs1').value=s.obs1;$('#tobs2').value=s.obs2;
   let done=0,next=0;box.innerHTML='';
   for(let n=1;n<=10;n++){if(tstate(n)==='done')done++;else if(!next)next=n}
   for(let n=1;n<=10;n++){
@@ -871,7 +957,7 @@ function renderT(mode){
     b.className='tnode '+st+(n===next?' next':'')+(tcur===n?' cur':'')+(mode==='pop'?' pop':'');b.dataset.n=n;b.style.setProperty('--i',n);
     const has=f&&tHas(f);
     b.innerHTML=`<div class="tm${st==='done'?' dn':st==='part'?' pt':''}">${frameM(n)} m</div><div class="dot">${n}</div><div class="card">${has?
-      `<b>Target ${f.ct??'–'}%</b><span>Cover total ${tot??'–'}</span><span>Mature ${f.nm??'–'} · Imm ${f.ni??'–'}</span>${f.dm?`<span>Damage ${f.dm}</span>`:''}`
+      `<b>Target ${f.ct??'–'}%</b><span>Cover total ${tot??'–'}</span><span>Mature ${f.nm??'–'} · Imm ${f.ni??'–'}</span>${dmSet(f)?`<span>Damage ${f.dm}</span>`:''}`
       :`<span>${n===next?'Next up':'Not started'}</span>`}</div>`;
     b.onclick=()=>openFrame(n);
     box.appendChild(b);
@@ -919,7 +1005,9 @@ const padWrite=fn=>padDB().then(d=>new Promise(res=>{const tx=d.transaction('str
 const newId=()=>String(Date.now()).padStart(14,'0')+'-'+String(++padSeq).padStart(5,'0');
 const padCache={},padReady={};
 function padGet(kind,side){
-  const sess=kind==='g'?S():TS(),key=kind+':'+sess.id+':'+side;
+  const sess=kind==='g'?db.sessions[db.cur]:db.tsessions[db.tcur];
+  if(!sess)return {key:kind+':none:'+side,arr:[],ready:Promise.resolve()};   // no session yet: show an empty pad, create nothing
+  const key=kind+':'+sess.id+':'+side;
   if(!padCache[key]){
     const arr=padCache[key]=[];
     padReady[key]=padDB().then(d=>new Promise(res=>{const r=d.transaction('strokes').objectStore('strokes').index('pad').getAll(key);r.onsuccess=()=>{arr.unshift(...r.result.sort((a,b)=>a.id<b.id?-1:1));res()};r.onerror=()=>res()})).catch(()=>{}).then(()=>{
@@ -1034,19 +1122,41 @@ function fish(){
 $('#tframes').addEventListener('scroll',()=>{if(fishQ)return;fishQ=true;requestAnimationFrame(()=>{fishQ=false;fish()})},{passive:true});
 window.addEventListener('resize',()=>{fish();layoutLine();fitGrid()});
 window.addEventListener('orientationchange',()=>setTimeout(()=>{fish();layoutLine();fitGrid()},250));
-$('#tNew').onclick=()=>{
-  const has=Object.values(TS().frames).some(tHas);
-  if(has&&!confirm('Start a new transect?\n\nThe current one stays saved under Sessions.'))return;
-  startNewT();
-};
 $('#tContinue').onclick=e=>{const n=Number(e.currentTarget.dataset.n);if(n)openFrame(n)};
 
-// ----- frame entry screen: everything for one frame in one place -----
+// =====================================================================
+// Transect frame entry screen: a static header (title, total, damage, undo, timeline) over ONE sliding entry card
+// =====================================================================
 const tundo={};
 const tkey=()=>db.tcur+':'+tcur;
 function tpush(){const k=tkey();(tundo[k]=tundo[k]||[]).push(JSON.stringify(frame(tcur)));if(tundo[k].length>100)tundo[k].shift()}
 function tdoUndo(){const a=tundo[tkey()];if(!a||!a.length)return;TS().frames[tcur]=JSON.parse(a.pop());save();openFrame(tcur)}
-let tpend=false;
+let tpend=false,ffT=null;
+const reduceMotion=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SV=p=>`<svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`;
+const MI=SV('<path d="M5 12h14"/>'),PL=SV('<path d="M5 12h14M12 5v14"/>'),XI=SV('<path d="M6 6l12 12M18 6 6 18"/>');
+const TRASH=SV('<path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/>');
+const dmSet=f=>f.dm!==''&&f.dm!=null;
+const hCount=n=>Math.min(3,Math.max(0,Math.floor(n||0)));   // 0 -> no height boxes, 1 -> Tall, 2 -> Tall + Short, 3+ -> Tall + Short + Avg
+const showMI=f=>(f.ct||0)>0;                                  // mature / immature only matter when there is target
+const WSTEP=5;
+// a changing label rolls in from above or below
+function roll(el,text,dir){
+  if(!el||el.textContent===String(text))return;
+  el.textContent=text;
+  if(!reduceMotion()&&dir)el.animate([{transform:`translateY(${dir>0?55:-55}%)`,opacity:0},{transform:'none',opacity:1}],{duration:300,easing:'cubic-bezier(.2,.85,.25,1)'});
+}
+function syncReveal(f){
+  const ch=[],rv=$('#rvMI');
+  if(rv){const on=showMI(f);if(rv.classList.contains('on')!==on)ch.push([rv,on])}
+  [['nm','mat'],['ni','imm']].forEach(([k,g])=>{
+    const n=hCount(f[k]);
+    document.querySelectorAll(`.hbx[data-hg="${g}"]`).forEach(el=>{const on=n>=Number(el.dataset.hi);if(el.classList.contains('on')!==on)ch.push([el,on])});
+  });
+  if(ch.length)fitFrame(ch);   // the count area opens while the entry cards glide smaller, in one motion
+  document.querySelectorAll('.dmb button').forEach(b=>b.classList.toggle('on',dmSet(f)&&Number(b.dataset.tdm)===f.dm));
+  const nb=$('#tnotes');if(nb)nb.classList.toggle('has',!!f.nt);
+}
 function refreshT(){
   if(tcur==null)return;const f=frame(tcur),tot=covTot(f),box=$('#ttotbox');
   if(box){
@@ -1056,75 +1166,155 @@ function refreshT(){
   }
   document.querySelectorAll('.ttl .tn').forEach(b=>{const i=Number(b.dataset.tgo);b.className='tn '+tstate(i)+(i===tcur?' cur':'')});
   document.querySelectorAll('.tms .tm').forEach(m=>{const i=Number(m.dataset.tmi),st=tstate(i);m.className='tm'+(i===tcur?' cur':st==='done'?' dn':st==='part'?' pt':'')});
-  const dis=!(tundo[tkey()]||[]).length;['#tundo','#tundoTop'].forEach(s=>{const u=$(s);if(u)u.disabled=dis});
+  const u=$('#tundoTop');if(u)u.disabled=!(tundo[tkey()]||[]).length;
+  syncReveal(f);
 }
-function buildFrame(n){
-  tcur=n;const f=frame(n);tpend=false;
+function prepFrame(n){
+  tcur=n;tpend=false;const f=frame(n);
   // carry the other-weed names forward from the previous frame (values stay blank)
   if(!tHas(f)&&!f.ow.some(w=>w.n)){for(let j=n-1;j>=1;j--){const pf=TS().frames[j];if(pf&&pf.ow.some(w=>w.n)){f.ow=pf.ow.map(w=>({n:w.n,v:null}));break}}}
-  const MI='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>',PL='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg>';
-  const xsvg='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
-  const fld=(k,label,grp,step,nb)=>`<div class="tf${nb?' nb':''}" data-g="${grp}"><div class="tl">${label}</div>
-    <input data-tin="${k}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${f[k]??''}">
-    ${nb?'':`<div class="tb${k==='ct'?' tgt':COVERS.includes(k)?' rest':''}"><button data-tk="${k}" data-d="${-step}" aria-label="Decrease ${label||k}">${MI}</button><button data-tk="${k}" data-d="${step}" aria-label="Increase ${label||k}">${PL}</button>${k==='ct'?`<button class="rb" data-tset="${k}" data-v="5" aria-label="Set target to 5">5</button><button class="rb" data-tset="${k}" data-v="10" aria-label="Set target to 10">10</button>`:COVERS.includes(k)?`<button class="rb" data-trest="${k}" aria-label="Set ${label} to the rest of the cover">Rest</button>`:''}</div>`}</div>`;
-  const weed=(w,i)=>`<div class="tf" data-g="pl"><div class="tl wl${f.ow.length>1?' hasx':''}"><input class="wn" list="weedlist" data-town="${i}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="✎ Weed name" value="${esc(w.n)}" aria-label="Name of other weed ${i+1}">${f.ow.length>1?`<button class="xk r" data-towdel="${i}" aria-label="Remove other weed ${i+1}">${xsvg}</button>`:''}</div>
-    <input data-tow="${i}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${w.v??''}">
-    <div class="tb rest"><button data-twk="${i}" data-d="-5" aria-label="Decrease other weed ${i+1}">${MI}</button><button data-twk="${i}" data-d="5" aria-label="Increase other weed ${i+1}">${PL}</button><button class="rb" data-trestw="${i}" aria-label="Set other weed ${i+1} to the rest of the cover">Rest</button></div></div>`;
-  // weeds already seen in this transect that are not in this frame yet: tap to add
+  return f;
+}
+const ALLN=Array.from({length:10},(_,i)=>i+1);
+function headHtml(n){
+  const f=frame(n);
+  return `<div class="ph tph">
+      <div class="navh"><button id="tprev" aria-label="Previous frame" ${n>1?'':'disabled'}>←<span class="roll" id="tpn">${n>1?n-1:''}</span></button>
+        <h2><span class="roll" id="ttitle">Frame ${n}</span><span class="ttmeta roll" id="tmeta">${frameM(n)} m</span></h2>
+        <button id="tnext" aria-label="Next frame" ${n<10?'':'disabled'}><span class="roll" id="tnn">${n<10?n+1:''}</span>→</button></div>
+      <div class="hsum"><div class="ttchip" id="ttotbox"><span class="ts" style="color:inherit">Total</span><b id="ttot">–</b><span class="ts" id="ttots"></span></div></div>
+      <div class="hb"><button id="tundoTop" class="ib">${SV('<path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/>')}Undo</button><button id="tx">Close</button></div></div>
+    <div class="ttwrap" aria-label="Transect timeline, 20 m long">
+      <div class="tms">${ALLN.map(i=>`<div class="tm${i===n?' cur':tstate(i)==='done'?' dn':tstate(i)==='part'?' pt':''}" data-tmi="${i}">${frameM(i)} m</div>`).join('')}</div>
+      <div class="ttl" style="--p:${(n-.5)*10}%">${ALLN.map(i=>`<button class="tn ${tstate(i)}${i===n?' cur':''}" data-tgo="${i}" aria-label="Go to frame ${i}, ${frameM(i)} metres">${i}</button>`).join('')}<span class="tpin" style="left:calc(${(n-.5)*10}% - 19px)"></span></div>
+    </div>`;
+}
+const WHEEL_ITEMS='<div class="wi" data-v="">–</div>'+Array.from({length:21},(_,i)=>`<div class="wi" data-v="${i*WSTEP}">${i*WSTEP}</div>`).join('');
+function bodyHtml(n){
+  const f=frame(n);
+  const numCard=(k,label,grp,sc)=>`<div class="fc" data-g="${grp}"><div class="fl">${label}</div>
+      <div class="fbx"><div class="fpm"><button data-tk="${k}" data-d="${WSTEP}" aria-label="Increase ${label}">${PL}</button><button data-tk="${k}" data-d="${-WSTEP}" aria-label="Decrease ${label}">${MI}</button></div>
+        <input class="fin" data-tin="${k}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${f[k]??''}"></div>${sc?`<div class="fsc">${sc}</div>`:''}</div>`;
+  const wheelCard=(k,label,grp)=>`<div class="fc" data-g="${grp}"><div class="fl">${label}</div><div class="wheel"><div class="wband"></div><div class="wscroll" data-wk="${k}" tabindex="0" aria-label="${label} percent: scroll to choose, steps of 5">${WHEEL_ITEMS}</div></div></div>`;
+  const weed=(w,i)=>`<div class="fc" data-g="pl"><div class="fl wl${f.ow.length>1?' hasx':''}"><input class="wn" data-wname="${i}" readonly inputmode="none" placeholder="✎ Weed name" value="${esc(w.n)}" aria-label="Name of other weed ${i+1} (tap to write)">${f.ow.length>1?`<button class="xk r" data-towdel="${i}" aria-label="Remove other weed ${i+1}">${XI}</button>`:''}</div>
+      <div class="fbx"><div class="fpm"><button data-twk="${i}" data-d="${WSTEP}" aria-label="Increase other weed ${i+1}">${PL}</button><button data-twk="${i}" data-d="${-WSTEP}" aria-label="Decrease other weed ${i+1}">${MI}</button></div>
+        <input class="fin" data-tow="${i}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${w.v??''}"></div>
+      <div class="fsc"><button data-trestw="${i}" aria-label="Set other weed ${i+1} to the rest of the cover">Rest</button></div></div>`;
   const here=new Set(f.ow.map(w=>w.n.trim().toLowerCase()));
   const seen=seenWeeds().filter(nm=>!here.has(nm.toLowerCase()));
-  const chipsHtml=seen.length?`<div class="chips"><span class="seen">Seen:</span>${seen.map(nm=>`<button data-tchip="${esc(nm)}">${esc(nm)}</button>`).join('')}</div>`:`<span class="hintsm">Write each weed's name in its white box</span>`;
-  const undoSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>';
-  const head=`<div class="ph tph"><div class="navh"><button id="tprev" ${n>1?'':'disabled'}>← ${n>1?n-1:''}</button><h2>Frame ${n}<span class="ttmeta">${frameM(n)} m</span></h2><button id="tnext" ${n<10?'':'disabled'}>${n<10?n+1:''} →</button></div>
-      <div class="hsum"><div class="ttchip" id="ttotbox"><span class="ts" style="color:inherit">Total</span><b id="ttot">–</b><span class="ts" id="ttots"></span></div>
-        <div class="dmh"><span>Damage</span>${[1,2,3,4].map(d=>`<button data-tdm="${d}" class="${f.dm===d?'on':''}" aria-label="Damage ${d}">${d}</button>`).join('')}</div></div>
-      <div class="hb"><button id="tundoTop" class="ib">${undoSvg}Undo</button><button id="tx">Close</button></div></div>
-    <div class="ttwrap" aria-label="Transect timeline, 20 m long">
-      <div class="tms">${Array.from({length:10},(_,i)=>i+1).map(i=>`<div class="tm${i===n?' cur':tstate(i)==='done'?' dn':tstate(i)==='part'?' pt':''}" data-tmi="${i}">${frameM(i)} m</div>`).join('')}</div>
-      <div class="ttl" style="--p:${(n-.5)*10}%">${Array.from({length:10},(_,i)=>i+1).map(i=>`<button class="tn ${tstate(i)}${i===n?' cur':''}" data-tgo="${i}" aria-label="Go to frame ${i}, ${frameM(i)} metres">${i}</button>`).join('')}<span class="tpin" style="left:calc(${(n-.5)*10}% - 19px)"></span></div>
-    </div>`;
-  const body=`    <div class="tsec"><h3 class="h3row"><span>Cover (%)</span>${chipsHtml}${f.ow.length<5?'<button class="tinyadd" id="towadd">＋ Add another other weed</button>':''}</h3><div class="tcov">
-      ${fld('ct','★ Target','tg',5)}${f.ow.map(weed).join('')}${fld('cf','Forb','pl',5)}${fld('cs','Shrub','pl',5)}${fld('cg','Grass','pl',5)}
-      ${fld('cd','Ground','gr',5)}${fld('cl','Litter','gr',5)}${fld('cm','Moss','gr',5)}
+  const chipsHtml=seen.length?`<div class="chips"><span class="seen">Seen:</span>${seen.map(nm=>`<button data-tchip="${esc(nm)}">${esc(nm)}</button>`).join('')}</div>`:`<span class="hintsm">Tap a weed's name bar to write it</span>`;
+  const rest=k=>`<button data-trest="${k}" aria-label="Set to the rest of the cover">Rest</button>`;
+  const miRow=(g,label,kc,kh)=>{const n=hCount(f[kc]);
+    return `<div class="mirow"><div class="trl" data-g="${g}">${label}</div>
+      <div class="fc cnt" data-g="${g}"><div class="fl">Count</div><div class="fbx"><div class="fpm"><button data-tk="${kc}" data-d="1" aria-label="Increase ${label} count">${PL}</button><button data-tk="${kc}" data-d="-1" aria-label="Decrease ${label} count">${MI}</button></div>
+        <input class="fin" data-tin="${kc}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${f[kc]??''}"></div></div>
+      ${kh.map((k,j)=>`<div class="hbx${n>=j+1?' on':''}" data-hg="${g}" data-hi="${j+1}"><div class="fc" data-g="${g}"><div class="fl">${['Tall','Short','Avg'][j]}</div><div class="fbx"><input class="fin" data-tin="${k}" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${f[k]??''}"></div></div></div>`).join('')}</div>`};
+  return `<div class="tsec"><h3 class="h3row"><span>Cover (%)</span>${chipsHtml}${f.ow.length<5?'<button class="tinyadd" id="towadd">＋ Add another other weed</button>':''}</h3><div class="tcov">
+      ${numCard('ct','★ Target','tg',`<button data-tset="ct" data-v="5">5</button><button data-tset="ct" data-v="10">10</button>`)}${f.ow.map(weed).join('')}${wheelCard('cf','Forb','pl')}${wheelCard('cs','Shrub','pl')}${wheelCard('cg','Grass','pl')}
+      ${numCard('cd','Ground','gr',rest('cd'))}${numCard('cl','Litter','gr',rest('cl'))}${numCard('cm','Moss','gr')}
     </div></div>
-    <div class="tsec"><div class="tmx">
-      <div></div><div class="th">Count</div><div class="th">Tall</div><div class="th">Short</div><div class="th">Avg</div>
-      <div class="trl" data-g="mat">Mature</div>${fld('nm','','mat',1)}${fld('mt','','mat',1,1)}${fld('ms','','mat',1,1)}${fld('ma','','mat',1,1)}
-      <div class="trl" data-g="imm">Immature</div>${fld('ni','','imm',1)}${fld('it','','imm',1,1)}${fld('is','','imm',1,1)}${fld('ia','','imm',1,1)}
-    </div></div>
-`;
-  const nav=`<div class="nav"><button id="tundo" class="ib">${undoSvg}Undo</button><button id="tclr">Clear frame</button><button id="tdone" class="pri">Done ✓ → ${n<10?'frame '+(n+1):'finish'}</button></div>`;
-  return {head,body,nav};
+    <div class="dmrow"><div class="trl" data-g="dm">Damage</div><div class="fc" data-g="dm"><div class="dmb">${[0,1,2,3,4].map(d=>`<button data-tdm="${d}" class="${dmSet(f)&&f.dm===d?'on':''}" aria-label="Damage ${d}">${d}</button>`).join('')}</div></div></div>
+    <div class="reveal${showMI(f)?' on':''}" id="rvMI"><div class="rvin">${miRow('mat','Mature','nm',['mt','ms','ma'])}${miRow('imm','Immature','ni',['it','is','ia'])}</div></div>`;
 }
-function fitFrame(){
+function navHtml(n){
+  return `<div class="nav"><button id="tnotes" class="ib">${SV('<path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h5"/>')}Notes<i class="ndot"></i></button><button id="tclr">Clear frame</button><button id="tdone" class="pri">Done ✓ → <span class="roll" id="tdoneLbl">${n<10?'frame '+(n+1):'finish'}</span></button></div>`;
+}
+// ---- scroll wheels (forb / shrub / grass): vertical, snap in steps of 5, bend away from the centre ----
+function initWheels(root){
+  root.querySelectorAll('.wscroll').forEach(w=>{
+    const k=w.dataset.wk,items=[...w.children];let gesture=false,settle=0,raf=0,geo={h:0,r:36,p:0},user=false,userT=0;
+    const idxOf=v=>(v===''||v==null)?0:Math.min(21,Math.max(1,Math.round(Number(v)/WSTEP)+1));
+    let curIdx=idxOf(frame(tcur)[k]);
+    const layout=()=>{const h=w.clientHeight,r=items[0].getBoundingClientRect().height||36,p=Math.max(0,(h-r)/2);w.style.paddingTop=w.style.paddingBottom=p+'px';geo={h,r,p}};
+    const paint=()=>{const c=w.scrollTop+geo.h/2;items.forEach((it,i)=>{const d=((geo.p+i*geo.r+geo.r/2)-c)/geo.r,a=Math.min(Math.abs(d),3);it.style.transform=`perspective(230px) rotateX(${(-d*22).toFixed(1)}deg) scale(${(1-a*.06).toFixed(3)})`;it.style.opacity=(1-a*.22).toFixed(2)})};
+    const setIdx=(i,smooth)=>w.scrollTo({top:i*geo.r,behavior:smooth?'smooth':'auto'});
+    // only a real touch / wheel / key on THIS wheel may change the data; layout changes (rows resizing) never do
+    const arm=()=>{user=true;clearTimeout(userT);userT=setTimeout(()=>{user=false},450)};
+    ['pointerdown','touchstart','wheel','keydown'].forEach(ev=>w.addEventListener(ev,arm,{passive:true}));
+    layout();setIdx(curIdx,false);paint();
+    const relayout=()=>{layout();setIdx(curIdx,false);paint()};
+    new ResizeObserver(relayout).observe(w);w.addEventListener('relayout',relayout);
+    w.addEventListener('scroll',()=>{
+      if(!raf)raf=requestAnimationFrame(()=>{raf=0;paint()});
+      if(!user)return;arm();                                    // keep the window open through the momentum after the finger lifts
+      const idx=Math.max(0,Math.min(21,Math.round(w.scrollTop/geo.r)));
+      if(idx!==curIdx){
+        curIdx=idx;const f=frame(tcur);
+        if(!gesture){tpush();gesture=true}
+        f[k]=idx===0?null:(idx-1)*WSTEP;f.done=false;refreshT();
+        clearTimeout(settle);settle=setTimeout(()=>{gesture=false;save();renderT()},220);
+      }
+    },{passive:true});
+    items.forEach((it,i)=>it.addEventListener('click',()=>{arm();setIdx(i,true)}));
+  });
+}
+// Shrinks only the entry cards (never the header / ruler) until the form fits. With `ch` (reveal toggles) the layout is
+// measured at its final state with transitions off, then rewound and replayed so the open + shrink animate together.
+function fitFrame(ch=[]){
   const p=$('#tpanel');
-  if(!p||!p.querySelector('.fbodywrap')||!$('#tsheet').classList.contains('open'))return;
-  p.classList.remove('c1','c2','c3');
-  for(const c of ['c1','c2','c3']){if(p.scrollHeight<=p.clientHeight+1)break;p.classList.add(c)}
+  if(!p||!p.querySelector('.fbodywrap')||!$('#tsheet').classList.contains('open')){ch.forEach(([e,on])=>e.classList.toggle('on',on));return}
+  const CS=['c1','c2','c3'],old=CS.filter(c=>p.classList.contains(c)),animate=ch.length&&!reduceMotion();
+  p.classList.add('nofit');
+  ch.forEach(([e,on])=>e.classList.toggle('on',on));
+  p.classList.remove(...CS);
+  for(const c of CS){if(p.scrollHeight<=p.clientHeight+1)break;p.classList.add(c)}
+  const fin=CS.filter(c=>p.classList.contains(c)),relayout=()=>p.querySelectorAll('.wscroll').forEach(w=>w.dispatchEvent(new Event('relayout')));   // wheels re-centre on their value at the new row size
+  if(!animate){p.classList.remove('nofit');relayout();return}
+  ch.forEach(([e,on])=>e.classList.toggle('on',!on));
+  p.classList.remove(...CS);p.classList.add(...old);
+  void p.offsetHeight;p.classList.remove('nofit');void p.offsetHeight;
+  ch.forEach(([e,on])=>e.classList.toggle('on',on));
+  p.classList.remove(...CS);p.classList.add(...fin);
+  clearTimeout(ffT);ffT=setTimeout(relayout,480);
 }
 window.addEventListener('resize',()=>fitFrame());
 window.addEventListener('orientationchange',()=>setTimeout(fitFrame,250));
-function mountFrame(n){ // instant full render; returns whether the panel was already open
-  const {head,body,nav}=buildFrame(n),panel=$('#tpanel'),was=$('#tsheet').classList.contains('open');
-  panel.innerHTML=`<div class="fhead">${head}</div><div class="fbodywrap"><div class="fbody">${body}</div></div><div class="fnav">${nav}</div>`;
-  panel.scrollTop=0;$('#tsheet').classList.add('open');fitFrame();refreshT();
-  $('#weedlist').innerHTML=seenWeeds().map(nm=>`<option value="${esc(nm)}">`).join('');
-  return was;
+function mountFrame(n){ // full render (first open)
+  prepFrame(n);
+  const panel=$('#tpanel');
+  panel.innerHTML=`<div class="fhead">${headHtml(n)}</div><div class="fbodywrap"><div class="fbody">${bodyHtml(n)}</div></div><div class="fnav">${navHtml(n)}</div>`;
+  panel.scrollTop=0;$('#tsheet').classList.add('open');
+  initWheels(panel);fitFrame();refreshT();
 }
 function renderFrame(n){
-  const was=mountFrame(n);
-  // first open: the page springs up from the bottom
+  const was=$('#tsheet').classList.contains('open')&&$('#tpanel').querySelector('.fbodywrap');
+  mountFrame(n);
   if(!was&&!reduceMotion())$('#tpanel').animate([{transform:'translateY(56px) scale(.94)',opacity:0},{transform:'translateY(-7px) scale(1.01)',opacity:1,offset:.72},{transform:'none',opacity:1}],{duration:460,easing:'cubic-bezier(.2,.8,.3,1)'});
 }
-// Smooth navigation: the old frame slides/fades out, the new one slides in. Only the content
-// moves (the panel and backdrop stay still), so there is no flash or jump.
-let tnav=0;
-const reduceMotion=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-// Moving along the transect: the old page slides off one side while the new page slides in from the other
-// (both visible at once, with a little spring), and the gold marker hops along the ruler to the new spot.
-// Shared "two cards" slide used by the transect frames and the grid cells: a copy of the current card slides away
-// while the live card (already showing the next screen) slides in from the other side, same distance, same speed,
-// nothing fading or scaling. The copy is an exact twin (typed values included), so no box changes size mid-slide.
+function refreshBody(){ // same frame, new content (added a weed, undo, clear...)
+  const body=$('#tpanel .fbody:not(.leaving)');if(!body)return;
+  prepFrame(tcur);body.innerHTML=bodyHtml(tcur);initWheels(body);fitFrame();refreshT();
+}
+// the header stays put and animates to the new frame: numbers roll, the marker glides along the line, the progress fills
+function updateHead(n,dir){
+  const f=frame(n);
+  roll($('#ttitle'),'Frame '+n,dir);roll($('#tmeta'),frameM(n)+' m',dir);
+  $('#tprev').disabled=n<=1;$('#tnext').disabled=n>=10;
+  roll($('#tpn'),n>1?String(n-1):'',-dir);roll($('#tnn'),n<10?String(n+1):'',dir);
+  roll($('#tdoneLbl'),n<10?'frame '+(n+1):'finish',dir);
+  const ttl=document.querySelector('.ttl');if(ttl){ttl.style.setProperty('--p',(n-.5)*10+'%');const pin=ttl.querySelector('.tpin');if(pin)pin.style.left=`calc(${(n-.5)*10}% - 19px)`}
+}
+// only the entry card slides: the old card moves off one side while the new one comes in from the other
+function goFrame(n,dir){
+  const panel=$('#tpanel'),wrap=panel.querySelector('.fbodywrap'),body=wrap.querySelector('.fbody:not(.leaving)');
+  wrap.querySelectorAll('.fbody.leaving').forEach(x=>x.remove());
+  const anim=!reduceMotion();let ghost=null;
+  if(anim){
+    body.querySelectorAll('input').forEach(el=>el.setAttribute('value',el.value));
+    ghost=body.cloneNode(true);ghost.classList.add('leaving');ghost.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));
+    Object.assign(ghost.style,{width:body.offsetWidth+'px',height:body.offsetHeight+'px'});
+    wrap.appendChild(ghost);
+    const os=body.querySelectorAll('.wscroll'),gs=ghost.querySelectorAll('.wscroll');gs.forEach((g,i)=>{g.scrollTop=os[i].scrollTop});
+  }
+  prepFrame(n);body.innerHTML=bodyHtml(n);initWheels(body);updateHead(n,dir);fitFrame();refreshT();
+  if(!anim)return;
+  const D=wrap.clientWidth+16,opt={duration:440,easing:'cubic-bezier(.4,0,.2,1)'};
+  ghost.animate([{transform:'translateX(0)'},{transform:`translateX(${-dir*D}px)`}],{...opt,fill:'forwards'}).onfinish=()=>ghost.remove();
+  setTimeout(()=>ghost.remove(),900);
+  body.animate([{transform:`translateX(${dir*D}px)`},{transform:'translateX(0)'}],opt);
+}
+// Shared "two cards" slide used by the grid cells: a copy of the current card slides away while the live card (already
+// showing the next screen) slides in from the other side, same distance, same speed, nothing fading or scaling.
 function slideCards(panel,sheet,mount,dir){
   sheet.querySelectorAll('.ghost').forEach(g=>g.remove());
   panel.querySelectorAll('input').forEach(el=>el.setAttribute('value',el.value));
@@ -1140,84 +1330,119 @@ function slideCards(panel,sheet,mount,dir){
   panel.animate([{transform:`translateX(${dir*D}px)`},{transform:'translateX(0)'}],opt);
 }
 function openFrame(n,dir){
-  const panel=$('#tpanel'),sheet=$('#tsheet');
-  tnav++;
-  if(!dir||reduceMotion()||!sheet.classList.contains('open')||!panel.querySelector('.fbodywrap')){renderFrame(n);return}
-  slideCards(panel,sheet,()=>mountFrame(n),dir);
+  const panel=$('#tpanel'),showing=$('#tsheet').classList.contains('open')&&panel.querySelector('.fbodywrap');
+  if(!showing){renderFrame(n);return}
+  if(n===tcur){refreshBody();return}
+  goFrame(n,dir||(n>tcur?1:-1));
 }
 function doResetT(){
   const s=TS(),n=Object.values(s.frames).filter(tHas).length;
-  if(!confirmTwice(`Reset the transect?\n\nThis erases all ${n} entered frame${n===1?'':'s'} in the current transect (${s.site||'no site'}, ${s.date}). Site, date and observers are kept.`,
+  if(!confirmTwice(`Reset the transect?\n\nThis erases all ${n} entered frame${n===1?'':'s'} in "${s.name}" (${s.site||'no site'}, ${s.date}). Name, site, date and observers are kept.`,
     'Are you sure?\n\nThis cannot be undone with the Undo button. A backup copy is saved first (Grid > Sessions > Restore from backup copy).'))return;
   backupNow(true);
   s.frames={};Object.keys(tundo).forEach(k=>{if(k.startsWith(db.tcur+':'))delete tundo[k]});
   save();closeFrame();renderT('pop');toast('Transect reset: all frames cleared.');
 }
 function startNewT(){
-  $('#tsheet').classList.remove('open');tcur=null;newTSession();renderT('pop');openFrame(1);
+  $('#tsheet').classList.remove('open');tcur=null;newTSession();show('tapp');
+  setTimeout(()=>{if(!$('#tapp').hidden)hdr('T',true)},480);   // ask for the name, site and observers straight away
 }
 function closeFrame(){$('#tsheet').classList.remove('open');tcur=null;renderT('smooth')}
+
+// ---- write-in pop-out: a big writing area that grows out of the small box you tapped ----
+let lastPT='mouse';document.addEventListener('pointerdown',e=>{lastPT=e.pointerType},true);
+const popEl=$('#pop'),popCard=popEl.querySelector('.wpcard'),popLine=$('#popLine'),popArea=$('#popArea'),popChips=$('#popChips'),popTitle=$('#popTitle');
+let popCfg=null;
+function openPop(cfg,originEl){
+  popCfg=cfg;popTitle.textContent=cfg.title;
+  const inp=cfg.multi?popArea:popLine,finger=lastPT==='touch'||lastPT==='mouse';
+  popLine.hidden=!!cfg.multi;popArea.hidden=!cfg.multi;
+  inp.value=cfg.value||'';inp.placeholder=cfg.placeholder||'';inp.inputMode=finger?'text':'none';inp.classList.toggle('typing',finger);
+  popChips.innerHTML=(cfg.chips||[]).map(c=>`<button data-pchip="${esc(c)}">${esc(c)}</button>`).join('');popChips.hidden=!(cfg.chips&&cfg.chips.length);
+  popEl.classList.add('open');popEl.setAttribute('aria-hidden','false');syncLock();
+  if(originEl){const r=originEl.getBoundingClientRect();popCard.style.transformOrigin=`${r.left+r.width/2-popCard.offsetLeft}px ${r.top+r.height/2-popCard.offsetTop}px`}
+  inp.focus();   // right now, inside the tap, so a finger brings up the keyboard and Scribble can start
+}
+function closePop(){
+  if(!popCfg)return;const c=popCfg;popCfg=null;
+  popEl.classList.remove('open');popEl.setAttribute('aria-hidden','true');
+  const a=document.activeElement;if(a&&popEl.contains(a))a.blur();
+  syncLock();if(c.onClose)c.onClose();
+}
+[popLine,popArea].forEach(el=>el.addEventListener('input',()=>{if(popCfg&&popCfg.onInput)popCfg.onInput(el.value)}));
+popEl.addEventListener('click',e=>{
+  if(e.target.closest('[data-pclose]')){closePop();return}
+  const c=e.target.closest('[data-pchip]');if(c&&popCfg){popLine.value=c.dataset.pchip;popCfg.onInput(c.dataset.pchip);closePop()}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePop()});
+function openWeedPop(i,el){
+  const f=frame(tcur),here=new Set(f.ow.map(w=>w.n.trim().toLowerCase())),chips=seenWeeds().filter(nm=>!here.has(nm.toLowerCase()));let pushed=false;
+  openPop({title:`Other weed ${i+1}: name`,value:f.ow[i].n,placeholder:'Write the weed name',chips,
+    onInput:v=>{if(!pushed){tpush();pushed=true}f.ow[i].n=v;el.value=v;f.done=false},
+    onClose:()=>{save();refreshBody()}},el);
+}
+function openNotesPop(el){
+  const f=frame(tcur);let pushed=false;
+  openPop({title:`Frame ${tcur} (${frameM(tcur)} m): notes`,value:f.nt||'',multi:true,placeholder:'Write notes for this frame',
+    onInput:v=>{if(!pushed){tpush();pushed=true}f.nt=v},onClose:()=>{save();refreshT()}},el);
+}
+
+// ---- clicks inside the frame screen ----
 $('#tpanel').addEventListener('click',e=>{
+  const wn=e.target.closest('input.wn');
+  if(wn&&tcur!=null){openWeedPop(Number(wn.dataset.wname),wn);return}
   const b=e.target.closest('button');if(!b)return;
   if(b.id==='tx'){closeFrame();return}
-  if(tcur!=null){
-    const f=frame(tcur);
-    if(b.dataset.tk){
-      const k=b.dataset.tk;tpush();f[k]=fit(k,(f[k]??0)+Number(b.dataset.d));f.done=false;
-      const inp=b.closest('.tf').querySelector('input');inp.value=f[k];flash(inp);save();refreshT();renderT();
-    }else if(b.dataset.tchip!==undefined){
-      const nm=b.dataset.tchip,slot=f.ow.find(w=>!w.n.trim());
-      if(!slot&&f.ow.length>=5){toast('This frame already has 5 other weeds. Remove one first.');return}
-      tpush();if(slot)slot.n=nm;else f.ow.push({n:nm,v:null});
-      f.done=false;save();openFrame(tcur);
-    }else if(b.dataset.tset){
-      const k=b.dataset.tset;tpush();f[k]=Number(b.dataset.v);f.done=false;
-      const inp=b.closest('.tf').querySelector('input[data-tin]');inp.value=f[k];flash(inp);save();refreshT();renderT();
-    }else if(b.dataset.twk){
-      const i=Number(b.dataset.twk),w=f.ow[i];tpush();w.v=fit('ow',(w.v??0)+Number(b.dataset.d));f.done=false;
-      const inp=b.closest('.tf').querySelector('input[data-tow]');inp.value=w.v;flash(inp);save();refreshT();renderT();
-    }else if(b.dataset.trest||b.dataset.trestw!==undefined){
-      tpush();const isW=b.dataset.trestw!==undefined,key=isW?b.dataset.trestw:b.dataset.trest;
-      const r=restOf(f,isW?'w:'+key:'k:'+key),v=Math.max(0,r);
-      if(isW)f.ow[Number(key)].v=v;else f[key]=v;f.done=false;
-      const inp=b.closest('.tf').querySelector(isW?'input[data-tow]':'input[data-tin]');inp.value=v;flash(inp);save();refreshT();renderT();
-      if(r<0)toast('The other cover boxes already add up to '+(100-r)+', more than 100.');
-    }else if(b.dataset.towdel!==undefined){
-      tpush();f.ow.splice(Number(b.dataset.towdel),1);if(!f.ow.length)f.ow.push({n:'',v:null});f.done=false;save();openFrame(tcur);
-    }else if(b.id==='towadd'){
-      if(f.ow.length<5){tpush();f.ow.push({n:'',v:null});save();openFrame(tcur)}
-    }else if(b.dataset.tdm){
-      const d=Number(b.dataset.tdm);tpush();f.dm=(f.dm===d)?'':d;f.done=false;
-      b.parentElement.querySelectorAll('button').forEach(x=>x.classList.toggle('on',Number(x.dataset.tdm)===f.dm));
-      save();renderT();
+  if(tcur==null)return;
+  const f=frame(tcur);
+  if(b.dataset.tk){
+    const k=b.dataset.tk;tpush();f[k]=fit(k,(f[k]??0)+Number(b.dataset.d));f.done=false;
+    const inp=b.closest('.fc').querySelector('input.fin');inp.value=f[k];flash(inp);save();refreshT();renderT();
+  }else if(b.dataset.tchip!==undefined){
+    const nm=b.dataset.tchip,slot=f.ow.find(w=>!w.n.trim());
+    if(!slot&&f.ow.length>=5){toast('This frame already has 5 other weeds. Remove one first.');return}
+    tpush();if(slot)slot.n=nm;else f.ow.push({n:nm,v:null});
+    f.done=false;save();refreshBody();
+  }else if(b.dataset.tset){
+    const k=b.dataset.tset;tpush();f[k]=Number(b.dataset.v);f.done=false;
+    const inp=b.closest('.fc').querySelector('input.fin');inp.value=f[k];flash(inp);save();refreshT();renderT();
+  }else if(b.dataset.twk){
+    const i=Number(b.dataset.twk),w=f.ow[i];tpush();w.v=fit('ow',(w.v??0)+Number(b.dataset.d));f.done=false;
+    const inp=b.closest('.fc').querySelector('input.fin');inp.value=w.v;flash(inp);save();refreshT();renderT();
+  }else if(b.dataset.trest||b.dataset.trestw!==undefined){
+    tpush();const isW=b.dataset.trestw!==undefined,key=isW?b.dataset.trestw:b.dataset.trest;
+    const r=restOf(f,isW?'w:'+key:'k:'+key),v=Math.max(0,r);
+    if(isW)f.ow[Number(key)].v=v;else f[key]=v;f.done=false;
+    const inp=b.closest('.fc').querySelector('input.fin');inp.value=v;flash(inp);save();refreshT();renderT();
+    if(r<0)toast('The other cover boxes already add up to '+(100-r)+', more than 100.');
+  }else if(b.dataset.towdel!==undefined){
+    tpush();f.ow.splice(Number(b.dataset.towdel),1);if(!f.ow.length)f.ow.push({n:'',v:null});f.done=false;save();refreshBody();
+  }else if(b.id==='towadd'){
+    if(f.ow.length<5){tpush();f.ow.push({n:'',v:null});save();refreshBody()}
+  }else if(b.dataset.tdm!==undefined){
+    const d=Number(b.dataset.tdm);tpush();f.dm=(dmSet(f)&&f.dm===d)?'':d;f.done=false;save();refreshT();renderT();
+  }
+  else if(b.dataset.tgo){const g=Number(b.dataset.tgo);if(g!==tcur)openFrame(g,g>tcur?1:-1)}
+  else if(b.id==='tprev'){if(tcur>1)openFrame(tcur-1,-1)}
+  else if(b.id==='tnext'){if(tcur<10)openFrame(tcur+1,1)}
+  else if(b.id==='tundoTop')tdoUndo();
+  else if(b.id==='tnotes')openNotesPop(b);
+  else if(b.id==='tclr'){tpush();Object.assign(f,Object.fromEntries(TKEYS.map(k=>[k,null])),{dm:'',nt:'',done:false,ow:f.ow.map(w=>({n:w.n,v:null}))});save();refreshBody();updateHead(tcur,0);refreshT()}
+  else if(b.id==='tdone'){
+    tpush();f.done=true;save();
+    if(tcur<10)openFrame(tcur+1,1);
+    else{
+      closeFrame();
+      const missing=[];for(let i=1;i<=10;i++)if(!(TS().frames[i]&&TS().frames[i].done))missing.push(i);
+      if(missing.length)toast('Frame'+(missing.length>1?'s ':' ')+missing.join(', ')+' not marked done yet.');
+      else (async()=>{
+        if(confirm('Transect complete! Export a backup CSV now?'))await exportT();
+        toast(`${TS().name} complete`);show('tlist',TS().id);   // back to the transect list, with this one marked complete
+      })();
     }
-    else if(b.dataset.tgo){const g=Number(b.dataset.tgo);if(g!==tcur)openFrame(g,g>tcur?1:-1)}
-    else if(b.id==='tprev'){if(tcur>1)openFrame(tcur-1,-1)}
-    else if(b.id==='tnext'){if(tcur<10)openFrame(tcur+1,1)}
-    else if(b.id==='tundo'||b.id==='tundoTop')tdoUndo();
-    else if(b.id==='tclr'){tpush();Object.assign(f,Object.fromEntries(TKEYS.map(k=>[k,null])),{dm:'',done:false,ow:f.ow.map(w=>({n:w.n,v:null}))});save();openFrame(tcur)}
-    else if(b.id==='tdone'){
-      tpush();f.done=true;save();
-      if(tcur<10)openFrame(tcur+1,1);
-      else{
-        closeFrame();
-        const missing=[];for(let i=1;i<=10;i++)if(!(TS().frames[i]&&TS().frames[i].done))missing.push(i);
-        if(missing.length)toast('Frame'+(missing.length>1?'s ':' ')+missing.join(', ')+' not marked done yet.');
-        else (async()=>{
-          if(confirm('Transect complete! Export a backup CSV now?'))await exportT();
-          if(confirm('Start a new transect?\n\nThis one stays saved under Sessions.'))startNewT();
-        })();
-      }
-    }
-  }else{
-    if(b.id==='tReset')doResetT();
-    else if(b.id==='tnew'){newTSession();closeFrame();renderT()}
-    else if(b.dataset.tsid){db.tcur=b.dataset.tsid;save(false);closeFrame();renderT()}
-    else if(b.id==='tdel'&&confirm('Delete this transect session and its data? Export first if unsure.')){
-      delete db.tsessions[db.tcur];db.tcur=Object.keys(db.tsessions)[0]||null;save(false);TS();closeFrame();renderT()}
   }
 });
-$('#tpanel').addEventListener('focusin',e=>{const d=e.target.dataset;if(d.tin||d.tow!==undefined||d.town!==undefined)tpend=true});
+$('#tpanel').addEventListener('focusin',e=>{const d=e.target.dataset;if(d.tin||d.tow!==undefined)tpend=true});
 $('#tpanel').addEventListener('input',e=>{
   if(tcur==null)return;const f=frame(tcur),d=e.target.dataset;
   if(d.tin||d.tow!==undefined){
@@ -1227,8 +1452,7 @@ $('#tpanel').addEventListener('input',e=>{
     if(raw.trim()!==''&&!readable(v))return;
     if(d.tin)f[d.tin]=num(v,d.tin);else f.ow[Number(d.tow)].v=num(v,'ow');
     f.done=false;refreshT();
-  }else if(d.town!==undefined){if(tpend){tpush();tpend=false}f.ow[Number(d.town)].n=e.target.value}
-  else return;
+  }else return;
   save();renderT();
 });
 $('#tpanel').addEventListener('change',e=>{
@@ -1250,34 +1474,50 @@ $('#tpanel').addEventListener('pointerup',e=>{
 });
 $('#tsheet').addEventListener('click',e=>{if(e.target.id==='tsheet')closeFrame()});
 
-$('#tSessions').onclick=()=>{
-  tcur=null;
-  const list=Object.values(db.tsessions).sort((a,b)=>(b.date+b.id).localeCompare(a.date+a.id));
-  $('#tpanel').innerHTML=`<div class="ph"><h2>Transect sessions</h2><button id="tx">Close</button></div>
-    <button class="pri" id="tnew">+ New transect (copies site &amp; observers)</button>
-    <div class="list">${list.map(s=>{const d=Object.values(s.frames).filter(f=>f.done).length;
-      return `<button data-tsid="${s.id}">${s.id===db.tcur?'● ':''}${esc(s.site||'(no site)')} — ${s.date} — ${esc([s.obs1,s.obs2].filter(Boolean).join(' & ')||'?')} <span class="hint">(${d}/10)</span></button>`}).join('')}</div>
-    <button id="tdel">Delete current transect session</button>
-    <button id="tReset" class="danger">Reset transect (erase all frames in this session)</button>
-    <div class="hint">Your hidden backup copy covers transect data too (see Grid → Sessions → Restore from backup copy).</div>`;
-  $('#tsheet').classList.add('open');
-};
+// ---- the transect list: every transect, done or not ----
+function renderTList(hi){
+  const box=$('#tlcards'),list=Object.values(db.tsessions).sort((a,b)=>Number(String(b.id).slice(1))-Number(String(a.id).slice(1)));
+  if(!list.length){box.innerHTML=`<div class="tlempty">No transects yet.<br>Tap <b>＋ New transect</b> to start one.</div>`;return}
+  box.innerHTML=list.map((s,i)=>{
+    const fs=Object.values(s.frames),done=fs.filter(f=>f.done).length,started=fs.some(tHas),st=done>=10?'done':started?'prog':'new';
+    const dots=ALLN.map(k=>{const f=s.frames[k];return `<i class="${f&&f.done?'dn':f&&tHas(f)?'pt':''}"></i>`}).join('');
+    const obs=[s.obs1,s.obs2].filter(Boolean).join(' & ');
+    return `<div class="tlc ${st}${s.id===hi?' hi':''}${s.id===db.tcur?' cur':''}" style="--i:${i}">
+      <button class="tlopen" data-open="${s.id}">
+        <span class="tlhead"><b>${esc(s.name||'Transect')}</b><span class="tlbadge">${st==='done'?'✓ Complete':st==='prog'?'In progress':'Not started'}</span></span>
+        <span class="tlsub">${esc(s.site||'(no site)')} · ${esc(fmtDate(s.date))}${obs?' · '+esc(obs):''}</span>
+        <span class="tlstrip">${dots}</span>
+        <span class="tlprog"><small>${done} of 10 frames done</small></span>
+      </button>
+      <button class="tldel" data-del="${s.id}" aria-label="Delete ${esc(s.name||'transect')}">${TRASH}</button></div>`;
+  }).join('');
+}
+$('#tlcards').addEventListener('click',e=>{
+  const del=e.target.closest('[data-del]'),op=e.target.closest('[data-open]');
+  if(del){
+    const s=db.tsessions[del.dataset.del];if(!s)return;
+    if(!confirm(`Delete "${s.name}" and all of its frames?\n\nA backup copy is saved first.`))return;
+    backupNow(true);delete db.tsessions[s.id];if(db.tcur===s.id)db.tcur=Object.keys(db.tsessions)[0]||null;save(false);renderTList();
+  }else if(op){db.tcur=op.dataset.open;save(false);show('tapp')}
+});
+$('#tlNew').onclick=startNewT;
+$('#tlBack').onclick=()=>show('menu');
 
 function tcsv(s){
   const fr=Object.entries(s.frames).filter(([n,f])=>tHas(f));
   const nw=Math.max(1,...fr.map(([n,f])=>f.ow.length));
   const wh=Array.from({length:nw},(_,i)=>[`other${i+1}_name`,`other${i+1}_pct`]).flat();
-  const rows=[['site','date','obs1','obs2','frame','distance_m','target','other_total',...wh,'forb','shrub','grass','ground','litter','moss','total','damage','mature_count','immature_count','mature_tall','mature_short','mature_avg','immature_tall','immature_short','immature_avg']];
+  const rows=[['transect','site','date','obs1','obs2','frame','distance_m','target','other_total',...wh,'forb','shrub','grass','ground','litter','moss','total','damage','mature_count','immature_count','mature_tall','mature_short','mature_avg','immature_tall','immature_short','immature_avg','notes']];
   for(let n=1;n<=10;n++){
     const f=s.frames[n];if(!f||!tHas(f))continue;
     const wv=Array.from({length:nw},(_,i)=>f.ow[i]?[f.ow[i].n,f.ow[i].v??'']:['','']).flat();
     const any=f.ow.some(w=>w.v!=null);
-    rows.push([s.site,s.date,s.obs1,s.obs2,n,frameM(n),f.ct??'',any?f.ow.reduce((a,w)=>a+(w.v??0),0):'',...wv,f.cf??'',f.cs??'',f.cg??'',f.cd??'',f.cl??'',f.cm??'',covTot(f)??'',f.dm,f.nm??'',f.ni??'',f.mt??'',f.ms??'',f.ma??'',f.it??'',f.is??'',f.ia??'']);
+    rows.push([s.name,s.site,s.date,s.obs1,s.obs2,n,frameM(n),f.ct??'',any?f.ow.reduce((a,w)=>a+(w.v??0),0):'',...wv,f.cf??'',f.cs??'',f.cg??'',f.cd??'',f.cl??'',f.cm??'',covTot(f)??'',dmSet(f)?f.dm:'',f.nm??'',f.ni??'',f.mt??'',f.ms??'',f.ma??'',f.it??'',f.is??'',f.ia??'',f.nt||'']);
   }
   return rows.map(r=>r.map(q).join(',')).join('\n');
 }
 async function exportT(){
-  const s=TS(),name=`transect_${(s.site||'site').replace(/\W+/g,'_')}_${s.date}.csv`;
+  const s=TS(),name=`transect_${(s.name||'transect').replace(/\W+/g,'_')}_${(s.site||'site').replace(/\W+/g,'_')}_${s.date}.csv`;
   const file=new File([tcsv(s)],name,{type:'text/csv'});
   try{
     if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:name});return}
@@ -1289,13 +1529,15 @@ $('#tResetBtn').onclick=doResetT;
 
 if(!db.cur||!db.sessions[db.cur])newSession();
 // While an entry screen is open the screen behind it cannot scroll or move
-function syncLock(){document.documentElement.classList.toggle('lock',$('#sheet').classList.contains('open')||$('#tsheet').classList.contains('open')||!!document.querySelector('.hover.open'))}
+function syncLock(){document.documentElement.classList.toggle('lock',$('#sheet').classList.contains('open')||$('#tsheet').classList.contains('open')||!!document.querySelector('.hover.open')||popEl.classList.contains('open'))}
 // ---- compact site / date / observers bar: tap it to drop down big input boxes over a darkened screen ----
 const fmtDate=d=>{try{const x=new Date(d+'T00:00:00');return x.toLocaleDateString([],x.getFullYear()===new Date().getFullYear()?{month:'short',day:'numeric'}:{month:'short',day:'numeric',year:'numeric'})}catch(e){return d||''}};
 function updateSum(w){
-  const s=w==='G'?S():TS(),obs=[s.obs1,s.obs2].filter(Boolean).join(' & ');
+  const s=w==='G'?db.sessions[db.cur]:db.tsessions[db.tcur];if(!s)return;   // never create a session just to refresh a label
+  const obs=[s.obs1,s.obs2].filter(Boolean).join(' & ');
   const ic=p=>`<svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg>`;
-  $('#hsum'+w).innerHTML=`<span class="hs">${ic('<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2"/>')}${s.site?`<b>${esc(s.site)}</b>`:'<i>Add site</i>'}</span>`
+  const first=w==='T'?`<b>${esc(s.name||'Transect')}</b>${s.site?`<i class="sm">· ${esc(s.site)}</i>`:''}`:(s.site?`<b>${esc(s.site)}</b>`:'<i>Add site</i>');
+  $('#hsum'+w).innerHTML=`<span class="hs">${ic('<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2"/>')}${first}</span>`
    +`<span class="hs">${ic('<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/>')}${esc(fmtDate(s.date))}</span>`
    +`<span class="hs">${ic('<circle cx="9" cy="9" r="3"/><path d="M3.5 20c.6-3 3-5 5.5-5s4.9 2 5.5 5"/><circle cx="17" cy="10" r="2.4"/><path d="M16.5 15c2.2.2 3.8 1.8 4.2 4"/>')}${obs?esc(obs):'<i>Add observers</i>'}</span>`
    +`<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`;
@@ -1313,7 +1555,7 @@ function hdr(w,open){
 document.addEventListener('keydown',e=>{if(e.key==='Escape')['G','T'].forEach(w=>hdr(w,false))});
 ['#sheet','#tsheet'].forEach(s=>new MutationObserver(syncLock).observe($(s),{attributes:true,attributeFilter:['class']}));
 // Site / observer boxes: keyboard for finger taps only (Pencil taps keep it hidden, Scribble still works)
-['site','obs1','obs2','tsite','tobs1','tobs2'].forEach(id=>{
+['site','obs1','obs2','tname','tsite','tobs1','tobs2'].forEach(id=>{
   const el=$('#'+id);el.classList.add('kb');
   el.addEventListener('pointerdown',e=>{
     const finger=e.pointerType==='touch'||e.pointerType==='mouse';
