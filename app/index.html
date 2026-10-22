@@ -85,7 +85,7 @@ button:disabled{opacity:.5}
 .ctl .row button{width:56px;height:56px;font-size:30px;padding:0;border-radius:16px;flex:none}
 .ctl{--wr:46px;--c:var(--accent)}
 .ctl .row .wheel{flex:1;min-width:0;min-height:calc(var(--wr)*3.2);background:var(--card)}
-.ctl .wi{font-size:calc(var(--wr)*.85)}
+.ctl .wi{font-size:calc(var(--wr)*.72)}
 .ctl .wscroll{-webkit-mask-image:linear-gradient(transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(transparent,#000 7%,#000 93%,transparent)}
 .ctl[data-f=h] .row{flex:1}
 .ctl .row input:not(.wsin){caret-color:transparent;flex:1;min-width:0;width:100%;text-align:center;font-size:40px;font-weight:800;padding:10px 4px;min-height:calc(var(--wr)*2.6)}
@@ -423,7 +423,7 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 .fl.wl .xk{width:26px;height:26px;margin-top:-13px;right:4px;color:#3b463e;background:rgba(0,0,0,.07)}
 /* scroll wheel (forb / shrub / grass, steps of 5) */
 .wheel{position:relative;flex:1 1 auto;min-height:calc(var(--wr)*3);border-radius:12px;border:3px solid var(--c);background:var(--card);overflow:hidden}
-.wscroll{contain:layout paint;position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-y;-webkit-mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent);mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent)}
+.wscroll{contain:layout paint;position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-y;-webkit-mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent);mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent)}
 .wscroll::-webkit-scrollbar{display:none}
 .wi{height:var(--wr);display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-size:calc(var(--wr)*.72);font-weight:800;color:var(--ink);cursor:pointer;-webkit-user-select:none;user-select:none}
 .wi[data-v=""]{color:var(--mute)}
@@ -434,7 +434,7 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 .wheel.hov .wi{opacity:0!important}
 .wheel.hov .wscroll,.sliding .wscroll{-webkit-mask-image:none;mask-image:none}
 .wsin{position:sticky;display:block;z-index:3;width:100%;height:var(--wh);margin:calc((var(--wr) - var(--wh))/2) 0 calc((var(--wh) + var(--wr))/-2);top:calc((var(--wr) - var(--wh))/2);padding:0;border:0;border-radius:10px;background:transparent;color:transparent;caret-color:transparent;text-align:center;font:inherit;font-size:calc(var(--wr)*.72 + (var(--wh) - var(--wr))*.3);font-weight:800;touch-action:pan-y;-webkit-user-select:text;user-select:text}
-.ctl .wsin{font-size:calc(var(--wr)*.85 + (var(--wh) - var(--wr))*.3)}
+.ctl .wsin{font-size:calc(var(--wr)*.72 + (var(--wh) - var(--wr))*.3)}
 .wsin:focus{outline:none}
 .wsin.off,.wsin.writing{color:var(--ink);background:var(--card)}
 .wsin.writing{box-shadow:inset 0 0 0 3px var(--c)}
@@ -836,7 +836,8 @@ const esc=x=>String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'
 const flash=el=>{if(!el)return;el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash')};
 // the stems total rolls to its new value and pulses; moving to another cell just sets it
 function tweenTot(t,nv){
-  const animate=t._cell===cur&&t._v!=null&&nv!=null&&t._v!==nv&&!reduceMotion();
+  const now=performance.now(),fast=now-(t._at||0)<140;t._at=now;
+  const animate=t._cell===cur&&t._v!=null&&nv!=null&&t._v!==nv&&!reduceMotion()&&!fast;
   t._cell=cur;cancelAnimationFrame(t._r);
   if(!animate){t.textContent=nv??'–';t._v=nv;return}
   const from=t._v,t0=performance.now(),dur=320;t._v=nv;
@@ -1586,7 +1587,7 @@ function wheelCore(root,ad){
     const measure=()=>{m={h:w.clientHeight,r:items[0].offsetHeight||36}},applyPad=()=>{const p=Math.max(0,(m.h-m.r)/2);w.style.paddingTop=w.style.paddingBottom=p+'px';inp.style.setProperty('--sp',p+'px');w.parentElement.style.setProperty('--wf',Math.max(m.r,m.h-4)+'px');geo={h:m.h,r:m.r,p}};
     const layout=()=>{measure();applyPad()};
     const paint=()=>{const c=w.scrollTop+geo.h/2,mid=Math.round((c-geo.p-geo.r/2)/geo.r);   // only the rows near the middle are visible, so only they are drawn
-      for(let i=Math.max(0,mid-5);i<=Math.min(last,mid+5);i++){const it=items[i],d=((geo.p+i*geo.r+geo.r/2)-c)/geo.r,a=Math.min(Math.abs(d),3);it.style.transform=`perspective(230px) rotateX(${(-d*22).toFixed(1)}deg) scale(${(a<1?1.4-.52*a:.88-.06*(a-1)).toFixed(3)})`;it.style.opacity=(a<1?1-a*.55:Math.max(.2,.45-.12*(a-1))).toFixed(2);it.style.color=`color-mix(in srgb,var(--ink) ${Math.round(100*(1-Math.min(a,1)))}%,var(--mute))`}};
+      for(let i=Math.max(0,mid-5);i<=Math.min(last,mid+5);i++){const it=items[i],d=((geo.p+i*geo.r+geo.r/2)-c)/geo.r,a=Math.min(Math.abs(d),3);it.style.transform=`perspective(230px) rotateX(${(-d*22).toFixed(1)}deg) scale(${(a<1?1.3-.42*a:.88-.06*(a-1)).toFixed(3)})`;it.style.opacity=(a<1?1-a*.55:Math.max(.2,.45-.12*(a-1))).toFixed(2)}};
     const setIdx=(i,smooth)=>w.scrollTo({top:i*geo.r,behavior:smooth?'smooth':'auto'});
     // only a real touch / wheel / key on THIS wheel may change the data; layout changes (rows resizing) never do
     const arm=()=>{user=true;clearTimeout(userT);userT=setTimeout(()=>{user=false},450)};
@@ -1648,6 +1649,7 @@ function wheelCore(root,ad){
     w.addEventListener('touchend',lift,{passive:true});w.addEventListener('touchcancel',lift,{passive:true});
     w.addEventListener('scroll',()=>{
       if(!raf)raf=requestAnimationFrame(()=>{raf=0;paint()});
+      if(w.scrollLeft)w.scrollLeft=0;   // the wheel only ever moves up and down
       samples.push({t:performance.now(),y:w.scrollTop});if(samples.length>8)samples.shift();
       {const ti=Math.max(0,Math.min(last,Math.round(w.scrollTop/geo.r)));if(ti!==tickIdx){tickIdx=ti;tick(items[ti])}}
       if(!user)return;arm();                                    // keep the window open through the momentum after the finger lifts
@@ -1670,11 +1672,14 @@ function initWheels(root){   // transect frame
     begin:()=>tpush(),change:()=>{frame(tcur).done=false;refreshT()},end:()=>{save();renderT()}
   });
 }
+// while a wheel is moving, redraw the total / grid once per frame instead of on every number it passes
+let refQ=0;
+function queueRefresh(){if(refQ)return;refQ=requestAnimationFrame(()=>{refQ=0;if(cur!=null)refresh()})}
 function initGridWheels(root){   // grid cell
   wheelCore(root,{
     get:w=>cell(cur)[w.dataset.wk],
     set:(w,v)=>{const c=cell(cur);c[w.dataset.wk]=v;c.done=false},
-    begin:w=>{push(w.dataset.wk);markLT(w.closest('.ctl'))},change:()=>{refresh();renderGrid()},end:()=>save()
+    begin:w=>{push(w.dataset.wk);markLT(w.closest('.ctl'))},change:queueRefresh,end:()=>{save();renderGrid()}
   });
 }
 // Boxes keep their size; the entry area scrolls instead. This just applies reveal toggles, re-centres the wheels and shows or hides the "Counts & heights" bar.
