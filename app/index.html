@@ -423,7 +423,7 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 .fl.wl .xk{width:26px;height:26px;margin-top:-13px;right:4px;color:#3b463e;background:rgba(0,0,0,.07)}
 /* scroll wheel (forb / shrub / grass, steps of 5) */
 .wheel{position:relative;flex:1 1 auto;min-height:calc(var(--wr)*3);border-radius:12px;border:3px solid var(--c);background:var(--card);overflow:hidden}
-.wscroll{contain:layout paint;position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-y;-webkit-mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent);mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent)}
+.wscroll{contain:layout paint;position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain;touch-action:none;-webkit-mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent);mask-image:linear-gradient(transparent,#000 16%,#000 84%,transparent)}
 .wscroll::-webkit-scrollbar{display:none}
 .wi{height:var(--wr);display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-size:calc(var(--wr)*.72);font-weight:800;color:var(--ink);cursor:pointer;-webkit-user-select:none;user-select:none}
 .wi[data-v=""]{color:var(--mute)}
@@ -433,7 +433,7 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 .wheel .wi{transition:opacity .18s}
 .wheel.hov .wi{opacity:0!important}
 .wheel.hov .wscroll,.sliding .wscroll{-webkit-mask-image:none;mask-image:none}
-.wsin{position:sticky;display:block;z-index:3;width:100%;height:var(--wh);margin:calc((var(--wr) - var(--wh))/2) 0 calc((var(--wh) + var(--wr))/-2);top:calc((var(--wr) - var(--wh))/2);padding:0;border:0;border-radius:10px;background:transparent;color:transparent;caret-color:transparent;text-align:center;font:inherit;font-size:calc(var(--wr)*.72 + (var(--wh) - var(--wr))*.3);font-weight:800;touch-action:pan-y;-webkit-user-select:text;user-select:text}
+.wsin{position:sticky;display:block;z-index:3;width:100%;height:var(--wh);margin:calc((var(--wr) - var(--wh))/2) 0 calc((var(--wh) + var(--wr))/-2);top:calc((var(--wr) - var(--wh))/2);padding:0;border:0;border-radius:10px;background:transparent;color:transparent;caret-color:transparent;text-align:center;font:inherit;font-size:calc(var(--wr)*.72 + (var(--wh) - var(--wr))*.3);font-weight:800;touch-action:none;-webkit-user-select:text;user-select:text}
 .ctl .wsin{font-size:calc(var(--wr)*.72 + (var(--wh) - var(--wr))*.3)}
 .wsin:focus{outline:none}
 .wsin.off,.wsin.writing{color:var(--ink);background:var(--card)}
@@ -638,6 +638,10 @@ const N=100, KEY='grids.v1', VERSION='1.21.0';
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.sessions)db={cur:null,sessions:{}};
+// Shake to Undo is an iPadOS feature for text boxes. The app has its own Undo buttons, so ignore the system's undo/redo
+// and clear a box's undo history as soon as you leave it.
+document.addEventListener('beforeinput',e=>{if(e.inputType==='historyUndo'||e.inputType==='historyRedo')e.preventDefault()},true);
+document.addEventListener('blur',e=>{const t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA')&&!t.readOnly&&t.type!=='date'&&t.type!=='file'){const v=t.value;t.value='';t.value=v}},true);
 const FIELDS={s1:{},s2:{},g:{},ch:{},m:{max:100,dec:0},h:{dec:1}};
 // Transect (SIMP) frame fields: cover %, mature/immature counts, heights
 const COVERS=['ct','cf','cs','cg','cd','cl','cm']; // fixed cover boxes; 'Other' weeds are a separate list (ow)
@@ -1624,33 +1628,49 @@ function wheelCore(root,ad){
     const relayout=()=>{layout();setIdx(curIdx,false);paint()};
     let firstRO=true;new ResizeObserver(()=>{if(firstRO){firstRO=false;if(w.clientHeight===geo.h)return}relayout()}).observe(w);w.addEventListener('relayout',relayout);
     // + / - / Rest buttons move the wheel to the new value without writing anything themselves
-    w.addEventListener('setv',e=>{const d=e.detail,inst=d&&typeof d==='object',v=inst?d.v:d;user=false;clearTimeout(userT);curIdx=idxOf(v);setIdx(curIdx,!inst&&!reduceMotion());refreshOff(v,inst)});
+    w.addEventListener('setv',e=>{stopGlide();const d=e.detail,inst=d&&typeof d==='object',v=inst?d.v:d;user=false;clearTimeout(userT);curIdx=idxOf(v);setIdx(curIdx,!inst&&!reduceMotion());refreshOff(v,inst)});
     // a small bounce on the number that lands in the middle, each time the wheel passes a value
     let tickIdx=curIdx,tickT=0;
     const tick=it=>{if(!it||reduceMotion())return;const now=performance.now();if(now-tickT<45)return;tickT=now;it.animate({scale:[1,1.22,1]},{duration:170,easing:'ease-out'})};
-    // fling: when a finger lifts at speed, keep the wheel coasting with a little extra push, then settle on the nearest number
-    let samples=[],touching=false,coast=0;
-    const stopCoast=()=>{if(coast){cancelAnimationFrame(coast);coast=0;w.style.scrollSnapType=''}};
-    w.addEventListener('touchstart',()=>{touching=true;samples=[];stopCoast()},{passive:true});
-    const lift=()=>{
-      if(!touching)return;touching=false;
-      const now=performance.now(),sm=samples.filter(q=>now-q.t<120);if(sm.length<2)return;
-      const a=sm[0],b=sm[sm.length-1],dt=b.t-a.t;if(dt<=0)return;
-      let v=(b.y-a.y)/dt*1.7;if(Math.abs(v)<.8)return;
-      w.style.scrollSnapType='none';let lt=performance.now();
-      const stepF=t=>{
-        const d=Math.min(32,t-lt);lt=t;w.scrollTop+=v*d;arm();v*=Math.pow(.94,d/16);
-        const mx=w.scrollHeight-w.clientHeight;
-        if(Math.abs(v)<.05||w.scrollTop<=0||w.scrollTop>=mx){coast=0;w.style.scrollSnapType='';setIdx(Math.round(w.scrollTop/geo.r),true);return}
-        coast=requestAnimationFrame(stepF);
+    // finger control: for touch the wheel is driven here, not by the browser. A drag follows the finger 1:1; a flick glides to a chosen
+    // number with an ease-out, so it can't stall halfway or run past where it was aimed. Pencil, mouse and keyboard still use normal scrolling.
+    let drag=null,glide=0,swallow=0;
+    const stopGlide=()=>{if(glide){cancelAnimationFrame(glide);glide=0}};
+    w.addEventListener('pointerdown',e=>{
+      if(e.pointerType!=='touch')return;
+      stopGlide();w.style.scrollSnapType='none';
+      drag={id:e.pointerId,y:e.clientY,top:w.scrollTop,moved:false,pts:[{t:e.timeStamp,y:e.clientY}]};
+    });
+    w.addEventListener('pointermove',e=>{
+      if(!drag||e.pointerId!==drag.id)return;
+      const dy=e.clientY-drag.y;
+      if(!drag.moved){if(Math.abs(dy)<6)return;drag.moved=true;try{w.setPointerCapture(e.pointerId)}catch(_){}}
+      w.scrollTop=drag.top-dy;arm();
+      drag.pts.push({t:e.timeStamp,y:e.clientY});if(drag.pts.length>8)drag.pts.shift();
+    });
+    const release=e=>{
+      if(!drag||e.pointerId!==drag.id)return;
+      const d=drag;drag=null;
+      if(!d.moved){w.style.scrollSnapType='';return}            // a plain tap: the click handler does the rest
+      swallow=Date.now()+300;                                    // the click that follows a drag must not pick a number
+      const now=e.timeStamp,pts=d.pts.filter(q=>now-q.t<110);
+      let v=0;if(e.type==='pointerup'&&pts.length>1){const a=pts[0],b=pts[pts.length-1];if(b.t>a.t)v=-(b.y-a.y)/(b.t-a.t)}   // px/ms, finger moving up = positive
+      const r=geo.r,from=w.scrollTop,top=last*r;
+      let dist=Math.abs(v)>.15?v*300:0;dist=Math.max(-80*r,Math.min(80*r,dist));
+      const target=Math.max(0,Math.min(top,Math.round((from+dist)/r)*r)),span=Math.abs(target-from);
+      const dur=span<r*1.5?220:Math.min(1300,380+Math.sqrt(span)*22),t0=performance.now();
+      const stepG=t=>{
+        const k=Math.min(1,(t-t0)/dur),ez=1-Math.pow(1-k,3);
+        w.scrollTop=from+(target-from)*ez;arm();
+        if(k<1)glide=requestAnimationFrame(stepG);else{glide=0;w.scrollTop=target;w.style.scrollSnapType=''}
       };
-      coast=requestAnimationFrame(stepF);
+      glide=requestAnimationFrame(stepG);
     };
-    w.addEventListener('touchend',lift,{passive:true});w.addEventListener('touchcancel',lift,{passive:true});
+    w.addEventListener('pointerup',release);w.addEventListener('pointercancel',release);
+    w.addEventListener('click',e=>{if(Date.now()<swallow){e.stopPropagation();e.preventDefault()}},true);
     w.addEventListener('scroll',()=>{
       if(!raf)raf=requestAnimationFrame(()=>{raf=0;paint()});
       if(w.scrollLeft)w.scrollLeft=0;   // the wheel only ever moves up and down
-      samples.push({t:performance.now(),y:w.scrollTop});if(samples.length>8)samples.shift();
       {const ti=Math.max(0,Math.min(last,Math.round(w.scrollTop/geo.r)));if(ti!==tickIdx){tickIdx=ti;tick(items[ti])}}
       if(!user)return;arm();                                    // keep the window open through the momentum after the finger lifts
       const idx=Math.max(0,Math.min(last,Math.round(w.scrollTop/geo.r)));
