@@ -137,6 +137,13 @@ html.lock .view{overflow:hidden}
 @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.025);background:color-mix(in srgb,var(--c,#1f6b2c) 13%,var(--card))}100%{transform:scale(1)}}
 textarea{width:100%;min-height:90px;resize:vertical}
 #panel input[data-in=h]::placeholder{font-size:20px;font-weight:600;color:var(--mute);opacity:.8}
+#tot{display:inline-block}
+#panel{transition:background-color .5s}
+#panel.st-has{background:color-mix(in srgb,#2f9e48 9%,var(--bg))}
+#panel.st-warn{background:color-mix(in srgb,#e0a100 16%,var(--bg))}
+.ctl{transition:box-shadow .3s}
+.ctl.lt{box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 40%,transparent),0 0 20px 2px color-mix(in srgb,var(--c) 45%,transparent)}
+.spk{position:absolute;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:#f2b705;pointer-events:none}
 #helpBtn{width:46px;padding:11px 0;font-size:20px}
 #notes{display:inline-flex;align-items:center;gap:6px}
 @media(max-width:900px){#notes .nt{display:none}}
@@ -311,6 +318,10 @@ textarea{width:100%;min-height:90px;resize:vertical}
 .ovl.open{display:flex}
 .orcard{background:var(--bg);border-radius:20px;padding:18px;width:min(92vw,400px);display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 40px rgba(0,0,0,.45)}
 .hlist{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.35}.hcard{width:min(92vw,520px)}
+.gfcard{width:min(92vw,460px);overflow:hidden;position:relative}
+#gfBody{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gft{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:8px 12px;display:flex;flex-direction:column}
+.gft small{font-size:12px;font-weight:700;color:var(--mute)}.gft b{font-size:28px;line-height:1.1;font-weight:800}
 .gscard{width:min(92vw,460px)}
 #gstatBoard{display:grid;grid-template-columns:repeat(10,1fr);gap:7px;padding:4px}
 #gstatBoard i{aspect-ratio:1;border-radius:50%;background:color-mix(in srgb,var(--line) 70%,var(--card));border:2px solid var(--line)}
@@ -613,6 +624,7 @@ textarea.wpin{min-height:min(44vh,360px);font-size:30px;resize:none;font-weight:
     <li><b>Each box header:</b> the left icon undoes that box, the right icon clears it.</li>
     <li><b>Notes:</b> tap the Notes bar to open a big writing area.</li>
   </ul><button class="pri" data-hclose>Got it</button></div></div>
+<div id="gfin" class="ovl" aria-hidden="true"><div class="orcard gfcard" role="dialog" aria-label="Grid complete"><h2>Grid complete!</h2><div class="hint" id="gfSub"></div><div id="gfBody"></div><div class="orbtns"><button id="gfClose">Close</button><button class="pri" id="gfExport">Export CSV</button></div></div></div>
 <div id="gstat" class="ovl" aria-hidden="true"><div class="orcard gscard" role="dialog" aria-label="Grid status"><h2 id="gstatTitle"></h2><div id="gstatBoard"></div><div class="gleg"><span><i class="d done"></i>Done</span><span><i class="d part"></i>Started</span><span><i class="d"></i>Not done</span><span><i class="d cur"></i>You are here</span></div><button class="pri" data-gclose>Close</button></div></div>
 <div id="orient" class="ovl" aria-hidden="true"><div class="orcard" role="dialog"><h2 id="orTitle"></h2><div class="hint" id="orHint"></div><div id="orBoard"></div><div class="orbtns"><button id="orBack">‹ Back</button><button id="orCancel">Cancel</button></div></div></div>
 <div id="toast"></div>
@@ -694,13 +706,43 @@ function renderGrid(){
   for(let i=1;i<=N;i++){
     const b=g.children[i-1],c=S().cells[i],st=state(i);if(st==='done')done++;
     const cls='cell '+st+(c&&c.n?' has':'')+(c&&warns(c).length?' warn':'')+(cur===i?' cur':'');
-    if(b.className!==cls)b.className=cls;
+    if(b.className!==cls){b.className=cls;if(b._st!==undefined&&b._st!=='done'&&st==='done'&&!reduceMotion())b.animate({transform:['scale(1)','scale(1.4)','scale(1)']},{duration:520,delay:200,easing:'cubic-bezier(.3,1.5,.5,1)'})}
+    b._st=st;
     const html=`${i}`+(c&&touched(c)?`<small>${stems(c)??0}/${c.g??0}</small>`:'');
     if(b._h!==html){b.innerHTML=html;b._h=html}
   }
   $('#prog').textContent=`${done}/${N} cells`;
-  const gr=$('#gring');if(gr){$('#gringFg').setAttribute('stroke-dasharray',`${(done/N*94.25).toFixed(2)} 94.25`);$('#gringTxt').textContent=done;gr.setAttribute('aria-label',`${done} of ${N} cells done`);gr.title=`${done} of ${N} cells done`}
+  const gr=$('#gring');if(gr){if(gr._d!==undefined&&done>gr._d)sparkle(gr);gr._d=done;$('#gringFg').setAttribute('stroke-dasharray',`${(done/N*94.25).toFixed(2)} 94.25`);$('#gringTxt').textContent=done;gr.setAttribute('aria-label',`${done} of ${N} cells done`);gr.title=`${done} of ${N} cells done`}
   placeArrow();renderStats();
+}
+function showFinish(){
+  const cs=Object.values(S().cells).filter(c=>c.done),sum=f=>cs.reduce((a,c)=>a+(f(c)||0),0),st=sum(stems),g=sum(c=>c.g),ch=sum(c=>c.ch);
+  const pct=(x,y)=>y>0?(x/y*100).toFixed(1)+'%':'–',ts=cs.map(c=>c.t).filter(Boolean);
+  let time='–',rate='–';
+  if(ts.length>1){const min=(Math.max(...ts)-Math.min(...ts))/60000;time=min>=60?`${Math.floor(min/60)} h ${Math.round(min%60)} min`:`${Math.max(1,Math.round(min))} min`;rate=(ts.length/Math.max(min,1)).toFixed(1)}
+  const tile=(k,v)=>`<div class="gft"><small>${k}</small><b>${v}</b></div>`,s=S();
+  $('#gfSub').textContent=`${s.site||'(no site)'} · ${fmtDate(s.date)} · all ${N} cells done`;
+  $('#gfBody').innerHTML=tile('Total stems',st)+tile('Total galls',g)+tile('Total chomps',ch)+tile('% chomped',pct(ch,st))+tile('Time (first to last cell)',time)+tile('Cells per minute',rate);
+  $('#gfin').classList.add('open');
+  if(!reduceMotion()){
+    const card=$('#gfin .gfcard'),cols=['#1b8a3a','#43b05c','#9be3a6','#f2b705','#d99e00'];
+    card.animate([{transform:'scale(.85)',opacity:0},{transform:'scale(1.03)',opacity:1,offset:.6},{transform:'scale(1)',opacity:1}],{duration:520,easing:'ease-out'});
+    for(let i=0;i<40;i++){
+      const d=document.createElement('div');d.className='fxdot';d.style.cssText=`position:absolute;left:50%;top:30%;background:${cols[i%cols.length]};opacity:1`;if(i%3===0)d.style.borderRadius='50%';card.appendChild(d);
+      const a=Math.random()*Math.PI*2,r=120+Math.random()*180;
+      d.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:`translate(${Math.cos(a)*r}px,${Math.sin(a)*r+60}px) rotate(${Math.round(Math.random()*720-360)}deg)`,opacity:0}],{duration:1100+Math.random()*700,easing:'cubic-bezier(.1,.7,.3,1)'}).onfinish=()=>d.remove();
+    }
+  }
+}
+$('#gfin').addEventListener('click',e=>{if(e.target.id==='gfin'||e.target.id==='gfClose')$('#gfin').classList.remove('open');else if(e.target.id==='gfExport')exportCsv()});
+function sparkle(el){
+  if(reduceMotion())return;
+  for(let i=0;i<10;i++){
+    const d=document.createElement('i');d.className='spk';el.appendChild(d);
+    const a=i/10*Math.PI*2+Math.random()*.4,r=26+Math.random()*12;
+    d.animate([{transform:'translate(-50%,-50%) scale(1)',opacity:1},{transform:`translate(calc(-50% + ${Math.cos(a)*r}px),calc(-50% + ${Math.sin(a)*r}px)) scale(.2)`,opacity:0}],{duration:600+Math.random()*300,easing:'ease-out'}).onfinish=()=>d.remove();
+  }
+  el.animate({transform:['scale(1)','scale(1.25)','scale(1)']},{duration:420,easing:'ease-out'});
 }
 // Grid stats dropdown, worked out from every cell you have entered
 function renderStats(){
@@ -792,9 +834,20 @@ function renderHeader(){redrawPads();const s=S();updateSum('G');$('#site').value
 let cur=null;
 const esc=x=>String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 const flash=el=>{if(!el)return;el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash')};
+// the stems total rolls to its new value and pulses; moving to another cell just sets it
+function tweenTot(t,nv){
+  const animate=t._cell===cur&&t._v!=null&&nv!=null&&t._v!==nv&&!reduceMotion();
+  t._cell=cur;cancelAnimationFrame(t._r);
+  if(!animate){t.textContent=nv??'–';t._v=nv;return}
+  const from=t._v,t0=performance.now(),dur=320;t._v=nv;
+  const tk=n=>{const k=Math.min(1,(n-t0)/dur),e=1-Math.pow(1-k,3);t.textContent=Math.round(from+(nv-from)*e);if(k<1)t._r=requestAnimationFrame(tk)};
+  tk(t0);t.animate({transform:['scale(1)','scale(1.35)','scale(1)']},{duration:360,easing:'ease-out'});
+}
+const markLT=el=>{if(!el)return;document.querySelectorAll('#panel .ctl.lt').forEach(x=>{if(x!==el)x.classList.remove('lt')});el.classList.add('lt')};
 function refresh(){
   if(cur==null)return;const c=cell(cur);
-  const t=$('#tot');if(t)t.textContent=stems(c)??'–';
+  const t=$('#tot');if(t)tweenTot(t,stems(c));
+  const pn=$('#panel');pn.classList.toggle('st-has',!!(c.done||touched(c)));pn.classList.toggle('st-warn',warns(c).length>0);
     const w=$('#warn');if(w){const a=warns(c);w.hidden=!a.length;w.textContent=a.length?'⚠ '+a.join(' '):''}
   const dis=!(undo[ukey()]||[]).length;['#undo'].forEach(s=>{const u=$(s);if(u)u.disabled=dis});
 }
@@ -849,7 +902,7 @@ function mountCell(n){ // instant render
 function openCell(n,kind){
   const panel=$('#panel'),sheet=$('#sheet');
   if(!kind||reduceMotion()||!sheet.classList.contains('open')||cur==null||!panel.querySelector('.gentry')){mountCell(n);return}
-  slideEntry(panel,n,vecTo(cur,n));
+  slideEntry(panel,n,vecTo(cur,n),kind==='done'||kind==='none');
   if(kind==='done'||kind==='none')fxBurst(kind);
 }
 // Move to another cell without rebuilding the screen: same wheels, same boxes, new numbers.
@@ -859,7 +912,7 @@ function updateCellInPlace(n){
   pb.disabled=!pv;pb.textContent=pv?glyph(n,pv)+' '+pv:'';nb.disabled=!nx;nb.textContent=nx?nx+' '+glyph(n,nx):'';
   $('#panel h2').textContent='Cell '+n;$('#rowpos').textContent=rowPos(n);
   db.textContent='Save & next '+(nx?glyph(n,nx)+' '+nx:'(finish)');
-  setNotesBtn(c);
+  setNotesBtn(c);document.querySelectorAll('#panel .ctl.lt').forEach(x=>x.classList.remove('lt'));
   const re=$('#rowend');if(re){const t=rowEnd(n);re.textContent=t;re.hidden=!t}
   $('#panel').querySelectorAll('.mpad button').forEach(b=>b.classList.toggle('on',b.dataset.mv!=='clear'&&c.m===Number(b.dataset.mv)));
   const hi=$('#panel input[data-in="h"]');if(hi)hi.value=c.h??'';
@@ -868,7 +921,7 @@ function updateCellInPlace(n){
 }
 // Only the six entry boxes slide: a copy of the old boxes leaves one side while the new ones come in from the other.
 // The title, buttons, hint and notes stay where they are.
-function slideEntry(panel,n,v){
+function slideEntry(panel,n,v,lift){
   const old=panel.querySelector('.gentry .gbody');
   old.querySelectorAll('input').forEach(el=>el.setAttribute('value',el.value));
   old.querySelectorAll('textarea').forEach(el=>{el.textContent=el.value});
@@ -889,10 +942,13 @@ function slideEntry(panel,n,v){
   updateCellInPlace(n);   // the wheels and boxes stay in the page; they just jump to the new cell's numbers
   const entry=panel.querySelector('.gentry'),nb=old;
   entry.appendChild(ghost);
-  const Dx=entry.clientWidth+24,Dy=entry.clientHeight+24,opt={duration:340,easing:'cubic-bezier(.4,0,.2,1)'};
-  ghost.animate([{transform:'translate(0,0)'},{transform:`translate(${-v.x*Dx}px,${-v.y*Dy}px)`}],{...opt,fill:'forwards'}).onfinish=()=>ghost.remove();
-  setTimeout(()=>{ghost.remove();panel.classList.remove('sliding')},420);
-  nb.animate([{transform:`translate(${v.x*Dx}px,${v.y*Dy}px)`},{transform:'translate(0,0)'}],opt);
+  const Dx=entry.clientWidth+24,Dy=entry.clientHeight+24,dur=lift?560:340,opt={duration:dur,easing:'cubic-bezier(.4,0,.2,1)'};
+  // a saved cell lifts off, tilts and fades as it leaves; the next one rises in
+  ghost.animate(lift?[{transform:'translate(0,0) rotate(0deg) scale(1)',opacity:1},{transform:`translate(${-v.x*Dx*.7}px,${-v.y*Dy*.7}px) rotate(${(v.x||1)*-5}deg) scale(.9)`,opacity:0}]
+    :[{transform:'translate(0,0)'},{transform:`translate(${-v.x*Dx}px,${-v.y*Dy}px)`}],{...opt,fill:'forwards'}).onfinish=()=>ghost.remove();
+  setTimeout(()=>{ghost.remove();panel.classList.remove('sliding')},dur+80);
+  nb.animate(lift?[{transform:`translate(${v.x*Dx*.5}px,${v.y*Dy*.5}px) scale(.94)`,opacity:0},{transform:'translate(0,0) scale(1)',opacity:1}]
+    :[{transform:`translate(${v.x*Dx}px,${v.y*Dy}px)`},{transform:'translate(0,0)'}],opt);
 }
 // Little celebration overlay: a stamp, a ring and confetti, so you can tell which button you pressed
 function fxBurst(type,d){
@@ -924,14 +980,19 @@ function doResetGrid(){
   s.cells={};Object.keys(undo).forEach(k=>{if(k.startsWith(db.cur+':'))delete undo[k]});
   save();closeSheet();toast('Grid reset: all cells cleared.');
 }
-function closeSheet(){$('#sheet').classList.remove('open');cur=null;if(!$('#app').hidden)renderGrid()}
+function closeSheet(){
+  $('#sheet').classList.remove('open');$('#panel').classList.remove('st-has','st-warn');cur=null;if(!$('#app').hidden)renderGrid();
+  const l=document.querySelector('#grid .cell.last');if(l&&!reduceMotion())l.animate({transform:['scale(1)','scale(1.3)','scale(1)']},{duration:520,easing:'cubic-bezier(.3,1.5,.5,1)'});
+}
 
 $('#panel').addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
   if(b.id==='x'){closeSheet();return}
   if(cur!=null){
     const c=cell(cur);
+    markLT(b.closest('.ctl'));
     if(b.dataset.mv!==undefined){
+      if(!reduceMotion())b.animate({scale:[1,1.3,1]},{duration:280,easing:'ease-out'});
       push('m');const v=Number(b.dataset.mv);c.m=b.dataset.mv==='clear'||c.m===v?null:v;c.done=false;syncWheel(b.closest('.ctl'),c.m);save();refresh();renderGrid();
     }else if(b.dataset.k){
       const k=b.dataset.k;push(k);
@@ -954,13 +1015,13 @@ $('#panel').addEventListener('click',e=>{
     }else if(b.id==='none'||b.id==='done'){
       push();
       if(b.id==='none')Object.assign(c,{s1:0,s2:0,g:0,ch:0,m:null,h:null});
-      if(c.s1===null&&c.s2===null)c.s1=0;if(c.g===null)c.g=0;if(c.ch===null)c.ch=0;c.done=true;save();
+      if(c.s1===null&&c.s2===null)c.s1=0;if(c.g===null)c.g=0;if(c.ch===null)c.ch=0;c.done=true;c.t=Date.now();save();
       const nx=nextOf(cur);
       if(nx)openCell(nx,b.id==='none'?'none':'done');
       else{
         closeSheet();
         const all=Object.values(S().cells).filter(x=>x.done).length;
-        if(all>=N&&confirm('All 100 cells are done! Export a backup CSV now?'))exportCsv();
+        if(all>=N)showFinish();
       }
     }
   }else{
@@ -970,10 +1031,34 @@ $('#panel').addEventListener('click',e=>{
     else if(b.dataset.snap)restoreSnap(b.dataset.snap);
   }
 });
+// hold + or - to keep counting, faster the longer you hold
+(()=>{
+  let timer=0,rep=0,supp=false;
+  const stop=()=>{clearTimeout(timer);clearInterval(rep);timer=rep=0};
+  $('#panel').addEventListener('click',e=>{if(supp){supp=false;e.stopPropagation();e.preventDefault()}},true);
+  $('#panel').addEventListener('pointerdown',e=>{
+    const b=e.target.closest('button[data-k][data-d]');if(!b||cur==null)return;
+    stop();let n=0,pushed=false;
+    timer=setTimeout(()=>{
+      const k=b.dataset.k,d=Number(b.dataset.d);supp=true;
+      const go=()=>{
+        if(cur==null){stop();return}
+        const c=cell(cur);if(!pushed){push(k);pushed=true}
+        c[k]=fit(k,(c[k]??0)+d);c.done=false;markLT(b.closest('.ctl'));
+        const w=b.closest('.ctl').querySelector('.wscroll');if(w)w.dispatchEvent(new CustomEvent('setv',{detail:{v:c[k],instant:true}}));
+        refresh();renderGrid();save();
+        n++;if(n===12||n===30){clearInterval(rep);rep=setInterval(go,n===12?70:40)}
+      };
+      go();rep=setInterval(go,130);
+    },380);
+  });
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>$('#panel').addEventListener(ev,stop,true));
+})();
 $('#panel').addEventListener('focusin',e=>{if(e.target.dataset.in==='h')e.target.inputMode=lastPT==='touch'?'decimal':'none';if(e.target.dataset.in||e.target.id==='notes')pend=true});
 $('#panel').addEventListener('input',e=>{
   if(cur==null)return;
   const c=cell(cur);
+  markLT(e.target.closest('.ctl'));
   if(e.target.dataset.in){
     if(e.isComposing)return;
     const k=e.target.dataset.in;if(pend){push(k);pend=false}
@@ -1539,8 +1624,32 @@ function wheelCore(root,ad){
     let firstRO=true;new ResizeObserver(()=>{if(firstRO){firstRO=false;if(w.clientHeight===geo.h)return}relayout()}).observe(w);w.addEventListener('relayout',relayout);
     // + / - / Rest buttons move the wheel to the new value without writing anything themselves
     w.addEventListener('setv',e=>{const d=e.detail,inst=d&&typeof d==='object',v=inst?d.v:d;user=false;clearTimeout(userT);curIdx=idxOf(v);setIdx(curIdx,!inst&&!reduceMotion());refreshOff(v,inst)});
+    // a small bounce on the number that lands in the middle, each time the wheel passes a value
+    let tickIdx=curIdx,tickT=0;
+    const tick=it=>{if(!it||reduceMotion())return;const now=performance.now();if(now-tickT<45)return;tickT=now;it.animate({scale:[1,1.22,1]},{duration:170,easing:'ease-out'})};
+    // fling: when a finger lifts at speed, keep the wheel coasting with a little extra push, then settle on the nearest number
+    let samples=[],touching=false,coast=0;
+    const stopCoast=()=>{if(coast){cancelAnimationFrame(coast);coast=0;w.style.scrollSnapType=''}};
+    w.addEventListener('touchstart',()=>{touching=true;samples=[];stopCoast()},{passive:true});
+    const lift=()=>{
+      if(!touching)return;touching=false;
+      const now=performance.now(),sm=samples.filter(q=>now-q.t<120);if(sm.length<2)return;
+      const a=sm[0],b=sm[sm.length-1],dt=b.t-a.t;if(dt<=0)return;
+      let v=(b.y-a.y)/dt*1.7;if(Math.abs(v)<.8)return;
+      w.style.scrollSnapType='none';let lt=performance.now();
+      const stepF=t=>{
+        const d=Math.min(32,t-lt);lt=t;w.scrollTop+=v*d;arm();v*=Math.pow(.94,d/16);
+        const mx=w.scrollHeight-w.clientHeight;
+        if(Math.abs(v)<.05||w.scrollTop<=0||w.scrollTop>=mx){coast=0;w.style.scrollSnapType='';setIdx(Math.round(w.scrollTop/geo.r),true);return}
+        coast=requestAnimationFrame(stepF);
+      };
+      coast=requestAnimationFrame(stepF);
+    };
+    w.addEventListener('touchend',lift,{passive:true});w.addEventListener('touchcancel',lift,{passive:true});
     w.addEventListener('scroll',()=>{
       if(!raf)raf=requestAnimationFrame(()=>{raf=0;paint()});
+      samples.push({t:performance.now(),y:w.scrollTop});if(samples.length>8)samples.shift();
+      {const ti=Math.max(0,Math.min(last,Math.round(w.scrollTop/geo.r)));if(ti!==tickIdx){tickIdx=ti;tick(items[ti])}}
       if(!user)return;arm();                                    // keep the window open through the momentum after the finger lifts
       const idx=Math.max(0,Math.min(last,Math.round(w.scrollTop/geo.r)));
       if(idx!==curIdx){
@@ -1565,7 +1674,7 @@ function initGridWheels(root){   // grid cell
   wheelCore(root,{
     get:w=>cell(cur)[w.dataset.wk],
     set:(w,v)=>{const c=cell(cur);c[w.dataset.wk]=v;c.done=false},
-    begin:w=>push(w.dataset.wk),change:()=>{refresh();renderGrid()},end:()=>save()
+    begin:w=>{push(w.dataset.wk);markLT(w.closest('.ctl'))},change:()=>{refresh();renderGrid()},end:()=>save()
   });
 }
 // Boxes keep their size; the entry area scrolls instead. This just applies reveal toggles, re-centres the wheels and shows or hides the "Counts & heights" bar.
