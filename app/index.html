@@ -50,7 +50,14 @@ button:disabled{opacity:.5}
 .ph{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .ph h2{margin:0;font-size:26px}
 .navh{display:flex;align-items:center;gap:10px}
-.navh h2{width:176px;text-align:center;white-space:nowrap;overflow:hidden}
+@media(max-width:900px){.tot .sx{display:none}.navh{gap:6px}.navh button{min-width:64px;padding:10px}.navh h2{width:112px;font-size:24px}.gring{width:38px;height:38px}}
+.gring{position:relative;width:42px;height:42px;flex:none;display:inline-flex;align-items:center;justify-content:center;padding:0;border:0;border-radius:50%;background:transparent}
+.gring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);fill:none;stroke-width:4.5}
+.gring .bg{stroke:color-mix(in srgb,var(--line) 70%,var(--card))}
+.gring .fg{stroke:var(--accent);stroke-linecap:round;transition:stroke-dasharray .6s cubic-bezier(.2,.8,.3,1)}
+.gring b{font-size:13px;font-weight:800;color:var(--ink)}
+.ctt{display:flex;flex-direction:column;align-items:center;line-height:1.1}.ctt small{font-size:12px;font-weight:700;color:var(--mute);white-space:nowrap}
+.navh h2{width:136px;text-align:center;white-space:nowrap;overflow:hidden}
 .navh button{min-width:78px;font-size:20px;padding:10px 14px}
 .ctr{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .tot{font-size:16px;font-weight:700;color:var(--mute)}.tot b{color:var(--ink);font-size:26px}
@@ -72,11 +79,14 @@ button:disabled{opacity:.5}
 .ctl[data-f] .row button{border-color:var(--c);color:var(--c);font-weight:800}
 .ctl[data-f] .quick button{border-color:var(--c);color:var(--ink)}
 .ctl[data-f] .sub{color:var(--c);font-weight:800}
-.ctl .row{display:flex;align-items:center;gap:10px;width:100%}
+.ctl .row{display:flex;align-items:stretch;gap:8px;width:100%;flex:1 1 auto}
+.ctl .sb{display:flex;flex-direction:column;gap:6px;flex:none}
+.ctl .row .sb button{width:54px;height:auto;flex:1 1 0;min-height:34px;font-size:17px;border-radius:12px;padding:0}
 .ctl .row button{width:56px;height:56px;font-size:30px;padding:0;border-radius:16px;flex:none}
-.ctl{--wr:40px;--c:var(--accent)}
-.ctl .row .wheel{flex:1;min-width:0;min-height:calc(var(--wr)*2.6);background:var(--card)}
+.ctl{--wr:46px;--c:var(--accent)}
+.ctl .row .wheel{flex:1;min-width:0;min-height:calc(var(--wr)*3.2);background:var(--card)}
 .ctl .wi{font-size:calc(var(--wr)*.85)}
+.ctl .wscroll{-webkit-mask-image:linear-gradient(transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(transparent,#000 7%,#000 93%,transparent)}
 .ctl[data-f=h] .row{flex:1}
 .ctl .row input:not(.wsin){caret-color:transparent;flex:1;min-width:0;width:100%;text-align:center;font-size:40px;font-weight:800;padding:10px 4px;min-height:calc(var(--wr)*2.6)}
 .ctl .quick{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
@@ -96,14 +106,22 @@ button:disabled{opacity:.5}
 .fxstamp.arrow svg{width:54px;height:54px}
 .fxstamp b{font-size:54px;line-height:1}.fxstamp small{font-size:14px;font-weight:800}
 .fxdot{position:absolute;width:12px;height:12px;border-radius:3px}
-.mpad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%;flex:1}
-.mpad button{height:auto;min-height:56px;padding:0;font-size:26px;font-weight:800;border:3px solid var(--c);color:var(--c);border-radius:14px}
+.mpad{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:1fr;gap:6px;width:100%;flex:1}
+.mpad button{height:auto;min-height:36px;padding:0;font-size:19px;font-weight:800;border:3px solid var(--c);color:var(--c);border-radius:14px}
+.mpad button.mclr{font-size:13px;border-color:var(--line);color:var(--mute)}
 .mpad button.on{background:var(--c);color:#fff}
-.rowend{background:#fff3cd;color:#5a4300;border:2px solid #d99e00;border-radius:10px;padding:8px 12px;font-weight:800;text-align:center}
+.rowslot{flex:1 1 0;min-width:0;display:flex;justify-content:center}
+.rowend{background:#fff3cd;color:#5a4300;border:2px solid #d99e00;border-radius:999px;padding:4px 12px;font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.rowend[hidden]{display:none}
 .garrow{position:absolute;z-index:3;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;background:#d99e00;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.4);pointer-events:none}
 .garrow svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
-.cell.up{outline:3px dashed #d99e00;outline-offset:-1px}
+.cell.up{z-index:2;background:#fff;color:#1d2a1f;border-color:#fff;animation:upglow 1.1s ease-in-out infinite}
+.garrow{animation:garbob 1.1s ease-in-out infinite}
+@keyframes garbob{0%,100%{transform:translate(calc(var(--dx,1)*-4px),calc(var(--dy,0)*-4px))}45%{transform:translate(calc(var(--dx,1)*6px),calc(var(--dy,0)*6px))}}
+@keyframes upglow{0%,100%{box-shadow:0 0 4px 1px rgba(242,183,5,.5),0 0 10px 2px rgba(242,183,5,.25);}45%{box-shadow:0 0 14px 5px rgba(242,183,5,.95),0 0 30px 12px rgba(242,183,5,.5)}}
+@media(prefers-reduced-motion:reduce){.cell.up,.garrow{animation:none}}
 .cell.last{box-shadow:inset 0 0 0 3px #d99e00}
+@media(max-height:780px){#panel .ctl{--wr:35px;padding:8px;gap:6px}#panel .ctl .t{min-height:32px}#panel textarea{min-height:64px}.mpad button{font-size:20px}}
 html,body{overflow:hidden;overscroll-behavior:none}
 body{position:fixed;inset:0;width:100%}
 /* each screen is its own scroller (only scrolls when its content is taller than the display); nothing stretches or pulls to refresh */
@@ -118,6 +136,11 @@ html.lock .view{overflow:hidden}
 .flash{animation:pop .22s ease-out}
 @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.025);background:color-mix(in srgb,var(--c,#1f6b2c) 13%,var(--card))}100%{transform:scale(1)}}
 textarea{width:100%;min-height:90px;resize:vertical}
+#panel input[data-in=h]::placeholder{font-size:20px;font-weight:600;color:var(--mute);opacity:.8}
+#helpBtn{width:46px;padding:11px 0;font-size:20px}
+#notes{display:inline-flex;align-items:center;gap:6px}
+@media(max-width:900px){#notes .nt{display:none}}
+#notes.has::after{content:"";flex:none;width:10px;height:10px;border-radius:50%;background:#f2b705}
 .nav{display:flex;gap:8px}
 .nav button{flex:1}
 .panel.wide .nav button{padding:9px 14px}
@@ -283,7 +306,37 @@ textarea{width:100%;min-height:90px;resize:vertical}
 @media(max-width:760px){.tcov{grid-template-columns:repeat(3,minmax(0,1fr))}.mgrid{grid-template-columns:1fr}}
 /* notes / sketch pads: write or draw with the Pencil */
 #gridrow{display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"g g" "l r";gap:12px}
-#gridrow>#grid{grid-area:g}#padL{grid-area:l;height:320px}#padR{grid-area:r;height:320px}
+#gridrow>#grid{grid-area:g}#leftcol{grid-area:l;display:flex;flex-direction:column;gap:10px;min-width:0}#padL{height:320px;flex:none}#padR{grid-area:r;height:320px}
+.ovl{position:fixed;inset:0;z-index:9;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center}
+.ovl.open{display:flex}
+.orcard{background:var(--bg);border-radius:20px;padding:18px;width:min(92vw,400px);display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 40px rgba(0,0,0,.45)}
+.hlist{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.35}.hcard{width:min(92vw,520px)}
+.gscard{width:min(92vw,460px)}
+#gstatBoard{display:grid;grid-template-columns:repeat(10,1fr);gap:7px;padding:4px}
+#gstatBoard i{aspect-ratio:1;border-radius:50%;background:color-mix(in srgb,var(--line) 70%,var(--card));border:2px solid var(--line)}
+#gstatBoard i.done,.gleg .d.done{background:#2f9e48;border-color:#2f9e48}
+#gstatBoard i.part,.gleg .d.part{background:#f2b705;border-color:#f2b705}
+#gstatBoard i.cur,.gleg .d.cur{box-shadow:0 0 0 3px var(--bg),0 0 0 6px var(--ink)}
+.gleg{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font-size:13px;color:var(--mute);font-weight:700}
+.gleg span{display:inline-flex;align-items:center;gap:6px}
+.gleg .d{width:14px;height:14px;border-radius:50%;background:color-mix(in srgb,var(--line) 70%,var(--card));border:2px solid var(--line);display:inline-block}
+.orcard h2{margin:0;font-size:24px;text-align:center}.orcard .hint{text-align:center}
+#orBoard{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.orc{aspect-ratio:1;padding:0;border-radius:12px;font-size:28px;font-weight:800;border:2px solid var(--line);background:color-mix(in srgb,var(--line) 25%,var(--card));color:var(--ink)}
+.orc:disabled{opacity:.55}
+.orc.on{background:#fff3cd;border-color:#d99e00;color:#5a4300;animation:upglow 1.1s ease-in-out infinite}
+.orc.one{background:var(--accent);border-color:var(--accent);color:#fff;opacity:1}
+.orbtns{display:flex;gap:8px}.orbtns button{flex:1}
+.gstats{position:relative;z-index:4;flex:none}
+.gsb{border:2px solid var(--line)!important;border-radius:14px!important;background:var(--card)!important}
+.gsb{width:100%;display:flex;align-items:center;gap:8px;border:0;border-radius:0;background:transparent;padding:10px 12px;font-size:15px;font-weight:800;text-align:left}
+.gsb .gsum{flex:1;text-align:right;font-weight:700;color:var(--mute);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gsb .chev{width:19px;height:19px;flex:none;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s}
+.gsb[aria-expanded=true] .chev{transform:rotate(180deg)}
+.gsbody{position:absolute;left:0;right:0;top:calc(100% + 6px);display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:10px 12px;font-size:14px;border:2px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.gsbody[hidden]{display:none}
+.gsbody .k{color:var(--mute)}.gsbody .v{font-weight:800;text-align:right}
+.gsbody hr{grid-column:1/-1;width:100%;border:0;border-top:1px solid var(--line);margin:2px 0}
 .padrow{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1 1 auto;min-height:260px}
 .pad{display:flex;flex-direction:column;min-width:0;min-height:0;border:2px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
 .padbar{display:flex;align-items:center;gap:6px;padding:5px 8px;border-bottom:2px solid var(--line);flex-wrap:wrap}
@@ -298,7 +351,7 @@ textarea{width:100%;min-height:90px;resize:vertical}
 html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while you write */
 /* iPad landscape: square cells sized so the whole 10x10 grid fits on screen without scrolling; pads fill both sides */
 #app.fit #gridrow{grid-template-columns:1fr auto 1fr;grid-template-areas:"l g r";align-items:stretch}
-#app.fit #padL,#app.fit #padR{height:auto;min-width:190px}
+#app.fit #padL{height:auto;flex:1 1 0;min-height:120px}#app.fit #leftcol{min-width:190px}#app.fit #padR{height:auto;min-width:190px}
 #app.fit #grid{grid-template-columns:repeat(10,var(--ch,60px));justify-content:center}
 #app.fit .cell{aspect-ratio:1;width:var(--ch);height:var(--ch);font-size:calc(var(--ch)*.4)}
 #app.fit .cell small{font-size:calc(var(--ch)*.24)}
@@ -364,7 +417,7 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 .wi{height:var(--wr);display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-size:calc(var(--wr)*.72);font-weight:800;color:var(--ink);cursor:pointer;-webkit-user-select:none;user-select:none}
 .wi[data-v=""]{color:var(--mute)}
 @property --wh{syntax:'<length>';inherits:true;initial-value:32px}
-.wheel{--wh:var(--wr);transition:--wh .22s cubic-bezier(.2,.85,.25,1)}
+.wheel{--wh:calc(var(--wr)*1.32);transition:--wh .22s cubic-bezier(.2,.85,.25,1)}
 .wheel.hov{--wh:var(--wf,calc(var(--wr)*2.1))}
 .wheel .wi{transition:opacity .18s}
 .wheel.hov .wi{opacity:0!important}
@@ -483,6 +536,7 @@ textarea.wpin{min-height:min(44vh,360px);font-size:30px;resize:none;font-weight:
   <div class="bar">
     <button id="btnMenu">‹ Grids</button><span id="prog"></span>
     <button class="hsumbar" id="hsumG" aria-expanded="false" aria-controls="hoverG"></button>
+    <button id="btnSpin" class="ib" aria-label="Orient the grid" title="Tell the app where cells 1 and 2 are"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"><path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v4.5h4.5"/></svg>Spin</button>
     <button id="btnReset" class="danger ib" aria-label="Reset grid" title="Reset grid"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/></svg>Reset</button>
     <button id="btnExport" class="pri ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>Export CSV</button>
   </div>
@@ -498,7 +552,7 @@ textarea.wpin{min-height:min(44vh,360px);font-size:30px;resize:none;font-weight:
       <button class="pri hdone" data-close>Done</button>
     </div>
   </div>
-  <div id="gridrow"><div class="pad" id="padL"></div><div id="grid"></div><div class="pad" id="padR"></div></div>
+  <div id="gridrow"><div id="leftcol"><div class="gstats"><button id="gstatsBtn" class="gsb" aria-expanded="false" aria-controls="gstatsBody"><span>Grid stats</span><span class="gsum" id="gsSum"></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div id="gstatsBody" class="gsbody" hidden></div></div><div class="pad" id="padL"></div></div><div id="grid"></div><div class="pad" id="padR"></div></div>
   <div class="hint">Green = done, yellow = started, dot = has notes, ! = check this cell. Cells are numbered in your zigzag walking order.</div>
   <footer class="foot"></footer>
 </div>
@@ -536,7 +590,7 @@ textarea.wpin{min-height:min(44vh,360px);font-size:30px;resize:none;font-weight:
 </div>
 
 <div id="tlist" class="view" hidden>
-  <div class="bar"><button id="tlBack">‹ Menu</button><h1 class="tltitle">Transects</h1><span class="sp"></span><button class="pri ib" id="tlNew">＋ New transect</button></div>
+  <div class="bar"><button id="tlBack">‹ Menu</button><h1 class="tltitle">Transects</h1><span class="sp"></span><button id="tlExportAll" class="ib">Export all</button><button class="pri ib" id="tlNew">＋ New transect</button></div>
   <div id="tlcards" class="tlgrid"></div>
   <footer class="foot"></footer>
 </div>
@@ -549,6 +603,18 @@ textarea.wpin{min-height:min(44vh,360px);font-size:30px;resize:none;font-weight:
     <textarea id="popArea" class="wpin" autocomplete="off" autocorrect="off" inputmode="none" hidden></textarea>
   </div>
 </div>
+<div id="ghelpov" class="ovl" aria-hidden="true"><div class="orcard hcard" role="dialog" aria-label="How this screen works"><h2>How this screen works</h2>
+  <ul class="hlist">
+    <li><b>Wheels:</b> swipe up or down, or tap a number. The buttons on each side add or take away 1, 5 or 10.</li>
+    <li><b>Pencil:</b> write on a wheel's middle box to set an exact number. Sums like 3+4 work.</li>
+    <li><b>Everything starts at 0.</b> Leave a box alone if the count is 0.</li>
+    <li><b>% Mature:</b> tap a value. Tap it again, or Clear, to remove it.</li>
+    <li><b>Avg height:</b> write the digits and the point is added for you: 122 becomes 12.2.</li>
+    <li><b>Each box header:</b> the left icon undoes that box, the right icon clears it.</li>
+    <li><b>Notes:</b> tap the Notes bar to open a big writing area.</li>
+  </ul><button class="pri" data-hclose>Got it</button></div></div>
+<div id="gstat" class="ovl" aria-hidden="true"><div class="orcard gscard" role="dialog" aria-label="Grid status"><h2 id="gstatTitle"></h2><div id="gstatBoard"></div><div class="gleg"><span><i class="d done"></i>Done</span><span><i class="d part"></i>Started</span><span><i class="d"></i>Not done</span><span><i class="d cur"></i>You are here</span></div><button class="pri" data-gclose>Close</button></div></div>
+<div id="orient" class="ovl" aria-hidden="true"><div class="orcard" role="dialog"><h2 id="orTitle"></h2><div class="hint" id="orHint"></div><div id="orBoard"></div><div class="orbtns"><button id="orBack">‹ Back</button><button id="orCancel">Cancel</button></div></div></div>
 <div id="toast"></div>
 <datalist id="weedlist"></datalist>
 <div id="sheet"><div class="panel" id="panel"></div></div>
@@ -556,7 +622,7 @@ textarea.wpin{min-height:min(44vh,360px);font-size:30px;resize:none;font-weight:
 <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" hidden>
 
 <script>
-const N=100, KEY='grids.v1', VERSION='1.19.0';
+const N=100, KEY='grids.v1', VERSION='1.20.0';
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!db||!db.sessions)db={cur:null,sessions:{}};
@@ -607,6 +673,14 @@ const warns=c=>{const w=[],t=stems(c)??0;if(c.ch!=null&&c.ch>t)w.push(`Chomps ($
 const ORDER=[];for(let r=0;r<10;r++){const row=[];for(let c=1;c<=10;c++)row.push(r*10+c);if(r%2)row.reverse();ORDER.push(...row)}
 const POS={};ORDER.forEach((n,i)=>POS[n]=i);
 const nextOf=n=>ORDER[POS[n]+1]??null, prevOf=n=>ORDER[POS[n]-1]??null;
+// Orientation: the grid can be spun in quarter turns (counter-clockwise per tap) so cell 1 sits where you are standing.
+// rot 0 = cell 1 top-left, 1 = bottom-left (row 1 runs up the left side), 2 = bottom-right, 3 = top-right.
+// An orientation is [ar,ac,br,bc]: on screen, going from cell 1 to cell 2 (along a row) moves by (ar,ac) and going to the next row moves by (br,bc).
+const rotOf=()=>{const s=db.sessions[db.cur];return Array.isArray(s&&s.ori)&&s.ori.length===4?s.ori:[0,1,1,0]};
+const screenRC=(n,o=rotOf())=>{const r=Math.floor((n-1)/10),c=(n-1)%10,[ar,ac,br,bc]=o;return [(ar<0||br<0?9:0)+c*ar+r*br,(ac<0||bc<0?9:0)+c*ac+r*bc]};
+// which way you move on screen to get from cell a to cell b
+const vecTo=(a,b)=>{const [r1,c1]=screenRC(a),[r2,c2]=screenRC(b);return {x:Math.sign(c2-c1),y:Math.sign(r2-r1)}};
+const glyph=(a,b)=>{const v=vecTo(a,b);return v.x>0?'→':v.x<0?'←':v.y>0?'↓':'↑'};
 
 function renderGrid(){
   const g=$('#grid');
@@ -614,6 +688,8 @@ function renderGrid(){
     g.innerHTML='';
     for(let i=1;i<=N;i++){const b=document.createElement('button');b.onclick=()=>openCell(i);g.appendChild(b)}
   }
+  const rot=rotOf(),rk=rot.join();
+  for(let i=1;i<=N;i++){const b=g.children[i-1];if(b._rot!==rk){const [r,c]=screenRC(i,rot);b.style.gridRow=r+1;b.style.gridColumn=c+1;b._rot=rk}}
   let done=0;
   for(let i=1;i<=N;i++){
     const b=g.children[i-1],c=S().cells[i],st=state(i);if(st==='done')done++;
@@ -623,7 +699,78 @@ function renderGrid(){
     if(b._h!==html){b.innerHTML=html;b._h=html}
   }
   $('#prog').textContent=`${done}/${N} cells`;
-  placeArrow();
+  const gr=$('#gring');if(gr){$('#gringFg').setAttribute('stroke-dasharray',`${(done/N*94.25).toFixed(2)} 94.25`);$('#gringTxt').textContent=done;gr.setAttribute('aria-label',`${done} of ${N} cells done`);gr.title=`${done} of ${N} cells done`}
+  placeArrow();renderStats();
+}
+// Grid stats dropdown, worked out from every cell you have entered
+function renderStats(){
+  const cs=Object.values(S().cells).filter(c=>c.done||touched(c)),n=cs.length,sum=f=>cs.reduce((a,c)=>a+(f(c)||0),0);
+  const st=sum(stems),g=sum(c=>c.g),ch=sum(c=>c.ch),done=cs.filter(c=>c.done).length;
+  const pct=(x,y)=>y>0?(x/y*100).toFixed(1)+'%':'–',avg=(x,k)=>k>0?(x/k).toFixed(1):'–';
+  const ms=cs.filter(c=>c.m!=null),hs=cs.filter(c=>c.h!=null);
+  $('#gsSum').textContent=n?`${st} stems · ${g} galls · ${pct(ch,st)} chomped`:'no data yet';
+  const body=$('#gstatsBody');if(body.hidden)return;
+  const row=(a,b)=>`<span class="k">${a}</span><span class="v">${b}</span>`;
+  body.innerHTML=row('Cells done',`${done} / ${N}`)+row('With data',n)+`<hr>`
+   +row('Total stems',st)+row('Total galls',g)+row('Total chomps',ch)+`<hr>`
+   +row('% galled',pct(g,st))+row('% chomped',pct(ch,st))+`<hr>`
+   +row('Avg stems',avg(st,n))+row('Avg galls',avg(g,n))
+   +row('Avg % mature',avg(ms.reduce((a,c)=>a+c.m,0),ms.length)+(ms.length?'%':''))+row('Avg height',avg(hs.reduce((a,c)=>a+c.h,0),hs.length))+`<hr>`
+   +row('No-stem cells',cs.filter(c=>c.done&&!(stems(c)>0)).length)+row('Cells w/ notes',cs.filter(c=>c.n).length);
+}
+$('#gstatsBtn').onclick=()=>{const b=$('#gstatsBody'),open=b.hidden;b.hidden=!open;$('#gstatsBtn').setAttribute('aria-expanded',open);renderStats();fitGrid()};
+document.addEventListener('pointerdown',e=>{const b=$('#gstatsBody');if(!b.hidden&&!e.target.closest('.gstats')){b.hidden=true;$('#gstatsBtn').setAttribute('aria-expanded','false')}});
+// Orient picker: tap the corner where cell 1 is, then the neighbour that is cell 2; the rest of the grid fills in from that
+let orStep=1,orCorner=null;
+function drawOrient(){
+  const box=$('#orBoard');
+  $('#orTitle').textContent=orStep===1?'Where is cell 1?':'Which way is cell 2?';
+  $('#orHint').textContent=orStep===1?'Tap the corner of the plot where you start.':'Tap the square next to cell 1 that cell 2 is on.';
+  $('#orBack').hidden=orStep===1;
+  let h='';
+  for(let r=0;r<4;r++)for(let c=0;c<4;c++){
+    const corner=(r===0||r===3)&&(c===0||c===3);let label='',on=false,cls='';
+    if(orStep===1){on=corner;if(corner)label='1'}
+    else{
+      const [kr,kc]=orCorner;
+      if(r===kr&&c===kc){label='1';cls='one'}
+      else if((r===kr&&Math.abs(c-kc)===1)||(c===kc&&Math.abs(r-kr)===1)){on=true;label='2'}
+    }
+    h+=`<button class="orc${on?' on':''}${cls?' '+cls:''}" data-r="${r}" data-c="${c}" ${on?'':'disabled'}>${label}</button>`;
+  }
+  box.innerHTML=h;
+}
+function openOrient(){orStep=1;orCorner=null;drawOrient();$('#orient').classList.add('open')}
+function closeOrient(){$('#orient').classList.remove('open')}
+function openGStat(){
+  const board=$('#gstatBoard'),dn=Object.values(S().cells).filter(c=>c.done).length;let h='';
+  for(let n=1;n<=N;n++){const [r,c]=screenRC(n);h+=`<i class="${state(n)}${n===cur?' cur':''}" style="grid-row:${r+1};grid-column:${c+1}"></i>`}
+  board.innerHTML=h;$('#gstatTitle').textContent=`${dn} of ${N} cells done`;$('#gstat').classList.add('open');
+}
+$('#gstat').addEventListener('click',e=>{if(e.target.id==='gstat'||e.target.closest('[data-gclose]'))$('#gstat').classList.remove('open')});
+$('#ghelpov').addEventListener('click',e=>{if(e.target.id==='ghelpov'||e.target.closest('[data-hclose]'))$('#ghelpov').classList.remove('open')});
+$('#orient').addEventListener('click',e=>{
+  if(e.target.id==='orient'||e.target.id==='orCancel'){closeOrient();return}
+  if(e.target.id==='orBack'){orStep=1;drawOrient();return}
+  const b=e.target.closest('.orc');if(!b||b.disabled)return;
+  const r=Number(b.dataset.r),c=Number(b.dataset.c);
+  if(orStep===1){orCorner=[r,c];orStep=2;drawOrient();return}
+  const [kr,kc]=orCorner,sr=kr===0?1:-1,sc=kc===0?1:-1;
+  const ori=r===kr?[0,c>kc?1:-1,sr,0]:[r>kr?1:-1,0,0,sc];   // 2 beside 1 -> rows run sideways; 2 above/below 1 -> rows run up/down
+  closeOrient();spinGrid(ori);
+});
+// Re-orient the plot: every block flies from its old spot to its new one, in a ripple from the new top-left
+function spinGrid(ori){
+  const s=S(),g=$('#grid'),btns=[...g.querySelectorAll('.cell')];
+  const first=btns.map(b=>b.getBoundingClientRect());
+  s.ori=ori;delete s.rot;save();renderGrid();
+  if(reduceMotion())return;
+  btns.forEach((b,i)=>{
+    const l=b.getBoundingClientRect(),dx=first[i].left-l.left,dy=first[i].top-l.top,[r,c]=screenRC(i+1);
+    b.animate([{transform:`translate(${dx}px,${dy}px) rotate(110deg) scale(.7)`},{transform:'translate(0,0) rotate(-7deg) scale(1.1)',offset:.72},{transform:'translate(0,0) rotate(2deg) scale(.97)',offset:.88},{transform:'none'}],
+      {duration:1100,delay:(r+c)*28,easing:'cubic-bezier(.3,.7,.3,1)',fill:'backwards'});
+  });
+  const ar=g.querySelector('.garrow');if(ar)ar.animate([{opacity:0},{opacity:0,offset:.8},{opacity:1}],{duration:1400+9*56*0,fill:'backwards'});
 }
 // Mid-grid: dashed ring on the next cell, gold edge on the last one finished, and an arrow between them
 function placeArrow(){
@@ -633,9 +780,9 @@ function placeArrow(){
   let lp=-1;ORDER.forEach((n,i)=>{const c=S().cells[n];if(c&&c.done)lp=i});
   if(lp<0||lp>=N-1)return;
   const a=g.children[ORDER[lp]-1],b=g.children[ORDER[lp+1]-1];
-  a.classList.add('last');b.classList.add('up');
+  a.classList.add('last');b.classList.add('up');const ph=`-${Date.now()%1100}ms`;b.style.animationDelay=ph;
   const ax=a.offsetLeft+a.offsetWidth/2,ay=a.offsetTop+a.offsetHeight/2,bx=b.offsetLeft+b.offsetWidth/2,by=b.offsetTop+b.offsetHeight/2;
-  const el=document.createElement('div');el.className='garrow';el.style.left=(ax+bx)/2+'px';el.style.top=(ay+by)/2+'px';
+  const el=document.createElement('div');el.className='garrow';{const L=Math.hypot(bx-ax,by-ay)||1;el.style.setProperty('--dx',((bx-ax)/L).toFixed(3));el.style.setProperty('--dy',((by-ay)/L).toFixed(3))}el.style.animationDelay=ph;el.style.left=(ax+bx)/2+'px';el.style.top=(ay+by)/2+'px';
   el.innerHTML=`<svg viewBox="0 0 24 24" style="transform:rotate(${Math.round(Math.atan2(by-ay,bx-ax)*180/Math.PI)}deg)"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
   g.appendChild(el);
 }
@@ -649,7 +796,7 @@ function refresh(){
   if(cur==null)return;const c=cell(cur);
   const t=$('#tot');if(t)t.textContent=stems(c)??'–';
     const w=$('#warn');if(w){const a=warns(c);w.hidden=!a.length;w.textContent=a.length?'⚠ '+a.join(' '):''}
-  const dis=!(undo[ukey()]||[]).length;['#undo','#undoTop'].forEach(s=>{const u=$(s);if(u)u.disabled=dis});
+  const dis=!(undo[ukey()]||[]).length;['#undo'].forEach(s=>{const u=$(s);if(u)u.disabled=dis});
 }
 
 // Undo history (per session + cell, kept in memory)
@@ -666,28 +813,29 @@ function undoField(f){
 function doUndo(){const a=undo[ukey()];if(!a||!a.length)return;S().cells[cur]=JSON.parse(a.pop());save();openCell(cur)}
 let pend=false; // first edit after focusing a box saves one undo step
 
-const rowEnd=n=>{const p=POS[n];if(p%10!==9)return '';const nx=nextOf(n);return nx?`Last cell in row ${Math.floor(p/10)+1}. Next, move down to row ${Math.floor(p/10)+2}: cell ${nx}.`:'Last cell in the grid. Tap Done to finish.'};
+const rowPos=n=>{const p=POS[n];return `Row ${Math.floor(p/10)+1} · ${p%10+1} of 10`};
+const rowEnd=n=>{const p=POS[n];if(p%10!==9)return '';const nx=nextOf(n);return nx?'Row end '+glyph(n,nx):'Grid end';};
+const notesBtn=c=>`<svg viewBox="0 0 24 24" aria-hidden="true" style="width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h5"/></svg><span class="nt">Notes</span>`;
+const setNotesBtn=c=>{const b=$('#notes');if(!b)return;b.innerHTML=notesBtn(c);b.classList.toggle('has',!!c.n);b.title=c.n||'Notes'};
 const GSPEC={s1:[300,1],s2:[300,1],g:[300,1],ch:[300,1],m:[100,10]};
 function buildCell(n){
   cur=n;const c=cell(n);pend=false;
   const pv=prevOf(n),nx=nextOf(n);
   const qb=(k,d,l)=>`<button data-k="${k}" data-d="${d}">${l}</button>`;
+  const sbtn=(k,d,label)=>`<button data-k="${k}" data-d="${d}" aria-label="${d<0?'Decrease':'Increase'} ${esc(label)} by ${Math.abs(d)}">${d<0?'−':'+'}${Math.abs(d)}</button>`;
   const ctl=(key,label,quick,step=1,sub='')=>`<div class="ctl" data-f="${key}"><div class="t">${label}<button class="xk l" data-undof="${key}" aria-label="Undo ${esc(label)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg></button><button class="xk r" data-clearf="${key}" aria-label="Clear ${esc(label)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-    ${key==='m'?`<div class="mpad">${[0,10,20,30,40,50,60,70,80,90,100].map(v=>`<button data-mv="${v}" class="${c.m===v?'on':''}">${v}</button>`).join('')}</div>`:`<div class="row">${key==='h'?'':`<button data-k="${key}" data-d="${-step}" aria-label="Decrease ${esc(label)}">${'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>'}</button>`}
-    ${key==='h'?`<input data-in="h" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${c[key]??''}">`:wheelBox(`data-wk="${key}"`,GSPEC[key],label)}
-    ${key==='h'?'':`<button data-k="${key}" data-d="${step}" aria-label="Increase ${esc(label)}">${'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg>'}</button>`}</div>
-    ${key==='h'?'':`<div class="quick">${quick}<button data-k="${key}" data-z="1">0</button></div>`}`}${sub?`<div class="sub" id="sub-${key}">${sub}</div>`:''}</div>`;
+    ${key==='m'?`<div class="mpad">${[0,10,20,30,40,50,60,70,80,90,100].map(v=>`<button data-mv="${v}" class="${c.m===v?'on':''}">${v}</button>`).join('')}<button data-mv="clear" class="mclr">Clear</button></div>`:`<div class="row">${key==='h'?'':`<div class="sb">${sbtn(key,-1,label)}${sbtn(key,-5,label)}${sbtn(key,-10,label)}</div>`}
+    ${key==='h'?`<input data-in="h" inputmode="none" autocomplete="off" autocorrect="off" placeholder="e.g. 12.2" value="${c[key]??''}">`:wheelBox(`data-wk="${key}"`,GSPEC[key],label,true)}
+    ${key==='h'?'':`<div class="sb">${sbtn(key,1,label)}${sbtn(key,5,label)}${sbtn(key,10,label)}</div>`}</div>`}${sub?`<div class="sub" id="sub-${key}">${sub}</div>`:''}</div>`;
   const q5=k=>qb(k,5,'+5')+qb(k,10,'+10');
   const w=warns(c);
-  const html=`<div class="ph"><div class="navh"><button id="prev" ${pv?'':'disabled'}>← ${pv??''}</button><h2>Cell ${n}</h2><button id="next" ${nx?'':'disabled'}>${nx??''} →</button></div>
-    <span class="tot">Stems total: <b id="tot">${stems(c)??'–'}</b></span><div class="hb"><button id="undoTop" class="ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button><button id="x">Close</button></div></div>
-    <div class="rowend" id="rowend" ${rowEnd(n)?'':'hidden'}>${rowEnd(n)}</div>
+  const html=`<div class="ph"><div class="navh"><button id="prev" ${pv?'':'disabled'}>${pv?glyph(n,pv)+' '+pv:''}</button><div class="ctt"><h2>Cell ${n}</h2><small id="rowpos">${rowPos(n)}</small></div><button id="next" ${nx?'':'disabled'}>${nx?nx+' '+glyph(n,nx):''}</button><button class="gring" id="gring" aria-haspopup="dialog"><svg viewBox="0 0 36 36" aria-hidden="true"><circle class="bg" cx="18" cy="18" r="15"/><circle class="fg" id="gringFg" cx="18" cy="18" r="15" stroke-dasharray="0 94.25"/></svg><b id="gringTxt"></b></button></div>
+    <span class="rowslot"><span class="rowend" id="rowend" ${rowEnd(n)?'':'hidden'}>${rowEnd(n)}</span></span><span class="tot"><span class="sx">Stems </span>total: <b id="tot">${stems(c)??'–'}</b></span><div class="hb"><button id="notes" class="ib${c.n?' has':''}" aria-label="Notes">${notesBtn(c)}</button><button id="helpBtn" class="ib" aria-label="How this screen works" aria-expanded="false">?</button><button id="x">Close</button></div></div>
     <div class="warn" id="warn" ${w.length?'':'hidden'}>${w.length?'⚠ '+esc(w.join(' ')):''}</div>
-    <div class="hint">Swipe a wheel up or down (or tap a number) to choose, or use the + / − buttons; write on a wheel's middle box with the Pencil. Avg height is a plain box: write it with the Pencil. In each box header, the left icon undoes that box and the right icon clears it.</div>
     <div class="gentry"><div class="gbody"><div class="ctr">${ctl('s1','Stems · '+esc(S().obs1||'Obs 1'),q5('s1'))}${ctl('s2','Stems · '+esc(S().obs2||'Obs 2'),q5('s2'))}${ctl('g','Galls',q5('g'))}</div>
-    <div class="ctr">${ctl('ch','Chomps',q5('ch'))}${ctl('m','% Mature','',10)}${ctl('h','Avg height',qb('h',-0.1,'−0.1')+qb('h',0.1,'+0.1'),1)}</div>
-    <textarea id="notes" inputmode="none" placeholder="Notes (write with the Pencil)">${esc(c.n)}</textarea></div></div>
-    <div class="nav"><button id="undo" class="ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button><button id="clr">Clear cell</button><button id="none">No toadflax ✓</button><button id="done" class="pri">Done ✓ → ${nx??'finish'}</button></div>`;
+    <div class="ctr">${ctl('ch','Chomps',q5('ch'))}${ctl('m','% Mature','',10)}${ctl('h','Avg height','',1,'Write digits: 122 becomes 12.2')}</div>
+    </div></div>
+    <div class="nav"><button id="undo" class="ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button><button id="clr">Clear cell</button><button id="none">No toadflax ✓</button><button id="done" class="pri">Save &amp; next ${nx?glyph(n,nx)+' '+nx:'(finish)'}</button></div>`;
   return html;
 }
 function mountCell(n){ // instant render
@@ -701,26 +849,26 @@ function mountCell(n){ // instant render
 function openCell(n,kind){
   const panel=$('#panel'),sheet=$('#sheet');
   if(!kind||reduceMotion()||!sheet.classList.contains('open')||cur==null||!panel.querySelector('.gentry')){mountCell(n);return}
-  slideEntry(panel,n,kind==='prev'?-1:1);
+  slideEntry(panel,n,vecTo(cur,n));
   if(kind==='done'||kind==='none')fxBurst(kind);
 }
 // Move to another cell without rebuilding the screen: same wheels, same boxes, new numbers.
 function updateCellInPlace(n){
   cur=n;pend=false;const c=cell(n),pv=prevOf(n),nx=nextOf(n);
   const pb=$('#prev'),nb=$('#next'),db=$('#done');
-  pb.disabled=!pv;pb.textContent='← '+(pv??'');nb.disabled=!nx;nb.textContent=(nx??'')+' →';
-  $('#panel h2').textContent='Cell '+n;
-  db.textContent='Done ✓ → '+(nx??'finish');
-  $('#notes').value=c.n;
+  pb.disabled=!pv;pb.textContent=pv?glyph(n,pv)+' '+pv:'';nb.disabled=!nx;nb.textContent=nx?nx+' '+glyph(n,nx):'';
+  $('#panel h2').textContent='Cell '+n;$('#rowpos').textContent=rowPos(n);
+  db.textContent='Save & next '+(nx?glyph(n,nx)+' '+nx:'(finish)');
+  setNotesBtn(c);
   const re=$('#rowend');if(re){const t=rowEnd(n);re.textContent=t;re.hidden=!t}
-  $('#panel').querySelectorAll('.mpad button').forEach(b=>b.classList.toggle('on',c.m===Number(b.dataset.mv)));
+  $('#panel').querySelectorAll('.mpad button').forEach(b=>b.classList.toggle('on',b.dataset.mv!=='clear'&&c.m===Number(b.dataset.mv)));
   const hi=$('#panel input[data-in="h"]');if(hi)hi.value=c.h??'';
   $('#panel').querySelectorAll('.wscroll').forEach(w=>w.dispatchEvent(new CustomEvent('setv',{detail:{v:c[w.dataset.wk],instant:true}})));
   $('#panel').scrollTop=0;renderGrid();refresh();
 }
 // Only the six entry boxes slide: a copy of the old boxes leaves one side while the new ones come in from the other.
 // The title, buttons, hint and notes stay where they are.
-function slideEntry(panel,n,dir){
+function slideEntry(panel,n,v){
   const old=panel.querySelector('.gentry .gbody');
   old.querySelectorAll('input').forEach(el=>el.setAttribute('value',el.value));
   old.querySelectorAll('textarea').forEach(el=>{el.textContent=el.value});
@@ -741,10 +889,10 @@ function slideEntry(panel,n,dir){
   updateCellInPlace(n);   // the wheels and boxes stay in the page; they just jump to the new cell's numbers
   const entry=panel.querySelector('.gentry'),nb=old;
   entry.appendChild(ghost);
-  const D=entry.clientWidth+24,opt={duration:340,easing:'cubic-bezier(.4,0,.2,1)'};
-  ghost.animate([{transform:'translateX(0)'},{transform:`translateX(${-dir*D}px)`}],{...opt,fill:'forwards'}).onfinish=()=>ghost.remove();
+  const Dx=entry.clientWidth+24,Dy=entry.clientHeight+24,opt={duration:340,easing:'cubic-bezier(.4,0,.2,1)'};
+  ghost.animate([{transform:'translate(0,0)'},{transform:`translate(${-v.x*Dx}px,${-v.y*Dy}px)`}],{...opt,fill:'forwards'}).onfinish=()=>ghost.remove();
   setTimeout(()=>{ghost.remove();panel.classList.remove('sliding')},420);
-  nb.animate([{transform:`translateX(${dir*D}px)`},{transform:'translateX(0)'}],opt);
+  nb.animate([{transform:`translate(${v.x*Dx}px,${v.y*Dy}px)`},{transform:'translate(0,0)'}],opt);
 }
 // Little celebration overlay: a stamp, a ring and confetti, so you can tell which button you pressed
 function fxBurst(type,d){
@@ -784,7 +932,7 @@ $('#panel').addEventListener('click',e=>{
   if(cur!=null){
     const c=cell(cur);
     if(b.dataset.mv!==undefined){
-      push('m');const v=Number(b.dataset.mv);c.m=c.m===v?null:v;c.done=false;syncWheel(b.closest('.ctl'),c.m);save();refresh();renderGrid();
+      push('m');const v=Number(b.dataset.mv);c.m=b.dataset.mv==='clear'||c.m===v?null:v;c.done=false;syncWheel(b.closest('.ctl'),c.m);save();refresh();renderGrid();
     }else if(b.dataset.k){
       const k=b.dataset.k;push(k);
       c[k]=b.dataset.z?0:fit(k,(c[k]??0)+Number(b.dataset.d));
@@ -798,7 +946,9 @@ $('#panel').addEventListener('click',e=>{
     }else if(b.dataset.undof){undoField(b.dataset.undof)}
     else if(b.id==='prev'){const p=prevOf(cur);if(p)openCell(p,'prev')}
     else if(b.id==='next'){const p=nextOf(cur);if(p)openCell(p,'next')}
-    else if(b.id==='undo'||b.id==='undoTop')doUndo();
+    else if(b.id==='undo')doUndo();
+    else if(b.id==='helpBtn')$('#ghelpov').classList.add('open');
+    else if(b.closest('#gring'))openGStat();
     else if(b.id==='clr'){
       push();Object.assign(c,{s1:null,s2:null,g:null,ch:null,m:null,h:null,n:'',done:false});save();openCell(cur);
     }else if(b.id==='none'||b.id==='done'){
@@ -820,7 +970,7 @@ $('#panel').addEventListener('click',e=>{
     else if(b.dataset.snap)restoreSnap(b.dataset.snap);
   }
 });
-$('#panel').addEventListener('focusin',e=>{if(e.target.dataset.in||e.target.id==='notes')pend=true});
+$('#panel').addEventListener('focusin',e=>{if(e.target.dataset.in==='h')e.target.inputMode=lastPT==='touch'?'decimal':'none';if(e.target.dataset.in||e.target.id==='notes')pend=true});
 $('#panel').addEventListener('input',e=>{
   if(cur==null)return;
   const c=cell(cur);
@@ -982,13 +1132,18 @@ async function exportAll(){
     let base=`grid_${(s.site||'site').replace(/\W+/g,'_')}_${s.date}`;used[base]=(used[base]||0)+1;if(used[base]>1)base+='_'+used[base];
     return new File([csv(s)],base+'.csv',{type:'text/csv'});
   });
+  await shareFiles(files,`${files.length} grids`);
+}
+// one share sheet with every file; where that is not supported, download them one after another
+async function shareFiles(files,title){
   try{
-    if(navigator.canShare&&navigator.canShare({files})){await navigator.share({files,title:`${files.length} grids`});return}
+    if(navigator.canShare&&navigator.canShare({files})){await navigator.share({files,title});return}
   }catch(e){if(e.name==='AbortError')return}
   files.forEach((f,i)=>setTimeout(()=>{const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;a.click()},i*400));
 }
 $('#glExportAll').onclick=exportAll;
 $('#btnReset').onclick=doResetGrid;
+$('#btnSpin').onclick=openOrient;
 
 
 // =====================================================================
@@ -1300,10 +1455,10 @@ function headHtml(n){
 // every number box is a vertical wheel: swipe up/down to choose, or use the + / - buttons beside it
 const WSPEC={ct:[100,5],cf:[100,5],cs:[100,5],cg:[100,5],cd:[100,5],cl:[100,5],cm:[100,5],ow:[100,5],nm:[60,1],ni:[60,1],mt:[150,1],ms:[150,1],ma:[150,1],it:[150,1],is:[150,1],ia:[150,1]};
 const wItemsCache={};
-const wItems=(max,step)=>wItemsCache[max+'|'+step]||(wItemsCache[max+'|'+step]='<div class="wi" data-v="">–</div>'+Array.from({length:Math.round(max/step)+1},(_,i)=>{const v=step<1?(i*step).toFixed(1):i*step;return `<div class="wi" data-v="${v}">${v}</div>`}).join(''));
+const wItems=(max,step,zero)=>wItemsCache[max+'|'+step+'|'+!!zero]||(wItemsCache[max+'|'+step+'|'+!!zero]=(zero?'':'<div class="wi" data-v="">–</div>')+Array.from({length:Math.round(max/step)+1},(_,i)=>{const v=step<1?(i*step).toFixed(1):i*step;return `<div class="wi" data-v="${v}">${v}</div>`}).join(''));
 const pmBtns=(attr,label,step)=>`<div class="fpm"><button ${attr} data-d="${step}" aria-label="Increase ${label}">${PL}</button><button ${attr} data-d="${-step}" aria-label="Decrease ${label}">${MI}</button></div>`;
-const wheelBox=(wattr,spec,label)=>`<div class="wheel"><div class="wband"></div><div class="wscroll" ${wattr} data-max="${spec[0]}" data-step="${spec[1]}" tabindex="0" aria-label="${label}: swipe up or down to choose">${wItems(spec[0],spec[1])}</div></div>`;
-const syncWheel=(fc,v)=>{const mp=fc&&fc.querySelector('.mpad');if(mp){mp.querySelectorAll('button').forEach(b=>b.classList.toggle('on',v!=null&&Number(b.dataset.mv)===v));return}const w=fc&&fc.querySelector('.wscroll');if(w){w.dispatchEvent(new CustomEvent('setv',{detail:v}));flash(w.parentElement);return}const i=fc&&fc.querySelector('input[data-in]');if(i){i.value=v??'';flash(i)}};
+const wheelBox=(wattr,spec,label,zero)=>`<div class="wheel"><div class="wband"></div><div class="wscroll" ${wattr}${zero?' data-zero="1"':''} data-max="${spec[0]}" data-step="${spec[1]}" tabindex="0" aria-label="${label}: swipe up or down to choose">${wItems(spec[0],spec[1],zero)}</div></div>`;
+const syncWheel=(fc,v)=>{const mp=fc&&fc.querySelector('.mpad');if(mp){mp.querySelectorAll('button').forEach(b=>b.classList.toggle('on',v!=null&&b.dataset.mv!=='clear'&&Number(b.dataset.mv)===v));return}const w=fc&&fc.querySelector('.wscroll');if(w){w.dispatchEvent(new CustomEvent('setv',{detail:v}));flash(w.parentElement);return}const i=fc&&fc.querySelector('input[data-in]');if(i){i.value=v??'';flash(i)}};
 function bodyHtml(n){
   const f=frame(n);
   const numCard=(k,label,grp,sc)=>`<div class="fc" data-g="${grp}"><div class="fl">${label}</div>
@@ -1334,25 +1489,25 @@ function navHtml(n){
 function wheelCore(root,ad){
   const pending=[];   // all wheels are measured together, then laid out together, so the page reflows twice instead of twice per wheel
   root.querySelectorAll('.wscroll').forEach(w=>{
-    const max=Number(w.dataset.max),step=Number(w.dataset.step),last=Math.round(max/step)+1;
+    const max=Number(w.dataset.max),step=Number(w.dataset.step),Z=w.dataset.zero==='1',base=Z?0:1,last=Math.round(max/step)+base;
     // Pencil layer: a see-through text box sitting on the middle row. A finger drag passes through it (pan-y) and scrolls the wheel;
     // writing with the Pencil lands in it and sets the exact number (sums like 3+4 work). A value that is not on the wheel's steps shows in it.
     const inp=document.createElement('input');inp.className='wsin';inp.setAttribute('inputmode','none');inp.setAttribute('autocomplete','off');inp.setAttribute('autocorrect','off');inp.setAttribute('aria-label','Write a number with the Pencil');
     w.insertBefore(inp,w.firstChild);
     const items=[...w.querySelectorAll('.wi')];let gesture=false,settle=0,raf=0,geo={h:0,r:36,p:0},user=false,userT=0;
-        const idxOf=v=>(v===''||v==null)?0:Math.min(last,Math.max(1,Math.round(Number(v)/step)+1));
+        const idxOf=v=>(v===''||v==null)?0:Math.min(last,Math.max(base,Math.round(Number(v)/step)+base));
     let curIdx=idxOf(ad.get(w));
     let m={h:0,r:36};
     const measure=()=>{m={h:w.clientHeight,r:items[0].offsetHeight||36}},applyPad=()=>{const p=Math.max(0,(m.h-m.r)/2);w.style.paddingTop=w.style.paddingBottom=p+'px';inp.style.setProperty('--sp',p+'px');w.parentElement.style.setProperty('--wf',Math.max(m.r,m.h-4)+'px');geo={h:m.h,r:m.r,p}};
     const layout=()=>{measure();applyPad()};
     const paint=()=>{const c=w.scrollTop+geo.h/2,mid=Math.round((c-geo.p-geo.r/2)/geo.r);   // only the rows near the middle are visible, so only they are drawn
-      for(let i=Math.max(0,mid-5);i<=Math.min(last,mid+5);i++){const it=items[i],d=((geo.p+i*geo.r+geo.r/2)-c)/geo.r,a=Math.min(Math.abs(d),3);it.style.transform=`perspective(230px) rotateX(${(-d*22).toFixed(1)}deg) scale(${(1-a*.06).toFixed(3)})`;it.style.opacity=(1-a*.22).toFixed(2)}};
+      for(let i=Math.max(0,mid-5);i<=Math.min(last,mid+5);i++){const it=items[i],d=((geo.p+i*geo.r+geo.r/2)-c)/geo.r,a=Math.min(Math.abs(d),3);it.style.transform=`perspective(230px) rotateX(${(-d*22).toFixed(1)}deg) scale(${(a<1?1.4-.52*a:.88-.06*(a-1)).toFixed(3)})`;it.style.opacity=(a<1?1-a*.55:Math.max(.2,.45-.12*(a-1))).toFixed(2);it.style.color=`color-mix(in srgb,var(--ink) ${Math.round(100*(1-Math.min(a,1)))}%,var(--mute))`}};
     const setIdx=(i,smooth)=>w.scrollTo({top:i*geo.r,behavior:smooth?'smooth':'auto'});
     // only a real touch / wheel / key on THIS wheel may change the data; layout changes (rows resizing) never do
     const arm=()=>{user=true;clearTimeout(userT);userT=setTimeout(()=>{user=false},450)};
     ['pointerdown','touchstart','wheel','keydown'].forEach(ev=>w.addEventListener(ev,arm,{passive:true}));
     const dec=step<1?1:0,fitV=x=>{x=Math.min(max,Math.max(0,x));return Math.round(x*10**dec)/10**dec};
-    const refreshOff=(v,force)=>{const off=v!=null&&v!==''&&Math.abs(Number(v)-(curIdx-1)*step)>1e-6;inp.classList.toggle('off',off);if(force||document.activeElement!==inp)inp.value=off?String(v):''};
+    const refreshOff=(v,force)=>{const off=v!=null&&v!==''&&Math.abs(Number(v)-(curIdx-base)*step)>1e-6;inp.classList.toggle('off',off);if(force||document.activeElement!==inp)inp.value=off?String(v):''};
     let writing=false,wGesture=false;
     const commit=(text,final)=>{
       const v=clean(text);
@@ -1391,7 +1546,7 @@ function wheelCore(root,ad){
       if(idx!==curIdx){
         curIdx=idx;
         if(!gesture){ad.begin(w);gesture=true}
-        ad.set(w,idx===0?null:Math.round((idx-1)*step*10)/10);ad.change();refreshOff(null);
+        ad.set(w,(!Z&&idx===0)?null:Math.round((idx-base)*step*10)/10);ad.change();refreshOff(null);
         clearTimeout(settle);settle=setTimeout(()=>{gesture=false;ad.end()},220);
       }
     },{passive:true});
@@ -1542,6 +1697,12 @@ function openWeedPop(i,el){
     onInput:v=>{if(!pushed){tpush();pushed=true}f.ow[i].n=v;el.value=v;f.done=false},
     onClose:()=>{save();refreshBody()}},el);
 }
+$('#panel').addEventListener('click',e=>{
+  const el=e.target.closest('#notes');if(!el||cur==null)return;
+  const n=cur,c=cell(n);let pushed=false;
+  openPop({title:`Cell ${n}: notes`,value:c.n,multi:true,placeholder:'Write notes for this cell',
+    onInput:v=>{if(!pushed){push();pushed=true}c.n=v;c.done=false;save();renderGrid()},onClose:()=>{if(cur===n){setNotesBtn(c);refresh()}}},el);
+});
 function openNotesPop(el){
   const f=frame(tcur);let pushed=false;
   openPop({title:`Frame ${tcur} (${frameM(tcur)} m): notes`,value:f.nt||'',multi:true,placeholder:'Write notes for this frame',
@@ -1715,6 +1876,16 @@ async function exportT(){
   const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=name;a.click();
 }
 $('#tExport').onclick=exportT;
+async function exportAllT(){
+  const list=Object.values(db.tsessions).filter(s=>Object.values(s.frames).some(tHas));
+  if(!list.length){toast('No transects with data to export yet.');return}
+  const used={},files=list.map(s=>{
+    let base=`transect_${(s.site||'site').replace(/\W+/g,'_')}_${s.date}`;used[base]=(used[base]||0)+1;if(used[base]>1)base+='_'+used[base];
+    return new File([tcsv(s)],base+'.csv',{type:'text/csv'});
+  });
+  await shareFiles(files,`${files.length} transects`);
+}
+$('#tlExportAll').onclick=exportAllT;
 $('#tResetBtn').onclick=doResetT;
 
 if(!db.cur||!db.sessions[db.cur])newSession();
