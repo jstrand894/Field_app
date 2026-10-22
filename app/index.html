@@ -34,7 +34,7 @@ button.pri{background:var(--pri);color:#fff;border-color:var(--pri);text-shadow:
 button:active{transform:scale(.95);filter:brightness(.88)}
 button:disabled{opacity:.5}
 #prog{font-size:15px;font-weight:700;color:var(--mute)}
-#grid{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+#grid{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;position:relative}
 .cell{aspect-ratio:1;border-radius:10px;border:2px solid var(--line);background:var(--card);padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:clamp(15px,2.8vw,24px);font-weight:800;position:relative;line-height:1.1}
 .cell small{font-size:clamp(10px,1.7vw,14px);font-weight:700;color:var(--ink)}
 .cell.done{background:var(--done);border-color:var(--accent)}
@@ -96,6 +96,14 @@ button:disabled{opacity:.5}
 .fxstamp.arrow svg{width:54px;height:54px}
 .fxstamp b{font-size:54px;line-height:1}.fxstamp small{font-size:14px;font-weight:800}
 .fxdot{position:absolute;width:12px;height:12px;border-radius:3px}
+.mpad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%;flex:1}
+.mpad button{height:auto;min-height:56px;padding:0;font-size:26px;font-weight:800;border:3px solid var(--c);color:var(--c);border-radius:14px}
+.mpad button.on{background:var(--c);color:#fff}
+.rowend{background:#fff3cd;color:#5a4300;border:2px solid #d99e00;border-radius:10px;padding:8px 12px;font-weight:800;text-align:center}
+.garrow{position:absolute;z-index:3;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;background:#d99e00;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.4);pointer-events:none}
+.garrow svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.cell.up{outline:3px dashed #d99e00;outline-offset:-1px}
+.cell.last{box-shadow:inset 0 0 0 3px #d99e00}
 html,body{overflow:hidden;overscroll-behavior:none}
 body{position:fixed;inset:0;width:100%}
 /* each screen is its own scroller (only scrolls when its content is taller than the display); nothing stretches or pulls to refresh */
@@ -522,7 +530,7 @@ textarea.wpin{min-height:min(44vh,360px);font-size:30px;resize:none;font-weight:
 </div>
 
 <div id="glist" class="view" hidden>
-  <div class="bar"><button id="glBack">‹ Menu</button><h1 class="tltitle">Grids</h1><span class="sp"></span><button id="btnSessions" class="ib">Backup &amp; more</button><button class="pri ib" id="glNew">＋ New grid</button></div>
+  <div class="bar"><button id="glBack">‹ Menu</button><h1 class="tltitle">Grids</h1><span class="sp"></span><button id="btnSessions" class="ib">Backup &amp; more</button><button id="glExportAll" class="ib">Export all</button><button class="pri ib" id="glNew">＋ New grid</button></div>
   <div id="glcards" class="tlgrid"></div>
   <footer class="foot"></footer>
 </div>
@@ -615,6 +623,21 @@ function renderGrid(){
     if(b._h!==html){b.innerHTML=html;b._h=html}
   }
   $('#prog').textContent=`${done}/${N} cells`;
+  placeArrow();
+}
+// Mid-grid: dashed ring on the next cell, gold edge on the last one finished, and an arrow between them
+function placeArrow(){
+  const g=$('#grid');g.querySelectorAll('.garrow').forEach(a=>a.remove());
+  g.querySelectorAll('.up,.last').forEach(b=>b.classList.remove('up','last'));
+  if(g.children.length!==N||$('#app').hidden)return;
+  let lp=-1;ORDER.forEach((n,i)=>{const c=S().cells[n];if(c&&c.done)lp=i});
+  if(lp<0||lp>=N-1)return;
+  const a=g.children[ORDER[lp]-1],b=g.children[ORDER[lp+1]-1];
+  a.classList.add('last');b.classList.add('up');
+  const ax=a.offsetLeft+a.offsetWidth/2,ay=a.offsetTop+a.offsetHeight/2,bx=b.offsetLeft+b.offsetWidth/2,by=b.offsetTop+b.offsetHeight/2;
+  const el=document.createElement('div');el.className='garrow';el.style.left=(ax+bx)/2+'px';el.style.top=(ay+by)/2+'px';
+  el.innerHTML=`<svg viewBox="0 0 24 24" style="transform:rotate(${Math.round(Math.atan2(by-ay,bx-ax)*180/Math.PI)}deg)"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
+  g.appendChild(el);
 }
 function renderHeader(){redrawPads();const s=S();updateSum('G');$('#site').value=s.site;$('#date').value=s.date;$('#obs1').value=s.obs1;$('#obs2').value=s.obs2}
 ['site','date','obs1','obs2'].forEach(k=>$('#'+k).addEventListener('input',e=>{S()[k]=e.target.value;save();updateSum('G')}));
@@ -643,24 +666,26 @@ function undoField(f){
 function doUndo(){const a=undo[ukey()];if(!a||!a.length)return;S().cells[cur]=JSON.parse(a.pop());save();openCell(cur)}
 let pend=false; // first edit after focusing a box saves one undo step
 
+const rowEnd=n=>{const p=POS[n];if(p%10!==9)return '';const nx=nextOf(n);return nx?`Last cell in row ${Math.floor(p/10)+1}. Next, move down to row ${Math.floor(p/10)+2}: cell ${nx}.`:'Last cell in the grid. Tap Done to finish.'};
 const GSPEC={s1:[300,1],s2:[300,1],g:[300,1],ch:[300,1],m:[100,10]};
 function buildCell(n){
   cur=n;const c=cell(n);pend=false;
   const pv=prevOf(n),nx=nextOf(n);
   const qb=(k,d,l)=>`<button data-k="${k}" data-d="${d}">${l}</button>`;
   const ctl=(key,label,quick,step=1,sub='')=>`<div class="ctl" data-f="${key}"><div class="t">${label}<button class="xk l" data-undof="${key}" aria-label="Undo ${esc(label)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg></button><button class="xk r" data-clearf="${key}" aria-label="Clear ${esc(label)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-    <div class="row">${key==='h'?'':`<button data-k="${key}" data-d="${-step}" aria-label="Decrease ${esc(label)}">${'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>'}</button>`}
+    ${key==='m'?`<div class="mpad">${[0,10,20,30,40,50,60,70,80,90,100].map(v=>`<button data-mv="${v}" class="${c.m===v?'on':''}">${v}</button>`).join('')}</div>`:`<div class="row">${key==='h'?'':`<button data-k="${key}" data-d="${-step}" aria-label="Decrease ${esc(label)}">${'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>'}</button>`}
     ${key==='h'?`<input data-in="h" inputmode="none" autocomplete="off" autocorrect="off" placeholder="–" value="${c[key]??''}">`:wheelBox(`data-wk="${key}"`,GSPEC[key],label)}
     ${key==='h'?'':`<button data-k="${key}" data-d="${step}" aria-label="Increase ${esc(label)}">${'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg>'}</button>`}</div>
-    ${key==='h'?'':`<div class="quick">${quick}<button data-k="${key}" data-z="1">0</button></div>`}${sub?`<div class="sub" id="sub-${key}">${sub}</div>`:''}</div>`;
+    ${key==='h'?'':`<div class="quick">${quick}<button data-k="${key}" data-z="1">0</button></div>`}`}${sub?`<div class="sub" id="sub-${key}">${sub}</div>`:''}</div>`;
   const q5=k=>qb(k,5,'+5')+qb(k,10,'+10');
   const w=warns(c);
   const html=`<div class="ph"><div class="navh"><button id="prev" ${pv?'':'disabled'}>← ${pv??''}</button><h2>Cell ${n}</h2><button id="next" ${nx?'':'disabled'}>${nx??''} →</button></div>
     <span class="tot">Stems total: <b id="tot">${stems(c)??'–'}</b></span><div class="hb"><button id="undoTop" class="ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button><button id="x">Close</button></div></div>
+    <div class="rowend" id="rowend" ${rowEnd(n)?'':'hidden'}>${rowEnd(n)}</div>
     <div class="warn" id="warn" ${w.length?'':'hidden'}>${w.length?'⚠ '+esc(w.join(' ')):''}</div>
     <div class="hint">Swipe a wheel up or down (or tap a number) to choose, or use the + / − buttons; write on a wheel's middle box with the Pencil. Avg height is a plain box: write it with the Pencil. In each box header, the left icon undoes that box and the right icon clears it.</div>
     <div class="gentry"><div class="gbody"><div class="ctr">${ctl('s1','Stems · '+esc(S().obs1||'Obs 1'),q5('s1'))}${ctl('s2','Stems · '+esc(S().obs2||'Obs 2'),q5('s2'))}${ctl('g','Galls',q5('g'))}</div>
-    <div class="ctr">${ctl('ch','Chomps',q5('ch'))}${ctl('m','% Mature',qb('m',-10,'−10')+qb('m',10,'+10')+qb('m',100,'100'),10)}${ctl('h','Avg height',qb('h',-0.1,'−0.1')+qb('h',0.1,'+0.1'),1)}</div>
+    <div class="ctr">${ctl('ch','Chomps',q5('ch'))}${ctl('m','% Mature','',10)}${ctl('h','Avg height',qb('h',-0.1,'−0.1')+qb('h',0.1,'+0.1'),1)}</div>
     <textarea id="notes" inputmode="none" placeholder="Notes (write with the Pencil)">${esc(c.n)}</textarea></div></div>
     <div class="nav"><button id="undo" class="ib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H11"/></svg>Undo</button><button id="clr">Clear cell</button><button id="none">No toadflax ✓</button><button id="done" class="pri">Done ✓ → ${nx??'finish'}</button></div>`;
   return html;
@@ -687,6 +712,8 @@ function updateCellInPlace(n){
   $('#panel h2').textContent='Cell '+n;
   db.textContent='Done ✓ → '+(nx??'finish');
   $('#notes').value=c.n;
+  const re=$('#rowend');if(re){const t=rowEnd(n);re.textContent=t;re.hidden=!t}
+  $('#panel').querySelectorAll('.mpad button').forEach(b=>b.classList.toggle('on',c.m===Number(b.dataset.mv)));
   const hi=$('#panel input[data-in="h"]');if(hi)hi.value=c.h??'';
   $('#panel').querySelectorAll('.wscroll').forEach(w=>w.dispatchEvent(new CustomEvent('setv',{detail:{v:c[w.dataset.wk],instant:true}})));
   $('#panel').scrollTop=0;renderGrid();refresh();
@@ -725,20 +752,20 @@ function fxBurst(type,d){
   const cols=type==='done'?['#1b8a3a','#43b05c','#9be3a6','#f2b705']:['#f2b705','#ffe08a','#ffffff','#d99e00'];
   if(type!=='arrow'){
     const ring=document.createElement('div');ring.className='fxring';ring.style.borderColor=cols[0];fx.appendChild(ring);
-    ring.animate([{transform:'scale(.3)',opacity:.9},{transform:'scale(2.8)',opacity:0}],{duration:680,easing:'ease-out',fill:'forwards'});
+    ring.animate([{transform:'scale(.3)',opacity:.9},{transform:'scale(2.8)',opacity:0}],{duration:1300,easing:'ease-out',fill:'forwards'});
   }
   const st=document.createElement('div');st.className='fxstamp '+type;
   st.innerHTML=type==='done'?'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>':type==='none'?'<b>0</b><small>No toadflax</small>':`<svg viewBox="0 0 24 24"><path d="${d>0?'M5 12h14M13 6l6 6-6 6':'M19 12H5M11 6l-6 6 6 6'}"/></svg>`;
   fx.appendChild(st);
   if(type==='arrow')st.animate([{transform:`translateX(${-d*70}px) scale(.5)`,opacity:0},{transform:'translateX(0) scale(1.05)',opacity:1,offset:.4},{transform:`translateX(${d*90}px) scale(.8)`,opacity:0}],{duration:640,easing:'ease-out',fill:'forwards'});
-  else st.animate([{transform:'scale(.2) rotate(-28deg)',opacity:0},{transform:'scale(1.2) rotate(5deg)',opacity:1,offset:.32},{transform:'scale(1) rotate(0)',opacity:1,offset:.62},{transform:'scale(1.08)',opacity:0}],{duration:800,easing:'ease-out',fill:'forwards'});
+  else st.animate([{transform:'scale(.2) rotate(-28deg)',opacity:0},{transform:'scale(1.2) rotate(5deg)',opacity:1,offset:.18},{transform:'scale(1) rotate(0)',opacity:1,offset:.3},{transform:'scale(1)',opacity:1,offset:.8},{transform:'scale(1.08)',opacity:0}],{duration:1900,easing:'ease-out',fill:'forwards'});
   const n=type==='arrow'?0:type==='done'?18:12;
   for(let i=0;i<n;i++){
     const dot=document.createElement('div');dot.className='fxdot';dot.style.background=cols[i%cols.length];if(i%3===0)dot.style.borderRadius='50%';fx.appendChild(dot);
     const a=(i/n)*Math.PI*2+Math.random()*.4,r=110+Math.random()*150,dx=Math.cos(a)*r,dy=Math.sin(a)*r;
-    dot.animate([{transform:'translate(0,0) scale(1) rotate(0)',opacity:1},{transform:`translate(${dx}px,${dy}px) scale(.5) rotate(${Math.round(Math.random()*540-270)}deg)`,opacity:0}],{duration:700+Math.random()*350,easing:'cubic-bezier(.1,.7,.3,1)',fill:'forwards'});
+    dot.animate([{transform:'translate(0,0) scale(1) rotate(0)',opacity:1},{transform:`translate(${dx}px,${dy}px) scale(.5) rotate(${Math.round(Math.random()*540-270)}deg)`,opacity:0}],{duration:1300+Math.random()*500,easing:'cubic-bezier(.1,.7,.3,1)',fill:'forwards'});
   }
-  setTimeout(()=>fx.remove(),1150);
+  setTimeout(()=>fx.remove(),2000);
 }
 const confirmTwice=(a,b)=>confirm(a)&&confirm(b);
 function doResetGrid(){
@@ -756,7 +783,9 @@ $('#panel').addEventListener('click',e=>{
   if(b.id==='x'){closeSheet();return}
   if(cur!=null){
     const c=cell(cur);
-    if(b.dataset.k){
+    if(b.dataset.mv!==undefined){
+      push('m');const v=Number(b.dataset.mv);c.m=c.m===v?null:v;c.done=false;syncWheel(b.closest('.ctl'),c.m);save();refresh();renderGrid();
+    }else if(b.dataset.k){
       const k=b.dataset.k;push(k);
       c[k]=b.dataset.z?0:fit(k,(c[k]??0)+Number(b.dataset.d));
       c.done=false;
@@ -798,8 +827,10 @@ $('#panel').addEventListener('input',e=>{
   if(e.target.dataset.in){
     if(e.isComposing)return;
     const k=e.target.dataset.in;if(pend){push(k);pend=false}
-    const raw=e.target.value,v=clean(raw);
-    if(raw.trim()!==''&&!readable(v))return; // unreadable handwriting: keep the old value, explained on change
+    const raw=e.target.value;let v=clean(raw);
+    if(raw.trim()!==''&&!readable(v)){e.target.value=c[k]??'';toast('Could not read that as a number: '+codes(raw)+'. Try again.');return}   // unreadable handwriting: never leave letters in the box
+    if(k==='h')v=autoDec(v);
+    if(v!==raw)e.target.value=v;
     c[k]=num(v,k);c.done=false;refresh();
   }else if(e.target.id==='notes'){if(pend){push();pend=false}c.n=e.target.value;c.done=false}
   save();renderGrid();
@@ -808,6 +839,8 @@ $('#panel').addEventListener('input',e=>{
 const LOOK={o:'0',O:'0',D:'0',Q:'0',I:'1',l:'1','|':'1','!':'1',i:'1','/':'1','\\':'1',"'":'1','`':'1','´':'1','ı':'1','ǀ':'1','│':'1','∣':'1','¦':'1','ʹ':'1','’':'1','‘':'1',z:'2',Z:'2',s:'5',S:'5',b:'6',G:'6',T:'7',B:'8',g:'9',q:'9',',':'.','·':'.'};
 const clean=v=>v.normalize('NFKC').replace(/[^0-9+.]/g,ch=>LOOK[ch]??'').replace(/^\+/,'');
 const readable=v=>/\d/.test(v);
+// Avg height: three or more digits with no point get one before the last digit (122 -> 12.2); sums and typed points are left alone
+const autoDec=v=>/^\d{3,}$/.test(v)?v.slice(0,-1)+'.'+v.slice(-1):v;
 let toastT=null;
 function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('on'),7000)}
 const codes=s=>[...s.trim()].slice(0,4).map(ch=>'“'+ch+'” U+'+ch.codePointAt(0).toString(16).toUpperCase().padStart(4,'0')).join(', ');
@@ -815,7 +848,8 @@ const fit=(k,x)=>{const f=FIELDS[k]||TFIELDS[k]||{};x=Math.max(0,Math.min(f.max?
 const num=(v,k)=>{const p=v.split('+').map(parseFloat).filter(x=>!isNaN(x));return p.length?fit(k,p.reduce((a,x)=>a+x,0)):null};
 $('#panel').addEventListener('change',e=>{
   if(cur==null||!e.target.dataset.in)return;
-  const c=cell(cur),k=e.target.dataset.in,raw=e.target.value,v=clean(raw);
+  const c=cell(cur),k=e.target.dataset.in,raw=e.target.value;let v=clean(raw);
+  if(k==='h')v=autoDec(v);
   if(raw.trim()!==''&&!readable(v)){e.target.value=c[k]??'';toast('Could not read that as a number: '+codes(raw)+'. Try again, or use the + / − buttons.');return}
   const n=num(v,k);
   c[k]=n;e.target.value=n??'';save();refresh();renderGrid();
@@ -941,6 +975,19 @@ async function exportCsv(){
   const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=name;a.click();
 }
 $('#btnExport').onclick=exportCsv;
+async function exportAll(){
+  const list=Object.values(db.sessions).filter(s=>Object.values(s.cells).some(c=>c.done||touched(c)||c.n));
+  if(!list.length){toast('No grids with data to export yet.');return}
+  const used={},files=list.map(s=>{
+    let base=`grid_${(s.site||'site').replace(/\W+/g,'_')}_${s.date}`;used[base]=(used[base]||0)+1;if(used[base]>1)base+='_'+used[base];
+    return new File([csv(s)],base+'.csv',{type:'text/csv'});
+  });
+  try{
+    if(navigator.canShare&&navigator.canShare({files})){await navigator.share({files,title:`${files.length} grids`});return}
+  }catch(e){if(e.name==='AbortError')return}
+  files.forEach((f,i)=>setTimeout(()=>{const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;a.click()},i*400));
+}
+$('#glExportAll').onclick=exportAll;
 $('#btnReset').onclick=doResetGrid;
 
 
@@ -1047,13 +1094,13 @@ function layoutLine(){
 function fitGrid(){
   const g=$('#grid'),app=$('#app');
   if(!g||app.hidden)return;
-  if(!matchMedia('(orientation:landscape) and (min-width:900px)').matches){app.classList.remove('fit');g.style.removeProperty('--ch');return}
+  if(!matchMedia('(orientation:landscape) and (min-width:900px)').matches){app.classList.remove('fit');g.style.removeProperty('--ch');placeArrow();return}
   const row=$('#gridrow'),pad=parseFloat(getComputedStyle(app).paddingBottom)||0;
   let below=0;for(let e=row.nextElementSibling;e;e=e.nextElementSibling)below+=e.offsetHeight+12;
   const top=row.getBoundingClientRect().top+app.scrollTop,gap=6;
   const byH=(window.innerHeight-top-below-pad-gap*9)/10,byW=(row.clientWidth-2*190-2*12-gap*9)/10;
   const ch=Math.max(36,Math.min(96,byH,byW));
-  app.classList.add('fit');g.style.setProperty('--ch',ch.toFixed(1)+'px');
+  app.classList.add('fit');g.style.setProperty('--ch',ch.toFixed(1)+'px');placeArrow();
 }
 // ---------- notes / sketch pads (Pencil, finger or mouse) ----------
 // Strokes are NOT part of the main saved data. Each stroke is its own tiny record in a separate IndexedDB
@@ -1256,7 +1303,7 @@ const wItemsCache={};
 const wItems=(max,step)=>wItemsCache[max+'|'+step]||(wItemsCache[max+'|'+step]='<div class="wi" data-v="">–</div>'+Array.from({length:Math.round(max/step)+1},(_,i)=>{const v=step<1?(i*step).toFixed(1):i*step;return `<div class="wi" data-v="${v}">${v}</div>`}).join(''));
 const pmBtns=(attr,label,step)=>`<div class="fpm"><button ${attr} data-d="${step}" aria-label="Increase ${label}">${PL}</button><button ${attr} data-d="${-step}" aria-label="Decrease ${label}">${MI}</button></div>`;
 const wheelBox=(wattr,spec,label)=>`<div class="wheel"><div class="wband"></div><div class="wscroll" ${wattr} data-max="${spec[0]}" data-step="${spec[1]}" tabindex="0" aria-label="${label}: swipe up or down to choose">${wItems(spec[0],spec[1])}</div></div>`;
-const syncWheel=(fc,v)=>{const w=fc&&fc.querySelector('.wscroll');if(w){w.dispatchEvent(new CustomEvent('setv',{detail:v}));flash(w.parentElement);return}const i=fc&&fc.querySelector('input[data-in]');if(i){i.value=v??'';flash(i)}};
+const syncWheel=(fc,v)=>{const mp=fc&&fc.querySelector('.mpad');if(mp){mp.querySelectorAll('button').forEach(b=>b.classList.toggle('on',v!=null&&Number(b.dataset.mv)===v));return}const w=fc&&fc.querySelector('.wscroll');if(w){w.dispatchEvent(new CustomEvent('setv',{detail:v}));flash(w.parentElement);return}const i=fc&&fc.querySelector('input[data-in]');if(i){i.value=v??'';flash(i)}};
 function bodyHtml(n){
   const f=frame(n);
   const numCard=(k,label,grp,sc)=>`<div class="fc" data-g="${grp}"><div class="fl">${label}</div>
@@ -1323,7 +1370,7 @@ function wheelCore(root,ad){
     box.addEventListener('pointerleave',e=>{if(e.pointerType==='pen')hover(false)});
     inp.addEventListener('pointerdown',e=>{if(e.pointerType==='pen'){writing=true;inp.classList.add('writing');hover(true)}});
     inp.addEventListener('focus',()=>{if(writing){inp.value='';inp.classList.add('writing')}});
-    inp.addEventListener('input',e=>{if(e.isComposing)return;if(!writing){inp.value='';return}commit(inp.value,false)});
+    inp.addEventListener('input',e=>{if(e.isComposing)return;if(!writing){inp.value='';return}const cl=clean(inp.value);if(cl!==inp.value&&readable(cl))inp.value=cl;commit(inp.value,false)});
     inp.addEventListener('change',()=>{if(writing)commit(inp.value,true)});
     inp.addEventListener('blur',()=>{
       if(writing&&inp.value.trim()!=='')commit(inp.value,true);
