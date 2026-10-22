@@ -1059,7 +1059,7 @@ $('#panel').addEventListener('click',e=>{
   });
   ['pointerup','pointercancel','pointerleave'].forEach(ev=>$('#panel').addEventListener(ev,stop,true));
 })();
-$('#panel').addEventListener('focusin',e=>{if(e.target.dataset.in==='h')e.target.inputMode=lastPT==='touch'?'decimal':'none';if(e.target.dataset.in||e.target.id==='notes')pend=true});
+$('#panel').addEventListener('focusin',e=>{if(e.target.dataset.in==='h')e.target.inputMode=(lastPT==='touch'||lastPT==='pen')?'decimal':'none';if(e.target.dataset.in||e.target.id==='notes')pend=true});
 $('#panel').addEventListener('input',e=>{
   if(cur==null)return;
   const c=cell(cur);
@@ -1076,7 +1076,7 @@ $('#panel').addEventListener('input',e=>{
   save();renderGrid();
 });
 // Handwriting cleanup: fix look-alike letters, allow digits, + and decimal point; sum on blur
-const LOOK={o:'0',O:'0',D:'0',Q:'0',I:'1',l:'1','|':'1','!':'1',i:'1','/':'1','\\':'1',"'":'1','`':'1','´':'1','ı':'1','ǀ':'1','│':'1','∣':'1','¦':'1','ʹ':'1','’':'1','‘':'1',z:'2',Z:'2',s:'5',S:'5',b:'6',G:'6',T:'7',B:'8',g:'9',q:'9',',':'.','·':'.'};
+const LOOK={o:'0',O:'0',D:'0',Q:'0',I:'1',l:'1','|':'1','!':'1',i:'1','/':'1','\\':'1',"'":'1','`':'1','´':'1','ı':'1','ǀ':'1','│':'1','∣':'1','¦':'1','ʹ':'1','’':'1','‘':'1',z:'2',Z:'2',H:'14',A:'4',y:'4',Y:'4',L:'1',s:'5',S:'5',b:'6',G:'6',T:'7',B:'8',g:'9',q:'9',',':'.','·':'.'};
 const clean=v=>v.normalize('NFKC').replace(/[^0-9+.]/g,ch=>LOOK[ch]??'').replace(/^\+/,'');
 const readable=v=>/\d/.test(v);
 // Avg height: three or more digits with no point get one before the last digit (122 -> 12.2); sums and typed points are left alone
@@ -1613,12 +1613,13 @@ function wheelCore(root,ad){
     box.addEventListener('pointerenter',e=>{if(e.pointerType==='pen')hover(true)});
     box.addEventListener('pointermove',e=>{if(e.pointerType==='pen'&&!box.classList.contains('hov'))hover(true)});
     box.addEventListener('pointerleave',e=>{if(e.pointerType==='pen')hover(false)});
-    inp.addEventListener('pointerdown',e=>{if(e.pointerType==='pen'){writing=true;inp.classList.add('writing');hover(true)}});
+    inp.addEventListener('pointerdown',e=>{if(e.pointerType==='pen'){inp.setAttribute('inputmode','numeric');writing=true;inp.classList.add('writing');hover(true)}});
     inp.addEventListener('focus',()=>{if(writing){inp.value='';inp.classList.add('writing')}});
     inp.addEventListener('input',e=>{if(e.isComposing)return;if(!writing){inp.value='';return}const cl=clean(inp.value);if(cl!==inp.value&&readable(cl))inp.value=cl;commit(inp.value,false)});
     inp.addEventListener('change',()=>{if(writing)commit(inp.value,true)});
     inp.addEventListener('blur',()=>{
       if(writing&&inp.value.trim()!=='')commit(inp.value,true);
+      inp.setAttribute('inputmode','none');
       const was=wGesture;writing=false;wGesture=false;inp.classList.remove('writing');box.classList.remove('hov');
       if(was){save();ad.end()}
       refreshOff(ad.get(w),true);
