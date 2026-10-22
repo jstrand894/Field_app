@@ -137,7 +137,7 @@ html.lock .view{overflow:hidden}
 @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.025);background:color-mix(in srgb,var(--c,#1f6b2c) 13%,var(--card))}100%{transform:scale(1)}}
 textarea{width:100%;min-height:90px;resize:vertical}
 #panel input[data-in=h]::placeholder{font-size:20px;font-weight:600;color:var(--mute);opacity:.8}
-#tot{display:inline-block}
+#tot{display:inline-block;min-width:3ch;text-align:left;font-variant-numeric:tabular-nums}
 #panel{transition:background-color .5s}
 #panel.st-has{background:color-mix(in srgb,#2f9e48 9%,var(--bg))}
 #panel.st-warn{background:color-mix(in srgb,#e0a100 16%,var(--bg))}
@@ -437,8 +437,8 @@ html.drawing .tnode.next .dot{animation:none}   /* nothing else repaints while y
 .ctl .wsin{font-size:calc(var(--wr)*.72 + (var(--wh) - var(--wr))*.3)}
 .wsin:focus{outline:none}
 .wsin.off,.wsin.writing{color:var(--ink);background:var(--card)}
-.wsin.writing{box-shadow:inset 0 0 0 3px var(--c)}
-.wband{position:absolute;left:5px;right:5px;top:50%;height:var(--wh);margin-top:calc(var(--wh)/-2);border-radius:10px;background:color-mix(in srgb,var(--c) 16%,transparent);border:2px solid var(--c);pointer-events:none;z-index:1}
+.wheel.hov .wband{opacity:0}
+.wband{transition:opacity .15s;position:absolute;left:5px;right:5px;top:50%;height:var(--wh);margin-top:calc(var(--wh)/-2);border-radius:10px;background:color-mix(in srgb,var(--c) 16%,transparent);border:2px solid var(--c);pointer-events:none;z-index:1}
 /* mature / immature: appears when target > 0; height boxes appear as the count grows */
 .reveal{display:grid;grid-template-rows:0fr;opacity:0;margin-top:-8px;transition:grid-template-rows .45s cubic-bezier(.2,.85,.25,1),opacity .3s ease,margin-top .45s cubic-bezier(.2,.85,.25,1)}
 .reveal.on{grid-template-rows:1fr;opacity:1;margin-top:0}
